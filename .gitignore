@@ -59,3 +59,10 @@ build/
 ### VS Code ###
 .vscode/
 token.txt
+demo-maven/target/classes/META-INF/MANIFEST.MF
+demo-maven/target/classes/META-INF/maven/com.example/demo-maven/pom.properties
+demo-maven/target/classes/META-INF/maven/com.example/demo-maven/pom.xml
+demo-maven/target/classes/META-INF/MANIFEST.MF
+demo-maven/target/classes/META-INF/maven/com.example/demo-maven/pom.properties
+demo-maven/target/classes/META-INF/maven/com.example/demo-maven/pom.xml
+demo-maven/target/classes/META-INF/maven/com.example/demo-maven/pom.properties
