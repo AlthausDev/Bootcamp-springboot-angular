@@ -1,6 +1,7 @@
 package com.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,6 +15,9 @@ import com.example.ioc.Servicio;
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
 
+	@Value("$mi.valor:mi valor por defecto")
+	String valor;
+	
 	@Autowired
 	private Servicio service;
 	
@@ -31,7 +35,6 @@ public class DemoApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		System.err.println("Aplicacion arrancada");
 //		Servicio srv = new Servicio(new Repositorio(new Configuracion()));
-//		
 //		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
 		service.guardar();
 	}
