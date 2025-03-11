@@ -6,11 +6,15 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import com.example.test.utils.Smoke;
 
 class CalculadoraTest {
 
@@ -42,6 +46,7 @@ class CalculadoraTest {
 		class OK {
 			@Test
 			@DisplayName("Suma de dos enteros")
+			@Smoke
 			void testSuma() {
 				var actual = calculadora.suma(2, 3);
 				assertEquals(5, actual);
@@ -79,6 +84,7 @@ class CalculadoraTest {
 
 	@Nested
 	@DisplayName("Casos no validos")
+	@Disabled
 	class KO {
 		
 		@Test
