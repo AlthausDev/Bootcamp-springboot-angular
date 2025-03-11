@@ -191,7 +191,31 @@ public class GildedRoseApprovalTest {
 		assertEquals(2, items[0].quality);		
     }
     
+    @Test
+    @DisplayName("Conjured Mana Cake caducado con calidad 1")
+    public void ConjuredTest3() {
+    	
+    	Item[] items = new Item[]{new Item("Conjured Mana Cake",0,1)};
+		GildedRose app = new GildedRose(items); 
+		app.updateQuality();
+
+		assertEquals("Conjured Mana Cake", items[0].name);
+		assertEquals(-1, items[0].sellIn);
+		assertEquals(0, items[0].quality);		
+    }
     
+    @Test
+    @DisplayName("Conjured Mana Cake caducado con calidad 3")
+    public void ConjuredTest4() {
+    	
+    	Item[] items = new Item[]{new Item("Conjured Mana Cake",0,3)};
+		GildedRose app = new GildedRose(items); 
+		app.updateQuality();
+
+		assertEquals("Conjured Mana Cake", items[0].name);
+		assertEquals(-1, items[0].sellIn);
+		assertEquals(0, items[0].quality);		
+    }
 
     @Test
     public void thirtyDays() {
