@@ -7,28 +7,18 @@ class GildedRose {
         this.items = items;
     }
 
-    public void updateQuality(boolean isConjured) {
-       
-
+    public void updateQuality() {
         for (int i = 0; i < items.length; i++) {
             if (!items[i].name.equals("Aged Brie")
                     && !items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
                 if (items[i].quality > 0) {
                     if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                        if(isConjured && items[i].quality != 1){
-                            items[i].quality = items[i].quality - 2;
-                        } else{
-                            items[i].quality = items[i].quality - 1;
-                        }
+                        items[i].quality = items[i].quality - 1;
                     }
                 }
             } else {
                 if (items[i].quality < 50) {
-                    if(isConjured && items[i].quality != 49){
-                        items[i].quality = items[i].quality + 2;
-                    } else{
-                        items[i].quality = items[i].quality + 1;
-                    }
+                    items[i].quality = items[i].quality + 1;
 
                     if (items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
                         if (items[i].sellIn < 11) {
