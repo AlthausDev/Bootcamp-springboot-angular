@@ -2,7 +2,6 @@ package com.gildedrose;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.DisplayName;
@@ -28,8 +27,6 @@ public class GildedRoseApprovalTest {
 		assertEquals("foo", items[0].name);
 		assertEquals(-1, items[0].sellIn);
 		assertEquals(4, items[0].quality);
-		
-        //Approvals.verifyAll("Items", items);
     }
     
     @Test
@@ -44,7 +41,6 @@ public class GildedRoseApprovalTest {
 		assertEquals(2, items[0].sellIn);
 		assertEquals(2, items[0].quality);
 		
-        //Approvals.verifyAll("Items", items);
     }
        
     
@@ -226,7 +222,5 @@ public class GildedRoseApprovalTest {
 
         Program.main();
         String output = fakeoutput.toString();
-
-        //Approvals.verify(output);
     }
 }
