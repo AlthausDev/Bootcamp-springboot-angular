@@ -1,6 +1,7 @@
 package com.example.util;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mockito;
 
 import com.example.test.utils.Smoke;
 
@@ -135,7 +137,38 @@ class CalculadoraTest {
 		class KO {
 
 		}
+		
+		@Nested
+		@DisplayName("Suplanta")
+		class Suplantaciones {
+			@Test
+			void suplanta() {
+				var calc = mock(Calculadora.class);
+				when(calc.suma(anyInt(), anyInt())).thenReturn(3).thenReturn(5);
 
+				var actual = calc.suma(2, 2);
+				assertEquals(3, actual);
+				assertEquals(5, calc.suma(2, 2));
+				assertEquals(5, calc.suma(7,3));
+			}
+			
+			@Test
+			void suplanta2() {
+				var calc = mock(Calculadora.class);
+				when(calc.suma(anyInt(), anyInt())).thenReturn(4);
+				var obj = new Factura(calc);
+				var actual = obj.calcularTotal(2, 2);
+				assertEquals(4, actual);
+				verify(calc).suma(2, 2);
+			}
+			
+			@Test
+			void Integracion() {
+				var obj = new Factura(new Calculadora());
+				var actual = obj.calcularTotal(2, 2);
+				assertEquals(4, actual);
+			}
+		}
 	}
 
 }

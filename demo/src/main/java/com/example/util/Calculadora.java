@@ -5,28 +5,26 @@ import java.math.RoundingMode;
 
 public class Calculadora {
 	
-	public double suma(double a, double b) {
-		return roundIEEE745(a + b);
-	}
-	
 	public int suma(int a, int b) {
 		return a + b;
 	}
 	
-	public int division(int a, int b) {
-		try {
-			return a / b;
-		} catch(ArithmeticException ex) {
-			ex.getMessage();
-			return b ;
-		}
+	public double suma(double a, double b) {
+		return roundIEEE754(a + b);
 	}
 	
 	public double division(double a, double b) {
-		return roundIEEE745(a/b);
+		if(b == 0) {
+			throw new ArithmeticException("/ by zero");
+		}
+		return roundIEEE754(a / b);
 	}
 	
-	private double roundIEEE745(double o) {
+	public int division(int a, int b) {
+		return a/b;
+	}
+	
+	private double roundIEEE754(double o) {
 		return BigDecimal.valueOf(o)
 				.setScale(16, RoundingMode.HALF_UP)
 				.doubleValue();
