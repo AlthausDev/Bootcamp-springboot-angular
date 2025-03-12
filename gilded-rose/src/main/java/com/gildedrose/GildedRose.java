@@ -13,14 +13,7 @@ class GildedRose {
     		"Backstage passes to a TAFKAL80ETC concert",
     		"Sulfuras, Hand of Ragnaros"};
     
-//    public Item updateQuality(Item item) {
-//    	item.quality -= 1;
-//    	item.sellIn -= 1;
-//    	
-//    	return item;
-//    }
 
-    
     public void updateQuality() {
     	
     	 for (int i = 0; i < items.length; i++) {
