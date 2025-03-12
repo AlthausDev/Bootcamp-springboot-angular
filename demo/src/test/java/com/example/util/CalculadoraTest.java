@@ -16,6 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
 
+import com.example.ioc.Repositorio;
 import com.example.test.utils.Smoke;
 
 class CalculadoraTest {
@@ -143,32 +144,47 @@ class CalculadoraTest {
 		class Suplantaciones {
 			@Test
 			void suplanta() {
-				var calc = mock(Calculadora.class);
-				when(calc.suma(anyInt(), anyInt())).thenReturn(3).thenReturn(5);
+				var calculadora = mock(Calculadora.class);
+				
+				when(calculadora.suma(anyInt(), anyInt()))
+					.thenReturn(3)
+					.thenReturn(5);
 
-				var actual = calc.suma(2, 2);
+				var actual = calculadora.suma(2, 2);
 				assertEquals(3, actual);
-				assertEquals(5, calc.suma(2, 2));
-				assertEquals(5, calc.suma(7,3));
+				assertEquals(5, calculadora.suma(2, 2));
+				assertEquals(5, calculadora.suma(7,3));
 			}
 			
 			@Test
 			void suplanta2() {
-				var calc = mock(Calculadora.class);
-				when(calc.suma(anyInt(), anyInt())).thenReturn(4);
-				var obj = new Factura(calc);
-				var actual = obj.calcularTotal(2, 2);
+				var calculadora = mock(Calculadora.class);
+				var repositorio = mock(Repositorio.class);
+				
+				when(calculadora.suma(anyInt(), anyInt())).thenReturn(4);
+				doNothing().when(repositorio).guardar();
+				
+				Factura factura = new Factura(calculadora, repositorio);
+				var actual = factura.calcularTotal(2, 2);
+				
+				factura.emitir();
+				
 				assertEquals(4, actual);
-				verify(calc).suma(2, 2);
+				verify(calculadora).suma(2, 2);
+			}
+			
+			@Test
+			void suplanta3() {
+				Calculadora calculadora = mock(Calculadora.class);
+				Repositorio repositorio = mock(Repositorio.class);
 			}
 			
 			@Test
 			void Integracion() {
-				var obj = new Factura(new Calculadora());
+				var obj = new Factura(new Calculadora(), null);
 				var actual = obj.calcularTotal(2, 2);
 				assertEquals(4, actual);
 			}
 		}
 	}
-
 }
