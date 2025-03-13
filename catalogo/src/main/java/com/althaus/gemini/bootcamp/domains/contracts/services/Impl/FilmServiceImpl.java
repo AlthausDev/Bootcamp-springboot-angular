@@ -7,12 +7,15 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.althaus.gemini.bootcamp.domains.contracts.repositories.FilmRepository;
 import com.althaus.gemini.bootcamp.domains.contracts.services.FilmService;
 import com.althaus.gemini.bootcamp.domains.entities.Film;
 import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;
 
 @Service
 public class FilmServiceImpl implements FilmService {
+	
+	private FilmRepository filmRepository;
 
 	@Override
 	public Optional<Film> getById(Integer id) {

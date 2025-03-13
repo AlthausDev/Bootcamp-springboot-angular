@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.stereotype.Service;
 
+import com.althaus.gemini.bootcamp.domains.contracts.repositories.LanguageRepository;
 import com.althaus.gemini.bootcamp.domains.contracts.services.LanguageService;
 import com.althaus.gemini.bootcamp.domains.entities.Language;
 import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;
@@ -13,6 +15,8 @@ import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;
 @Service
 public class LanguageServiceImpl implements LanguageService {
 
+	private LanguageRepository languageRepository;
+	
 	@Override
 	public Optional<Language> getById(Integer id) {
 		// TODO Auto-generated method stub

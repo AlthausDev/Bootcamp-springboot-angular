@@ -10,21 +10,25 @@ import com.althaus.gemini.bootcamp.domains.contracts.repositories.ActorRepositor
 import com.althaus.gemini.bootcamp.domains.contracts.repositories.CategoryRepository;
 import com.althaus.gemini.bootcamp.domains.contracts.repositories.FilmRepository;
 import com.althaus.gemini.bootcamp.domains.contracts.repositories.LanguageRepository;
+import com.althaus.gemini.bootcamp.domains.contracts.services.ActorService;
+import com.althaus.gemini.bootcamp.domains.contracts.services.CategoryService;
+import com.althaus.gemini.bootcamp.domains.contracts.services.FilmService;
+import com.althaus.gemini.bootcamp.domains.contracts.services.LanguageService;
 
 @SpringBootApplication
 public class CatalogoApplication implements CommandLineRunner {
 	
 	@Autowired
-	private ActorRepository actorRepository; 
+	private ActorService actorService; 
 	
 	@Autowired
-	private CategoryRepository categoryRepository;
+	private CategoryService categoryService;
 	
 	@Autowired
-	private FilmRepository filmRepository;
+	private FilmService filmService;
 	
 	@Autowired
-	private LanguageRepository languageRepository;
+	private LanguageService languageService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CatalogoApplication.class, args);
@@ -32,9 +36,7 @@ public class CatalogoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		actorRepository
-			.findTop10ByFirstNameStartingWithOrderByLastNameDesc("r")
-			.forEach(System.err::println);;	
+		
 	}
 	
 	@Bean

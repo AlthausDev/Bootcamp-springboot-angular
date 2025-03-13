@@ -7,6 +7,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.althaus.gemini.bootcamp.domains.contracts.repositories.CategoryRepository;
 import com.althaus.gemini.bootcamp.domains.contracts.services.CategoryService;
 import com.althaus.gemini.bootcamp.domains.entities.Category;
 import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;
@@ -14,6 +15,8 @@ import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
+	private CategoryRepository categoryRepository;
+	
 	@Override
 	public Optional<Category> getById(Integer id) {
 		// TODO Auto-generated method stub
