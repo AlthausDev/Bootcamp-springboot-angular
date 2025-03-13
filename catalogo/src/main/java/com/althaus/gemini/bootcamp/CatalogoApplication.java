@@ -24,7 +24,7 @@ public class CatalogoApplication implements CommandLineRunner {
 	private FilmRepository filmRepository;
 	
 	@Autowired
-	private LanguageRepository languajeRepository;
+	private LanguageRepository languageRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CatalogoApplication.class, args);
@@ -32,7 +32,9 @@ public class CatalogoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		actorRepository.findTop10ByFirstNameStartingWithOrderByLastNameDesc("r").forEach(System.err::println);;	
+		actorRepository
+			.findTop10ByFirstNameStartingWithOrderByLastNameDesc("r")
+			.forEach(System.err::println);;	
 	}
 	
 	@Bean
