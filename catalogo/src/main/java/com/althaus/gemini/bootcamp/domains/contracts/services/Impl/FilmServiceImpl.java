@@ -17,17 +17,7 @@ public class FilmServiceImpl implements FilmService {
 	
 	private FilmRepository filmRepository;
 
-	@Override
-	public Optional<Film> getById(Integer id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
-	}
-
-	@Override
-	public List<Film> getAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public Film create(Film item) throws DuplicateKeyException, InvalidDataException {
@@ -47,10 +37,30 @@ public class FilmServiceImpl implements FilmService {
 
 	}
 
-	@Override
-	public void deteleById(Integer id) {
-		// TODO Auto-generated method stub
+	
 
+	@Override
+	public Optional<Film> read(Integer id) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
+	}
+
+	@Override
+	public List<Film> readAllList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteById(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAll(List<Film> entities) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

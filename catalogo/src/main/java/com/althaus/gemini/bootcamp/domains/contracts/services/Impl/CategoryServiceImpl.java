@@ -17,18 +17,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	private CategoryRepository categoryRepository;
 	
-	@Override
-	public Optional<Category> getById(Integer id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
-	}
-
-	@Override
-	public List<Category> getAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public Category create(Category item) throws DuplicateKeyException, InvalidDataException {
 		// TODO Auto-generated method stub
@@ -47,10 +36,30 @@ public class CategoryServiceImpl implements CategoryService {
 
 	}
 
-	@Override
-	public void deteleById(Integer id) {
-		// TODO Auto-generated method stub
+	
 
+	@Override
+	public Optional<Category> read(Integer id) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
+	}
+
+	@Override
+	public List<Category> readAllList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteById(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAll(List<Category> entities) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

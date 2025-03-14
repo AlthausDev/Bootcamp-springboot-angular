@@ -17,18 +17,7 @@ public class LanguageServiceImpl implements LanguageService {
 
 	private LanguageRepository languageRepository;
 	
-	@Override
-	public Optional<Language> getById(Integer id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
-	}
-
-	@Override
-	public List<Language> getAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public Language create(Language item) throws DuplicateKeyException, InvalidDataException {
 		// TODO Auto-generated method stub
@@ -47,10 +36,29 @@ public class LanguageServiceImpl implements LanguageService {
 
 	}
 
+	
 	@Override
-	public void deteleById(Integer id) {
+	public Optional<Language> read(Integer id) {
 		// TODO Auto-generated method stub
+		return Optional.empty();
+	}
 
+	@Override
+	public List<Language> readAllList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteById(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAll(List<Language> entities) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

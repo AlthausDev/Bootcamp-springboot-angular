@@ -9,15 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.althaus.gemini.bootcamp.domains.entities.Actor;
 
-public interface ActorRepository extends JpaRepository<Actor, Integer> {
+public interface ActorRepository extends CoreRepository<Actor, Integer> {
 	
 	List<Actor>findTop10ByFirstNameStartingWithOrderByLastNameDesc(String prefijo);
 	List<Actor>findTop10ByFirstNameStartingWith(String prefijo, Sort orderBy);
 	
 	List<Actor> findByActorIdGreaterThan(int actorId);
-	
-	@Query(value = "SELECT a FROM Actor a WHERE a.actorId > ?1")
-	List<Actor> findNovedadesJPQL(int actorId);
-
-
 }

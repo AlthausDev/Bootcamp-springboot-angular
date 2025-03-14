@@ -1,19 +1,18 @@
 package com.althaus.gemini.bootcamp;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.althaus.gemini.bootcamp.domains.contracts.repositories.ActorRepository;
-import com.althaus.gemini.bootcamp.domains.contracts.repositories.CategoryRepository;
-import com.althaus.gemini.bootcamp.domains.contracts.repositories.FilmRepository;
-import com.althaus.gemini.bootcamp.domains.contracts.repositories.LanguageRepository;
 import com.althaus.gemini.bootcamp.domains.contracts.services.ActorService;
 import com.althaus.gemini.bootcamp.domains.contracts.services.CategoryService;
 import com.althaus.gemini.bootcamp.domains.contracts.services.FilmService;
 import com.althaus.gemini.bootcamp.domains.contracts.services.LanguageService;
+import com.althaus.gemini.bootcamp.domains.entities.Actor;
 
 @SpringBootApplication
 public class CatalogoApplication implements CommandLineRunner {
@@ -36,7 +35,8 @@ public class CatalogoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		
+		List<Actor> actores = actorService.readAllList();
+		//System.err.println(actores);
 	}
 	
 	@Bean

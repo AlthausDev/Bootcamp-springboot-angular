@@ -1,6 +1,5 @@
 package com.althaus.gemini.bootcamp.domains.contracts.services;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,8 +15,6 @@ public interface CoreService<T> {
 	Optional<T> read(Integer id);
 
 	List<T> readAllList();
-
-	HashMap<Long, T> readAllMap();
 
 	T update(T entity) throws NotFoundException, InvalidDataException;
 

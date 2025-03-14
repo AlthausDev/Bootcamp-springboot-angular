@@ -165,48 +165,48 @@ public class Film implements Serializable {
 		this.languageVO = languageVO;
 	}
 
-	public List<FilmActor> getFilmActors() {
-		return this.filmActors;
-	}
+//	public List<FilmActor> getFilmActors() {
+//		return this.filmActors;
+//	}
+//
+//	public void setFilmActors(List<FilmActor> filmActors) {
+//		this.filmActors = filmActors;
+//	}
 
-	public void setFilmActors(List<FilmActor> filmActors) {
-		this.filmActors = filmActors;
-	}
+//	public FilmActor addFilmActor(FilmActor filmActor) {
+//		getFilmActors().add(filmActor);
+//		filmActor.setFilm(this);
+//
+//		return filmActor;
+//	}
+//
+//	public FilmActor removeFilmActor(FilmActor filmActor) {
+//		getFilmActors().remove(filmActor);
+//		filmActor.setFilm(null);
+//
+//		return filmActor;
+//	}
 
-	public FilmActor addFilmActor(FilmActor filmActor) {
-		getFilmActors().add(filmActor);
-		filmActor.setFilm(this);
+//	public List<FilmCategory> getFilmCategories() {
+//		return this.filmCategories;
+//	}
+//
+//	public void setFilmCategories(List<FilmCategory> filmCategories) {
+//		this.filmCategories = filmCategories;
+//	}
 
-		return filmActor;
-	}
-
-	public FilmActor removeFilmActor(FilmActor filmActor) {
-		getFilmActors().remove(filmActor);
-		filmActor.setFilm(null);
-
-		return filmActor;
-	}
-
-	public List<FilmCategory> getFilmCategories() {
-		return this.filmCategories;
-	}
-
-	public void setFilmCategories(List<FilmCategory> filmCategories) {
-		this.filmCategories = filmCategories;
-	}
-
-	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
-		getFilmCategories().add(filmCategory);
-		filmCategory.setFilm(this);
-
-		return filmCategory;
-	}
-
-	public FilmCategory removeFilmCategory(FilmCategory filmCategory) {
-		getFilmCategories().remove(filmCategory);
-		filmCategory.setFilm(null);
-
-		return filmCategory;
-	}
+//	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
+//		getFilmCategories().add(filmCategory);
+//		filmCategory.setFilm(this);
+//
+//		return filmCategory;
+//	}
+//
+//	public FilmCategory removeFilmCategory(FilmCategory filmCategory) {
+//		getFilmCategories().remove(filmCategory);
+//		filmCategory.setFilm(null);
+//
+//		return filmCategory;
+//	}
 
 }
