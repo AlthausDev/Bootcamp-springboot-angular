@@ -8,7 +8,10 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 /**
@@ -29,13 +32,13 @@ public class Actor implements Serializable {
 	@Column(name="first_name", nullable=false, length=45)
 	@NotBlank
 	@Size(max = 45, min = 5)
-	@Pattern(regexp= "^[A-Z]*$", message = "El nombre debe estar en mayusculas")
+	@Pattern(regexp= "^[A-Za-z]*$", message = "El nombre debe estar compuesto por letras")
 	private String firstName;
 	
 	@Column(name="last_name", nullable=false, length=45)
 	@NotBlank
 	@Size(max = 45, min = 5)
-	@Pattern(regexp= "^[A-Z]*$", message = "El nombre debe estar en mayusculas")
+	@Pattern(regexp= "^[A-Za-z]*$", message = "El apellido debe estar compuesto por letras")
 	private String lastName;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
@@ -43,9 +46,10 @@ public class Actor implements Serializable {
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to FilmActor
-//	@OneToMany(mappedBy="actor", fetch = FetchType.LAZY)
-//	private List<FilmActor> filmActors;
-//
+	@OneToMany(mappedBy="actor", fetch = FetchType.LAZY)
+	@JsonBackReference
+	private List<FilmActor> filmActors;
+
 	public Actor() {
 	}
 	
@@ -120,26 +124,26 @@ public class Actor implements Serializable {
 		this.lastUpdate = lastUpdate;
 	}
 
-//	public List<FilmActor> getFilmActors() {
-//		return this.filmActors;
-//	}
-//
-//	public void setFilmActors(List<FilmActor> filmActors) {
-//		this.filmActors = filmActors;
-//	}
+	public List<FilmActor> getFilmActors() {
+		return this.filmActors;
+	}
 
-//	public FilmActor addFilmActor(FilmActor filmActor) {
-//		getFilmActors().add(filmActor);
-//		filmActor.setActor(this);
-//
-//		return filmActor;
-//	}
+	public void setFilmActors(List<FilmActor> filmActors) {
+		this.filmActors = filmActors;
+	}
 
-//	public FilmActor removeFilmActor(FilmActor filmActor) {
-//		getFilmActors().remove(filmActor);
-//		filmActor.setActor(null);
-//
-//		return filmActor;
-//	}
+	public FilmActor addFilmActor(FilmActor filmActor) {
+		getFilmActors().add(filmActor);
+		filmActor.setActor(this);
+
+		return filmActor;
+	}
+
+	public FilmActor removeFilmActor(FilmActor filmActor) {
+		getFilmActors().remove(filmActor);
+		filmActor.setActor(null);
+
+		return filmActor;
+	}
 
 }

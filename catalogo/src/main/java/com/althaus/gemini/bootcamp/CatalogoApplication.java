@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
 import com.althaus.gemini.bootcamp.domains.contracts.services.ActorService;
 import com.althaus.gemini.bootcamp.domains.contracts.services.CategoryService;
 import com.althaus.gemini.bootcamp.domains.contracts.services.FilmService;

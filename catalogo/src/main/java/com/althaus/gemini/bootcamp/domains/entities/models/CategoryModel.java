@@ -1,4 +1,4 @@
-package com.althaus.gemini.bootcamp.domains.entities.dtos;
+package com.althaus.gemini.bootcamp.domains.entities.models;
 
 import java.sql.Timestamp;
 
@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @AllArgsConstructor @NoArgsConstructor
-public class CategoryDTO {
+public class CategoryModel {
 	
 	private int categoryId;
 	private Timestamp lastUpdate;
