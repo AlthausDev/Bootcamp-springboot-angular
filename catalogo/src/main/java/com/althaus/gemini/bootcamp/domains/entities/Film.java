@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 
+
 /**
  * The persistent class for the film database table.
  * 
@@ -64,12 +65,12 @@ public class Film implements Serializable {
 	private Language languageVO;
 
 	//bi-directional many-to-one association to FilmActor
-//	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private List<Actor> filmActors;
+	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<FilmActor> filmActors;
 
 	//bi-directional many-to-one association to FilmCategory
-//	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private List<Category> filmCategories;
+	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<FilmCategory> filmCategories;
 
 	public Film() {
 	}
@@ -170,48 +171,48 @@ public class Film implements Serializable {
 		this.languageVO = languageVO;
 	}
 
-//	public List<FilmActor> getFilmActors() {
-//		return this.filmActors;
-//	}
-//
-//	public void setFilmActors(List<FilmActor> filmActors) {
-//		this.filmActors = filmActors;
-//	}
+	public List<FilmActor> getFilmActors() {
+		return this.filmActors;
+	}
 
-//	public FilmActor addFilmActor(FilmActor filmActor) {
-//		getFilmActors().add(filmActor);
-//		filmActor.setFilm(this);
-//
-//		return filmActor;
-//	}
-//
-//	public FilmActor removeFilmActor(FilmActor filmActor) {
-//		getFilmActors().remove(filmActor);
-//		filmActor.setFilm(null);
-//
-//		return filmActor;
-//	}
+	public void setFilmActors(List<FilmActor> filmActors) {
+		this.filmActors = filmActors;
+	}
 
-//	public List<FilmCategory> getFilmCategories() {
-//		return this.filmCategories;
-//	}
-//
-//	public void setFilmCategories(List<FilmCategory> filmCategories) {
-//		this.filmCategories = filmCategories;
-//	}
+	public FilmActor addFilmActor(FilmActor filmActor) {
+		getFilmActors().add(filmActor);
+		filmActor.setFilm(this);
 
-//	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
-//		getFilmCategories().add(filmCategory);
-//		filmCategory.setFilm(this);
-//
-//		return filmCategory;
-//	}
-//
-//	public FilmCategory removeFilmCategory(FilmCategory filmCategory) {
-//		getFilmCategories().remove(filmCategory);
-//		filmCategory.setFilm(null);
-//
-//		return filmCategory;
-//	}
+		return filmActor;
+	}
+
+	public FilmActor removeFilmActor(FilmActor filmActor) {
+		getFilmActors().remove(filmActor);
+		filmActor.setFilm(null);
+
+		return filmActor;
+	}
+
+	public List<FilmCategory> getFilmCategories() {
+		return this.filmCategories;
+	}
+
+	public void setFilmCategories(List<FilmCategory> filmCategories) {
+		this.filmCategories = filmCategories;
+	}
+
+	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
+		getFilmCategories().add(filmCategory);
+		filmCategory.setFilm(this);
+
+		return filmCategory;
+	}
+
+	public FilmCategory removeFilmCategory(FilmCategory filmCategory) {
+		getFilmCategories().remove(filmCategory);
+		filmCategory.setFilm(null);
+
+		return filmCategory;
+	}
 
 }
