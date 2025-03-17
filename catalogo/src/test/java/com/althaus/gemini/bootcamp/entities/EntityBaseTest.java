@@ -1,4 +1,4 @@
-package com.althaus.gemini.bootcamp.entities;
+ package com.althaus.gemini.bootcamp.entities;
 
 import static org.junit.jupiter.api.Assertions.*;
 

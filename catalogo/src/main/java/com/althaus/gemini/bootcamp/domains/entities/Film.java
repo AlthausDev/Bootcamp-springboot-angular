@@ -2,6 +2,9 @@ package com.althaus.gemini.bootcamp.domains.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
@@ -45,16 +48,18 @@ public class Film implements Serializable {
 	@Column(name="replacement_cost", nullable=false, precision=10, scale=2)
 	private BigDecimal replacementCost;
 
+	@NotBlank
 	@Column(nullable=false, length=128)
 	private String title;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@NotNull
 	@JoinColumn(name="language_id", nullable=false)
 	private Language language;
 
 	//bi-directional many-to-one association to Language
-	@ManyToOne
+	@ManyToOne	
 	@JoinColumn(name="original_language_id")
 	private Language languageVO;
 
