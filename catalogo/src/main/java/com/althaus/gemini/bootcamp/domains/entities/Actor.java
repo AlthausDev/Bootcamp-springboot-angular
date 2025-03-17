@@ -44,9 +44,9 @@ public class Actor implements Serializable {
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to FilmActor
-	@OneToMany(mappedBy="actor", fetch = FetchType.LAZY)
-	private List<FilmActor> filmActors;
-
+//	@OneToMany(mappedBy="actor", fetch = FetchType.LAZY)
+//	private List<FilmActor> filmActors;
+//
 	public Actor() {
 	}
 	
@@ -55,13 +55,13 @@ public class Actor implements Serializable {
 		this.actorId = actorId;
 	}
 
-	public Actor(int actorId, String firstName, String lastName, Timestamp lastUpdate, List<FilmActor> filmActors) {
+	public Actor(int actorId, String firstName, String lastName, Timestamp lastUpdate) {
 		this.actorId = actorId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.lastUpdate = lastUpdate;
-		this.filmActors = filmActors;
-	}
+//		this.filmActors = filmActors;
+		}
 
 	
 
@@ -123,26 +123,26 @@ public class Actor implements Serializable {
 		this.lastUpdate = lastUpdate;
 	}
 
-	public List<FilmActor> getFilmActors() {
-		return this.filmActors;
-	}
+//	public List<FilmActor> getFilmActors() {
+//		return this.filmActors;
+//	}
+//
+//	public void setFilmActors(List<FilmActor> filmActors) {
+//		this.filmActors = filmActors;
+//	}
 
-	public void setFilmActors(List<FilmActor> filmActors) {
-		this.filmActors = filmActors;
-	}
+//	public FilmActor addFilmActor(FilmActor filmActor) {
+//		getFilmActors().add(filmActor);
+//		filmActor.setActor(this);
+//
+//		return filmActor;
+//	}
 
-	public FilmActor addFilmActor(FilmActor filmActor) {
-		getFilmActors().add(filmActor);
-		filmActor.setActor(this);
-
-		return filmActor;
-	}
-
-	public FilmActor removeFilmActor(FilmActor filmActor) {
-		getFilmActors().remove(filmActor);
-		filmActor.setActor(null);
-
-		return filmActor;
-	}
+//	public FilmActor removeFilmActor(FilmActor filmActor) {
+//		getFilmActors().remove(filmActor);
+//		filmActor.setActor(null);
+//
+//		return filmActor;
+//	}
 
 }

@@ -28,8 +28,8 @@ public class Category implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to FilmCategory
-	@OneToMany(mappedBy="category")
-	private List<FilmCategory> filmCategories;
+//	@OneToMany(mappedBy="category")
+//	private List<FilmCategory> filmCategories;
 
 	public Category() {
 	}
@@ -58,26 +58,26 @@ public class Category implements Serializable {
 		this.name = name;
 	}
 
-	public List<FilmCategory> getFilmCategories() {
-		return this.filmCategories;
-	}
+//	public List<FilmCategory> getFilmCategories() {
+//		return this.filmCategories;
+//	}
+//
+//	public void setFilmCategories(List<FilmCategory> filmCategories) {
+//		this.filmCategories = filmCategories;
+//	}
 
-	public void setFilmCategories(List<FilmCategory> filmCategories) {
-		this.filmCategories = filmCategories;
-	}
-
-	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
-		getFilmCategories().add(filmCategory);
-		filmCategory.setCategory(this);
-
-		return filmCategory;
-	}
-
-	public FilmCategory removeFilmCategory(FilmCategory filmCategory) {
-		getFilmCategories().remove(filmCategory);
-		filmCategory.setCategory(null);
-
-		return filmCategory;
-	}
+//	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
+//		getFilmCategories().add(filmCategory);
+//		filmCategory.setCategory(this);
+//
+//		return filmCategory;
+//	}
+//
+//	public FilmCategory removeFilmCategory(FilmCategory filmCategory) {
+//		getFilmCategories().remove(filmCategory);
+//		filmCategory.setCategory(null);
+//
+//		return filmCategory;
+//	}
 
 }

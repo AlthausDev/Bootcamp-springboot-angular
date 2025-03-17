@@ -29,21 +29,16 @@ public class CatalogoApplication implements CommandLineRunner {
 	@Autowired
 	private LanguageService languageService;
 
-	public static void main(String[] args) {
-		SpringApplication.run(CatalogoApplication.class, args);
-	}
+public static void main(String[] args) {
+	SpringApplication.run(CatalogoApplication.class, args);
+}
 
-	@Override
-	public void run(String... args) throws Exception {
-		List<Actor> actores = actorService.readAllList();
-		//System.err.println(actores);
-	}
-	
-	@Bean
-	CommandLineRunner demo() {
-		return(args)->{
-			System.err.println("Aplicacion arrancada");
-		};
-	}
+@Override
+public void run(String... args) throws Exception {
+	System.err.println("Aplicacion arrancada");
+	List<Actor> actores = actorService.readAllList();
+	System.err.println(actores);
+}
+
 
 }
