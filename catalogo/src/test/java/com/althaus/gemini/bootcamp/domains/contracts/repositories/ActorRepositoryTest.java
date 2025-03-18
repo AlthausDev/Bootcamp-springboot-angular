@@ -42,4 +42,11 @@ class ActorRepositoryTest {
 		assertThat(actors).isNotEmpty();
 		assertThat(actors.get(0).getActorId()).isGreaterThan(100);
 	}
+
+	@Test
+	void testFindByFirstNameContaining() {
+		List<Actor> actors = actorRepository.findByFirstNameContaining("J");
+		assertThat(actors).isNotEmpty();
+		assertThat(actors.get(0).getFirstName()).contains("J");
+	}
 }

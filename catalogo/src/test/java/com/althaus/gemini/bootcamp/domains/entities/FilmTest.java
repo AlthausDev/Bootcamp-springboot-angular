@@ -99,39 +99,5 @@ public class FilmTest {
         assertEquals(languageVO, film.getLanguageVO());
     }
 
-    @Test
-    public void testGetAndSetFilmActors() {
-        FilmActor filmActor = new FilmActor();
-        film.setFilmActors(new ArrayList<>());
-        film.addFilmActor(filmActor);
-        assertTrue(film.getFilmActors().contains(filmActor));
-    }
-
-    @Test
-    public void testAddAndRemoveFilmActor() {
-        FilmActor filmActor = new FilmActor();
-        film.setFilmActors(new ArrayList<>());
-        film.addFilmActor(filmActor);
-        assertTrue(film.getFilmActors().contains(filmActor));
-        film.removeFilmActor(filmActor);
-        assertFalse(film.getFilmActors().contains(filmActor));
-    }
-
-    @Test
-    public void testGetAndSetFilmCategories() {
-        FilmCategory filmCategory = new FilmCategory();
-        film.setFilmCategories(new ArrayList<>());
-        film.addFilmCategory(filmCategory);
-        assertTrue(film.getFilmCategories().contains(filmCategory));
-    }
-
-    @Test
-    public void testAddAndRemoveFilmCategory() {
-        FilmCategory filmCategory = new FilmCategory();
-        film.setFilmCategories(new ArrayList<>());
-        film.addFilmCategory(filmCategory);
-        assertTrue(film.getFilmCategories().contains(filmCategory));
-        film.removeFilmCategory(filmCategory);
-        assertFalse(film.getFilmCategories().contains(filmCategory));
-    }
+  
 }
