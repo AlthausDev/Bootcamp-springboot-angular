@@ -17,8 +17,5 @@ public interface FilmRepository extends CoreRepository<Film, Integer>{
     List<Film> findByLength(int length);
     List<Film> findByReplacementCost(double replacementCost);
     List<Film> findByRating(String rating);
-    List<Film> findBySpecialFeaturesContaining(String specialFeatures);
-    List<Film> findByLanguageId(int languageId);
-    List<Film> findByOriginalLanguageId(int originalLanguageId);
     List<Film> findByLastUpdate(Timestamp lastUpdate);
 }

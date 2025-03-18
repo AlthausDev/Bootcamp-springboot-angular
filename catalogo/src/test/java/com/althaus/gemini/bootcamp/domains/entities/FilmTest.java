@@ -45,7 +45,7 @@ public class FilmTest {
 
     @Test
     public void testGetAndSetRating() {
-        String rating = "A";
+        Film.Rating rating = Film.Rating.GENERAL_AUDIENCES;
         film.setRating(rating);
         assertEquals(rating, film.getRating());
     }

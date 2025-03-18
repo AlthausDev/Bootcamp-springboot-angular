@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 
@@ -24,9 +26,9 @@ import java.sql.Timestamp;
             public void testFindByRentalRate() {
                 double rentalRate = 2.99;
                 Film film1 = new Film();
-                film1.setRentalRate(rentalRate);
+                film1.setRentalRate(BigDecimal.valueOf(rentalRate));
                 Film film2 = new Film();
-                film2.setRentalRate(rentalRate);
+                film2.setRentalRate(BigDecimal.valueOf(rentalRate));
 
                 List<Film> expectedFilms = Arrays.asList(film1, film2);
 
@@ -58,9 +60,9 @@ import java.sql.Timestamp;
             public void testFindByReleaseYear() {
                 int releaseYear = 1999;
                 Film film1 = new Film();
-                film1.setReleaseYear(releaseYear);
+                film1.setReleaseYear((short) releaseYear);
                 Film film2 = new Film();
-                film2.setReleaseYear(releaseYear);
+                film2.setReleaseYear((short) releaseYear);
 
                 List<Film> expectedFilms = Arrays.asList(film1, film2);
 
