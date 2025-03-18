@@ -12,9 +12,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.beans.BeanUtils;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.AttributeConverter;
@@ -42,13 +41,17 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
  * The persistent class for the film database table.
  * 
  */
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -171,7 +174,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	private Rating rating;
 
 	// @Temporal(TemporalType.DATE)
-	// @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy")
 	@Min(1901)
 	@Max(2155)
 	@Column(name = "release_year")
@@ -226,9 +229,6 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	@JsonBackReference
 	private List<FilmCategory> filmCategories = new ArrayList<FilmCategory>();
 
-	public Film() {
-	}
-
 	public Film(int filmId) {
 		this.filmId = filmId;
 	}
@@ -275,10 +275,6 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		this.length = length;
 		this.replacementCost = replacementCost;
 		this.rating = rating;
-	}
-
-	public int getFilmId() {
-		return this.filmId;
 	}
 
 	public void setFilmId(int filmId) {

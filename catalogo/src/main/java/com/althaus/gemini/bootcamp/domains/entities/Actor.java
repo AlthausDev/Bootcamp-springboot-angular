@@ -6,6 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -18,6 +22,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  * The persistent class for the actor database table.
  * 
  */
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name="actor")
 @NamedQuery(name="Actor.findAll", query="SELECT a FROM Actor a")
@@ -49,9 +57,6 @@ public class Actor implements Serializable {
 	@OneToMany(mappedBy="actor", fetch = FetchType.LAZY)
 	@JsonBackReference
 	private List<FilmActor> filmActors;
-
-	public Actor() {
-	}
 	
 	
 	public Actor(int actorId) {
@@ -64,7 +69,6 @@ public class Actor implements Serializable {
 		this.lastName = lastName;
 		}
 
-	
 
 	@Override
 	public int hashCode() {
@@ -90,48 +94,7 @@ public class Actor implements Serializable {
 		return "Actor [actorId=" + actorId + ", firstName=" + firstName + ", lastName=" + lastName + ", lastUpdate="
 				+ lastUpdate + "]";
 	}
-
-
-	public int getActorId() {
-		return this.actorId;
-	}
-
-	public void setActorId(int actorId) {
-		this.actorId = actorId;
-	}
-
-	public String getFirstName() {
-		return this.firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return this.lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public Timestamp getLastUpdate() {
-		return this.lastUpdate;
-	}
-
-	public void setLastUpdate(Timestamp lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
-
-	public List<FilmActor> getFilmActors() {
-		return this.filmActors;
-	}
-
-	public void setFilmActors(List<FilmActor> filmActors) {
-		this.filmActors = filmActors;
-	}
-
+	
 	public FilmActor addFilmActor(FilmActor filmActor) {
 		getFilmActors().add(filmActor);
 		filmActor.setActor(this);

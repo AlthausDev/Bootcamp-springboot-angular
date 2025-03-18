@@ -3,6 +3,10 @@ package com.althaus.gemini.bootcamp.domains.entities;
 import java.io.Serializable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -15,6 +19,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * The persistent class for the category database table.
  * 
  */
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name="category")
 @NamedQuery(name="Category.findAll", query="SELECT c FROM Category c")
@@ -41,57 +49,23 @@ public class Category implements Serializable {
 	@JsonIgnore
 	private List<FilmCategory> filmCategories;
 
-	public Category() {
-	}
 	
 	public Category(int categoryId) {
 		this.categoryId = categoryId;
 	}
 
-	public int getCategoryId() {
-		return this.categoryId;
+	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
+		getFilmCategories().add(filmCategory);
+		filmCategory.setCategory(this);
+
+		return filmCategory;
 	}
 
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
+	public FilmCategory removeFilmCategory(FilmCategory filmCategory) {
+		getFilmCategories().remove(filmCategory);
+		filmCategory.setCategory(null);
+
+		return filmCategory;
 	}
-
-	public Timestamp getLastUpdate() {
-		return this.lastUpdate;
-	}
-
-	public void setLastUpdate(Timestamp lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-//	public List<FilmCategory> getFilmCategories() {
-//		return this.filmCategories;
-//	}
-//
-//	public void setFilmCategories(List<FilmCategory> filmCategories) {
-//		this.filmCategories = filmCategories;
-//	}
-
-//	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
-//		getFilmCategories().add(filmCategory);
-//		filmCategory.setCategory(this);
-//
-//		return filmCategory;
-//	}
-//
-//	public FilmCategory removeFilmCategory(FilmCategory filmCategory) {
-//		getFilmCategories().remove(filmCategory);
-//		filmCategory.setCategory(null);
-//
-//		return filmCategory;
-//	}
-
+	
 }
