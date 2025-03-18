@@ -24,12 +24,15 @@ import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.item.xml.StaxEventItemReader;
+import org.springframework.batch.item.xml.StaxEventItemWriter;
 import org.springframework.batch.item.xml.builder.StaxEventItemReaderBuilder;
+import org.springframework.batch.item.xml.builder.StaxEventItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -53,17 +56,29 @@ public class PersonasJobConfiguration {
 	@Autowired
 	public PersonaItemProcessor personaItemProcessor;
 	
+//	@Bean
+//	public Job personasJob(PersonasJobListener listener, JdbcBatchItemWriter<Persona> personaDBItemWriter, 
+//			Step exportDB2CSVStep, Step exportDB2XMLStep) {
+//		return new JobBuilder("personasJob", jobRepository)
+//				.incrementer(new RunIdIncrementer())
+//				.listener(listener)
+//				.start(importCSV2DBStep(1, "input/personas-1.csv", personaDBItemWriter))			
+//				.next(exportDB2CSVStep)
+//				.next(exportDB2XMLStep)
+//				.build();
+//	}
+	
 	@Bean
-	public Job personasJob(PersonasJobListener listener, JdbcBatchItemWriter<Persona> personaDBItemWriter, Step exportDB2CSVStep) {
+	public Job personasJob(Step importXML2DBStep1, Step exportDB2XMLStep, Step exportDB2CSVStep) {
 		return new JobBuilder("personasJob", jobRepository)
 				.incrementer(new RunIdIncrementer())
-				.listener(listener)
-				.start(importCSV2DBStep(1, "input/personas-1.csv", personaDBItemWriter))
+				.start(importXML2DBStep1)
+				.next(exportDB2XMLStep)
 				.next(exportDB2CSVStep)
 				.build();
 	}
 	
-	//CSV to DB
+
 	public FlatFileItemReader<PersonaModel> personaCSVItemReader(String fname){
 		return new FlatFileItemReaderBuilder<PersonaModel>()
 				.name("personaCSVItemReader")
@@ -76,7 +91,33 @@ public class PersonasJobConfiguration {
 				}})
 				.build();
 	}
+	
+	@Bean
+	public FlatFileItemWriter<Persona> personaCSVItemWriter(){
+		return new FlatFileItemWriterBuilder<Persona>()
+				.name("personaCSVItemWriter")
+				.resource(new FileSystemResource("output/outputData.csv"))
+				.lineAggregator(new DelimitedLineAggregator<Persona>() {
+					{
+						setDelimiter(",");
+						setFieldExtractor(new BeanWrapperFieldExtractor<Persona>(){ 
+							{
+							setNames(new String[] {"id", "nombre", "correo", "ip"});
+							}
+						});
+					}
+				}).build();
+	}
 
+	@Bean
+	JdbcCursorItemReader<Persona>personaDBItemReader(DataSource dataSource){
+		return new JdbcCursorItemReaderBuilder<Persona>()
+				.name("personaDBItemReader")
+				.sql("SELECT id, nombre, correo, ip FROM personas")
+				.dataSource(dataSource)
+				.rowMapper(new BeanPropertyRowMapper<>(Persona.class))
+				.build();
+	}
 	
 	@Bean
 	@DependsOnDatabaseInitialization
@@ -96,35 +137,7 @@ public class PersonasJobConfiguration {
 				.writer(toDB)
 				.build();
 	}
-	
-	//DB to CSV
-	@Bean
-	JdbcCursorItemReader<Persona>personaDBItemReader(DataSource dataSource){
-		return new JdbcCursorItemReaderBuilder<Persona>()
-				.name("personaDBItemReader")
-				.sql("SELECT id, nombre, correo, ip FROM personas")
-				.dataSource(dataSource)
-				.rowMapper(new BeanPropertyRowMapper<>(Persona.class))
-				.build();
-	}
-	
-	@Bean
-	public FlatFileItemWriter<Persona> personaCSVItemWriter(){
-		return new FlatFileItemWriterBuilder<Persona>()
-				.name("personaCSVItemWriter")
-				.resource(new FileSystemResource("output/outputData.csv"))
-				.lineAggregator(new DelimitedLineAggregator<Persona>() {
-					{
-						setDelimiter(",");
-						setFieldExtractor(new BeanWrapperFieldExtractor<Persona>(){ 
-							{
-							setNames(new String[] {"id", "nombre", "correo", "ip"});
-							}
-						});
-					}
-				}).build();
-	}			
-	
+		
 	@Bean
 	public Step exportDB2SCVStep(JdbcCursorItemReader<Persona> personaDBItemReader) {
 		return new StepBuilder("exportDB2CSVStep", jobRepository)
@@ -134,7 +147,6 @@ public class PersonasJobConfiguration {
 				.build();
 	}
 	
-	//XML to DB
 	public StaxEventItemReader<PersonaModel>personaXMLItemReader(){
 		
 		XStreamMarshaller marshaller = new XStreamMarshaller();
@@ -147,21 +159,46 @@ public class PersonasJobConfiguration {
 		
 		return new StaxEventItemReaderBuilder<PersonaModel>()
 				.name("personaXMLItemReader")
-				.resource(new ClassPathResource("Personas.xml"))
+				.resource(new ClassPathResource("input/Personas.xml"))
 				.addFragmentRootElements("Persona")
 				.unmarshaller(marshaller)
 				.build();
 	}
 	
+	public StaxEventItemWriter<Persona> personaXMLItemWriter(){
+		XStreamMarshaller marshaller = new XStreamMarshaller();
+		
+		Map<String, Class> aliases = new HashMap<>();
+		aliases.put("Persona", Persona.class);
+		
+		marshaller.setAliases(aliases);
+		
+		return new StaxEventItemWriterBuilder<Persona>()
+				.name("personaXMLItemWriter")
+				.resource(new FileSystemResource("output/outputData.xml"))
+				.marshaller(marshaller)
+				.rootTagName("Personas")
+				.overwriteOutput(true)
+				.build();			
+	}
+	
+	@Primary
 	@Bean
 	public Step importXML2DBStep1(JdbcBatchItemWriter<Persona> personaDBItemWriter) {
 		return new StepBuilder("importXML2DBStep1", jobRepository)
-				.<PersonaModel, Persona>chunk(10, transactionManager)
+				.<PersonaModel, Persona>chunk(100, transactionManager)
 				.reader(personaXMLItemReader())
 				.processor(personaItemProcessor)
 				.writer(personaDBItemWriter)
 				.build();
 	}
 	
-	
+	@Bean
+	public Step exportDB2XMLStep(JdbcCursorItemReader<Persona> personaDBItemReader) {
+		return new StepBuilder("exportDB2XMLStep", jobRepository)
+				.<Persona, Persona>chunk(100, transactionManager)
+				.reader(personaDBItemReader)
+				.writer(personaXMLItemWriter())
+				.build();
+		}	
 }
