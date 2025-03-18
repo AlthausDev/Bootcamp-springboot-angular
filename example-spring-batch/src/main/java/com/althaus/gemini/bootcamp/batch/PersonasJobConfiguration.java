@@ -46,7 +46,7 @@ public class PersonasJobConfiguration {
 	@Autowired
 	public PersonaItemProcessor personaItemProcessor;
 	
-	
+	//CSV to DB
 	public FlatFileItemReader<PersonaModel> personaCSVItemReader(String fname){
 		return new FlatFileItemReaderBuilder<PersonaModel>()
 				.name("personaCSVItemReader")
@@ -81,23 +81,50 @@ public class PersonasJobConfiguration {
 	}
 	
 	@Bean
-	public Job personasJob(PersonasJobListener listener, JdbcBatchItemWriter<Persona> personaDBItemWriter) {
+	public Job personasJob(PersonasJobListener listener, JdbcBatchItemWriter<Persona> personaDBItemWriter, Step exportDB2CSVStep) {
 		return new JobBuilder("personasJob", jobRepository)
 				.incrementer(new RunIdIncrementer())
 				.listener(listener)
 				.start(importCSV2DBStep(1, "input/personas-1.csv", personaDBItemWriter))
+				.next(exportDB2CSVStep)
+				.build();
+	}
+	
+	
+	//DB to CSV
+	@Bean
+	JdbcCursorItemReader<Persona>personaDBItemReader(DataSource dataSource){
+		return new JdbcCursorItemReaderBuilder<Persona>()
+				.name("personaDBItemReader")
+				.sql("SELECT id, nombre, correo, ip FROM personas")
+				.dataSource(dataSource)
+				.rowMapper(new BeanPropertyRowMapper<>(Persona.class))
 				.build();
 	}
 	
 	@Bean
-	public Job personasJob(Step importXML2DBStep1, Step 
-	exportDB2XMLStep, Step exportDB2CSVStep) {
-		return new JobBuilder("personasJob", jobRepository)
-			.incrementer(new RunIdIncrementer())
-			.start(importXML2DBStep1)
-			.next(exportDB2XMLStep)
-			.next(exportDB2CSVStep)
-			.build();
+	public FlatFileItemWriter<Persona> personaCSVItemWriter(){
+		return new FlatFileItemWriterBuilder<Persona>()
+				.name("personaCSVItemWriter")
+				.resource(new FileSystemResource("output/outputData.csv"))
+				.lineAggregator(new DelimitedLineAggregator<Persona>() {
+					{
+						setDelimiter(",");
+						setFieldExtractor(new BeanWrapperFieldExtractor<Persona>(){ 
+							{
+							setNames(new String[] {"id", "nombre", "correo", "ip"});
+							}
+						});
+					}
+				}).build();
+	}			
+	
+	@Bean
+	public Step exportDB2SCVStep(JdbcCursorItemReader<Persona> personaDBItemReader) {
+		return new StepBuilder("exportDB2CSVStep", jobRepository)
+				.<Persona, Persona> chunk(100, transactionManager)
+				.reader(personaDBItemReader)
+				.writer(personaCSVItemWriter())
+				.build();
 	}
-
 }
