@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.job.builder.SimpleJobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -58,15 +59,25 @@ public class PersonasJobConfiguration {
 	
 
 	@Bean
-	public Job personasJob(PersonasJobListener listener, JdbcBatchItemWriter<Persona> personaDBItemWriter, Step importXML2DBStep1, Step exportDB2XMLStep, Step exportDB2CSVStep) {
-		return new JobBuilder("personasJob", jobRepository)
+	public Job personasJob(PersonasJobListener listener, JdbcBatchItemWriter<Persona> personaDBItemWriter, Step importXML2DBStep1, Step exportDB2XMLStep, Step exportDB2CSVStep, Step copyFilesInDir) {
+//		return new JobBuilder("personasJob", jobRepository)
+//				.incrementer(new RunIdIncrementer())
+//				.listener(listener)
+//				.start(importCSV2DBStep(1, "input/personas-1.csv", personaDBItemWriter))
+//				.next(importXML2DBStep1)
+//				.next(exportDB2XMLStep)
+//				.next(exportDB2CSVStep)
+//				.build();
+		
+		SimpleJobBuilder job = new JobBuilder("personasJob", jobRepository)
 				.incrementer(new RunIdIncrementer())
-				.listener(listener)
-				.start(importCSV2DBStep(1, "input/personas-1.csv", personaDBItemWriter))
-				.next(importXML2DBStep1)
-				.next(exportDB2XMLStep)
-				.next(exportDB2CSVStep)
-				.build();
+				.start(copyFilesInDir);
+		for(int i = 1; i <= 3; i++){
+			job = job.next(importCSV2DBStep(i, "input/personas-" + i + ".csv", personaDBItemWriter));
+		}
+			job = job.next(exportDB2CSVStep);
+			return job.build();
+		
 	}
 	
 
