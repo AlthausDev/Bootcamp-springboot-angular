@@ -56,23 +56,14 @@ public class PersonasJobConfiguration {
 	@Autowired
 	public PersonaItemProcessor personaItemProcessor;
 	
-//	@Bean
-//	public Job personasJob(PersonasJobListener listener, JdbcBatchItemWriter<Persona> personaDBItemWriter, 
-//			Step exportDB2CSVStep, Step exportDB2XMLStep) {
-//		return new JobBuilder("personasJob", jobRepository)
-//				.incrementer(new RunIdIncrementer())
-//				.listener(listener)
-//				.start(importCSV2DBStep(1, "input/personas-1.csv", personaDBItemWriter))			
-//				.next(exportDB2CSVStep)
-//				.next(exportDB2XMLStep)
-//				.build();
-//	}
-	
+
 	@Bean
-	public Job personasJob(Step importXML2DBStep1, Step exportDB2XMLStep, Step exportDB2CSVStep) {
+	public Job personasJob(PersonasJobListener listener, JdbcBatchItemWriter<Persona> personaDBItemWriter, Step importXML2DBStep1, Step exportDB2XMLStep, Step exportDB2CSVStep) {
 		return new JobBuilder("personasJob", jobRepository)
 				.incrementer(new RunIdIncrementer())
-				.start(importXML2DBStep1)
+				.listener(listener)
+				.start(importCSV2DBStep(1, "input/personas-1.csv", personaDBItemWriter))
+				.next(importXML2DBStep1)
 				.next(exportDB2XMLStep)
 				.next(exportDB2CSVStep)
 				.build();
@@ -159,7 +150,7 @@ public class PersonasJobConfiguration {
 		
 		return new StaxEventItemReaderBuilder<PersonaModel>()
 				.name("personaXMLItemReader")
-				.resource(new ClassPathResource("input/Personas.xml"))
+				.resource(new FileSystemResource("input/Personas.xml"))
 				.addFragmentRootElements("Persona")
 				.unmarshaller(marshaller)
 				.build();
