@@ -1,4 +1,4 @@
-package com.althaus.gemini.bootcamp.domains.contracts.repositories;
+package com.althaus.gemini.bootcamp.domains.core.contracts.repositories;
 
 import java.io.Serializable;
 

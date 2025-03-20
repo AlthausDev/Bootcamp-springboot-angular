@@ -1,4 +1,4 @@
-package com.althaus.gemini.bootcamp.domains.contracts.services;
+package com.althaus.gemini.bootcamp.domains.core.contracts.services;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.althaus.gemini.bootcamp.domains.contracts.services;
+package com.althaus.gemini.bootcamp.domains.core.contracts.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

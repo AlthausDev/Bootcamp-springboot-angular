@@ -1,4 +1,4 @@
-package com.althaus.gemini.bootcamp.domains.contracts.services.Impl;
+package com.althaus.gemini.bootcamp.domains.core.contracts.services.Impl;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -10,8 +10,8 @@ import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.S
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.althaus.gemini.bootcamp.domains.contracts.repositories.CoreRepository;
-import com.althaus.gemini.bootcamp.domains.contracts.services.CoreService;
+import com.althaus.gemini.bootcamp.domains.core.contracts.repositories.CoreRepository;
+import com.althaus.gemini.bootcamp.domains.core.contracts.services.CoreService;
 import com.althaus.gemini.bootcamp.domains.entities.Actor;
 
 public class CoreServiceImpl<T> implements CoreService<T> {

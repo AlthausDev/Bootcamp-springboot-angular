@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.althaus.gemini.bootcamp.domains.contracts.repositories.CategoryRepository;
 import com.althaus.gemini.bootcamp.domains.contracts.services.CategoryService;
+import com.althaus.gemini.bootcamp.domains.core.contracts.services.Impl.CoreServiceImpl;
 import com.althaus.gemini.bootcamp.domains.entities.Category;
 
 @Service

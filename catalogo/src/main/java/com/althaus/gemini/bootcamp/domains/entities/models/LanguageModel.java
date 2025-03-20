@@ -14,7 +14,7 @@ public class LanguageModel {
 
     @Schema(description = "Nombre del lenguaje", example = "English")
     private String name;
-  
+      
     public static LanguageModel from(Language source){
         return new LanguageModel(
             source.getLanguageId(),

@@ -22,11 +22,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.althaus.gemini.bootcamp.domains.contracts.services.ActorService;
-import com.althaus.gemini.bootcamp.domains.contracts.services.CoreService;
 import com.althaus.gemini.bootcamp.domains.entities.Actor;
 import com.althaus.gemini.bootcamp.domains.entities.models.ActorModel;
 import com.althaus.gemini.bootcamp.utils.exceptions.BadRequestException;

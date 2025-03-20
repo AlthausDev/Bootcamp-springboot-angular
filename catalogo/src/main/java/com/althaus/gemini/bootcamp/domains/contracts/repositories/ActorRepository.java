@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
+
+import com.althaus.gemini.bootcamp.domains.core.contracts.repositories.CoreRepository;
 import com.althaus.gemini.bootcamp.domains.entities.Actor;
 
 public interface ActorRepository extends CoreRepository<Actor, Integer> {

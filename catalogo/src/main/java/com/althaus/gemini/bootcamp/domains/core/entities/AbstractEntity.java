@@ -1,4 +1,4 @@
-package com.althaus.gemini.bootcamp.domains.entities;
+package com.althaus.gemini.bootcamp.domains.core.entities;
 
 import java.util.HashMap;
 import java.util.Map;

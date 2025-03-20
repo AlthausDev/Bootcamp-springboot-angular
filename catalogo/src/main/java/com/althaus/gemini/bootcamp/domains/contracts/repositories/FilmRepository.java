@@ -3,6 +3,7 @@ package com.althaus.gemini.bootcamp.domains.contracts.repositories;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.althaus.gemini.bootcamp.domains.core.contracts.repositories.CoreRepository;
 import com.althaus.gemini.bootcamp.domains.entities.Film;
 
 public interface FilmRepository extends CoreRepository<Film, Integer>{

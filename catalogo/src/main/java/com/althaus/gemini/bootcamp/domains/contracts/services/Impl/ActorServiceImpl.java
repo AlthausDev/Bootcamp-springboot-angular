@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.althaus.gemini.bootcamp.domains.contracts.repositories.ActorRepository;
 import com.althaus.gemini.bootcamp.domains.contracts.services.ActorService;
+import com.althaus.gemini.bootcamp.domains.core.contracts.services.Impl.CoreServiceImpl;
 import com.althaus.gemini.bootcamp.domains.entities.Actor;
 
 @Service
