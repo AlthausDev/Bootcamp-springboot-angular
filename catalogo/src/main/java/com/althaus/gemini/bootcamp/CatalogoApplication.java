@@ -34,8 +34,8 @@ public static void main(String[] args) {
 @Override
 public void run(String... args) throws Exception {
 	System.err.println("Aplicacion arrancada");
-	List<Actor> actores = actorService.readAllList();
-	System.err.println(actores);
+	//List<Actor> actores = actorService.readAllList();
+	//System.err.println(actores);
 }
 
 

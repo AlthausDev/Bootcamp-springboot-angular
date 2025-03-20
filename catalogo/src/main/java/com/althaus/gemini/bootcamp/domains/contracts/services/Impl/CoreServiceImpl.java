@@ -5,10 +5,14 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.althaus.gemini.bootcamp.domains.contracts.repositories.CoreRepository;
 import com.althaus.gemini.bootcamp.domains.contracts.services.CoreService;
+import com.althaus.gemini.bootcamp.domains.entities.Actor;
 
 public class CoreServiceImpl<T> implements CoreService<T> {
 
@@ -128,4 +132,29 @@ public class CoreServiceImpl<T> implements CoreService<T> {
 	            throw new RuntimeException("Error al eliminar todas las entidades", e);
 	        }
 	    }
+
+	// 	@Override
+	// public <T> List<T> getByProjection(Class<T> type) {
+	// 	return repository.findAllBy(type);
+	// }
+
+	// @Override
+	// public <T> Iterable<T> getByProjection(Sort sort, Class<T> type) {
+	// 	return repository.findAllBy(sort, type);
+	// }
+
+	// @Override
+	// public <T> Page<T> getByProjection(Pageable pageable, Class<T> type) {
+	// 	return repository.findAllBy(pageable, type);
+	// }
+
+	// @Override
+	// public Iterable<T> getAll(Sort sort) {
+	// 	return repository.findAll(sort);
+	// }
+
+	// @Override
+	// public Page<T> getAll(Pageable pageable) {
+	// 	return repository.findAll(pageable);
+	// }
 }
