@@ -1,6 +1,8 @@
 package com.althaus.gemini.bootcamp.application.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
@@ -31,6 +33,9 @@ import com.althaus.gemini.bootcamp.utils.exceptions.BadRequestException;
 import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;
 import com.althaus.gemini.bootcamp.utils.exceptions.NotFoundException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 import org.springframework.http.HttpStatus;
 
 @RestController
@@ -45,13 +50,35 @@ public class ActorController {
 		this.actorService = actorService;
 	}
 		
+	// @GetMapping
+	// public List<ActorModel> getAll() {
+	// 	return actorService.getByProjection(ActorModel.class);
+	// }
+
 	@GetMapping
+	@Operation(summary = "Obtener todos los actores", description = "Obtiene una lista de todos los actores")
 	public List<Actor> getAll() {
 		return actorService.readAllList();
 				
 	}
 	
+	record Titulo(int id, String titulo) {}
+
+	@Operation(summary = "Obtener las películas de un actor", description = "Obtiene una lista de las películas en las que ha participado un actor")
+	@GetMapping(path = "/{id}/pelis")	
+	@ApiResponse(responseCode = "200", description = "Películas encontradas")
+	@Transactional
+	public List<Titulo> getMoviesByActor(@PathVariable int id) {
+		Actor actor = actorService.read(id).get();
+
+		return actor.getFilmActors().stream()
+			.map(fa -> new Titulo(fa.getFilm().getFilmId(), fa.getFilm().getTitle()))
+			.toList();
+	}
+
+	@Operation(summary = "Obtener un actor por id", description = "Obtiene un actor por su id")
 	@GetMapping(path = "/{id}")
+	@ApiResponse(responseCode = "200", description = "Actor encontrado")
 	public ActorModel getById(@PathVariable int id) throws NotFoundException {
 		var item = actorService.read(id);
 		
@@ -61,7 +88,10 @@ public class ActorController {
 		return ActorModel.from(item.get());
 	}
 	
+	@Operation(summary = "Crear un actor", description = "Crea un actor")
 	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	@ApiResponse(responseCode = "201", description = "Actor creado")
 	public ResponseEntity<Object> create(@Valid @RequestBody ActorModel item) throws BadRequestException, InvalidDataException {
 		var newItem = actorService.create(ActorModel.from(item));
 		
@@ -70,8 +100,10 @@ public class ActorController {
 		return ResponseEntity.created(location).build();
 	}
 	
+	@Operation(summary = "Actualizar un actor", description = "Actualiza un actor")
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ApiResponse(responseCode = "204", description = "Actor actualizado")
 	public void update(@PathVariable int id, 
 			@Valid @RequestBody Actor item) throws BadRequestException, NotFoundException, InvalidDataException, NotFoundException {
 
@@ -86,8 +118,10 @@ public class ActorController {
 		}
 	}
 	
+	@Operation(summary = "Eliminar un actor", description = "Elimina un actor")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ApiResponse(responseCode = "204", description = "Actor eliminado")
 	public void delete(@PathVariable int id) {
 		actorService.deleteById(id);
 	}
