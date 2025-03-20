@@ -8,7 +8,7 @@ import com.althaus.gemini.bootcamp.domains.core.contracts.services.Impl.CoreServ
 import com.althaus.gemini.bootcamp.domains.entities.Category;
 
 @Service
-public class CategoryServiceImpl extends CoreServiceImpl<Category> implements CategoryService {
+public class CategoryServiceImpl extends CoreServiceImpl<Category, Integer> implements CategoryService {
 
 	private CategoryRepository categoryRepository;
 	

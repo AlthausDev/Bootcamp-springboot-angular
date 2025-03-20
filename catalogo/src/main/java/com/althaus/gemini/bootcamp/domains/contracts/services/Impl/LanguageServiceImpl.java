@@ -8,7 +8,7 @@ import com.althaus.gemini.bootcamp.domains.core.contracts.services.Impl.CoreServ
 import com.althaus.gemini.bootcamp.domains.entities.Language;
 
 @Service
-public class LanguageServiceImpl extends CoreServiceImpl<Language> implements LanguageService {
+public class LanguageServiceImpl extends CoreServiceImpl<Language, Integer> implements LanguageService {
 
 	private LanguageRepository languageRepository;
 	

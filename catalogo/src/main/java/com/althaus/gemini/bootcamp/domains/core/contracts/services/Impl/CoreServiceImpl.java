@@ -1,25 +1,25 @@
 package com.althaus.gemini.bootcamp.domains.core.contracts.services.Impl;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.althaus.gemini.bootcamp.domains.core.contracts.repositories.CoreRepository;
 import com.althaus.gemini.bootcamp.domains.core.contracts.services.CoreService;
-import com.althaus.gemini.bootcamp.domains.entities.Actor;
 
-public class CoreServiceImpl<T> implements CoreService<T> {
+public class CoreServiceImpl<T, K extends Serializable> implements CoreService<T, K> {
 
-    private final JpaRepository<T, Integer> repository;
+    private final CoreRepository<T, K> repository;
 	 private Class<T> entityClass;
 	   
-	    public CoreServiceImpl(CoreRepository<T, Integer> repository) {
+	    public CoreServiceImpl(CoreRepository<T, K> repository) {
 	        this.repository = repository;
 	        this.entityClass = initEntityClass();
 	    }
@@ -58,15 +58,15 @@ public class CoreServiceImpl<T> implements CoreService<T> {
 	        }
 	    }
 
-	    @Override
-	    public Optional<T> read(Integer id) {
-	        try {
-	            Optional<T> entity = repository.findById(id);
-	            return entity;
-	        } catch (Exception e) {
-	            throw new RuntimeException("Error al leer la entidad por ID", e);
-	        }
-	    }
+		@Override
+		public Optional<T> read(K id) {
+			try {
+				Optional<T> entity = repository.findById((K) id);
+				return entity;
+			} catch (Exception e) {
+				throw new RuntimeException("Error al leer la entidad por ID", e);
+			}
+		}
 
 	  
 	    public List<T> readAllList() {
@@ -106,18 +106,18 @@ public class CoreServiceImpl<T> implements CoreService<T> {
 	    }
 
 	   
-	    @Override
-	    public void deleteById(Integer id) {
-	        try {
-	            if (id == null) {
-	                throw new IllegalArgumentException("El ID no puede ser nulo para eliminar la entidad.");
-	            }
-
-	            repository.deleteById(id);
-	        } catch (Exception e) {
-	            throw new RuntimeException("Error al eliminar la entidad por ID", e);
-	        }
-	    }
+		@Override
+		public void deleteById(K id) {
+			try {
+				if (id == null) {
+					throw new IllegalArgumentException("El ID no puede ser nulo para eliminar la entidad.");
+				}
+		
+				repository.deleteById((K) id);
+			} catch (Exception e) {
+				throw new RuntimeException("Error al eliminar la entidad por ID", e);
+			}
+		}
 
 	    
 	    @Override
@@ -133,28 +133,22 @@ public class CoreServiceImpl<T> implements CoreService<T> {
 	        }
 	    }
 
-	// 	@Override
-	// public <T> List<T> getByProjection(Class<T> type) {
-	// 	return repository.findAllBy(type);
-	// }
+	@Override
+	public <P> List<P> getByProjection(Class<P> type) {
+		if (repository instanceof CoreRepository<?, ?> coreRepository) {
+			return repository.findAllBy(type);
+		} else {
+			throw new IllegalStateException("Repository is not an instance of CoreRepository");
+		}
+	}
 
-	// @Override
-	// public <T> Iterable<T> getByProjection(Sort sort, Class<T> type) {
-	// 	return repository.findAllBy(sort, type);
-	// }
+	@Override
+	public <P> Iterable<P> getByProjection(Sort sort, Class<P> type) {
+		return repository.findAllBy(sort, type);
+	}
 
-	// @Override
-	// public <T> Page<T> getByProjection(Pageable pageable, Class<T> type) {
-	// 	return repository.findAllBy(pageable, type);
-	// }
-
-	// @Override
-	// public Iterable<T> getAll(Sort sort) {
-	// 	return repository.findAll(sort);
-	// }
-
-	// @Override
-	// public Page<T> getAll(Pageable pageable) {
-	// 	return repository.findAll(pageable);
-	// }
+	@Override
+	public <P> Page<P> getByProjection(Pageable pageable, Class<P> type) {
+		return repository.findAllBy(pageable, type);
+	}
 }

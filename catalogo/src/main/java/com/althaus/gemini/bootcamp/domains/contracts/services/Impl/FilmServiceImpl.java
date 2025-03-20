@@ -8,7 +8,7 @@ import com.althaus.gemini.bootcamp.domains.core.contracts.services.Impl.CoreServ
 import com.althaus.gemini.bootcamp.domains.entities.Film;
 
 @Service
-public class FilmServiceImpl extends CoreServiceImpl<Film> implements FilmService {
+public class FilmServiceImpl extends CoreServiceImpl<Film, Integer> implements FilmService {
 	
 	private FilmRepository filmRepository;
 
