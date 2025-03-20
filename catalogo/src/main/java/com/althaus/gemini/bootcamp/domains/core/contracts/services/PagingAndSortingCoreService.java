@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-public interface PagingAndSortingCoreService<T, K> extends CoreService<T, K> {
+public interface PagingAndSortingCoreService<T, K> {
 	Iterable<T> getAll(Sort sort);
 	Page<T> getAll(Pageable pageable);
 }

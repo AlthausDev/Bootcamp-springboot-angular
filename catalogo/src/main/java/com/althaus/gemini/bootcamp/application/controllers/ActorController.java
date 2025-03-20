@@ -3,16 +3,14 @@ package com.althaus.gemini.bootcamp.application.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
-import jakarta.validation.Validator;
-import jakarta.websocket.server.PathParam;
-
 import java.net.URI;
 import java.util.List;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,17 +46,23 @@ public class ActorController {
 		this.actorService = actorService;
 	}
 		
-	// @GetMapping
-	// public List<ActorModel> getAll() {
-	// 	return actorService.getByProjection(ActorModel.class);
+	@GetMapping
+	public List<ActorModel> getAll() {
+		return actorService.getByProjection(ActorModel.class);
+	}
+
+	// @GetMapping(params = { "page" })
+	// @Operation(summary = "Obtiene todos los actores paginados")
+	// public Page<ActorModel> getAll(@ParameterObject Pageable pageable) {
+	// 	return actorService.getByProjection(pageable, ActorModel.class);
 	// }
 
-	@GetMapping
-	@Operation(summary = "Obtener todos los actores", description = "Obtiene una lista de todos los actores")
-	public List<Actor> getAll() {
-		return actorService.readAllList();
+	// @GetMapping
+	// @Operation(summary = "Obtener todos los actores", description = "Obtiene una lista de todos los actores")
+	// public List<Actor> getAll() {
+	// 	return actorService.readAllList();
 				
-	}
+	// }
 	
 	record Titulo(int id, String titulo) {}
 

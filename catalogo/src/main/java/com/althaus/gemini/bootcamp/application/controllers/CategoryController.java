@@ -38,7 +38,7 @@ public class CategoryController {
 
     // @GetMapping
     // @Operation(summary = "Obtener todas las categorías", description = "Obtiene una lista de todas las categorías")
-    // public List<Category> getAll() {
+    // public List<CategoryModel> getAll() {
     //     return categoryService.getByProjection(CategoryModel.class);
     // }
 
@@ -53,6 +53,7 @@ public class CategoryController {
     // @Operation(summary = "Crear una categoría", description = "Crea una nueva categoría")
     // @ApiResponse(responseCode = "201", description = "Categoría creada")
     // public ResponseEntity<Category> create(@Valid @RequestBody CategoryModel categoryModel) {
+        
     //     Category category = categoryService.create(categoryModel.toEntity());
     //     URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getCategoryId()).toUri();
     //     return ResponseEntity.created(location).body(category);

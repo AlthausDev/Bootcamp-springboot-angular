@@ -12,7 +12,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 
 @NoRepositoryBean
-public interface CoreRepository<T, ID extends Serializable> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {
+public interface CoreRepository<T, ID extends Serializable> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T>{
 
     <U> List<U> findAllBy(Class<U> tipo);
 	<U> List<U> findAllBy(Sort orden, Class<U> tipo);

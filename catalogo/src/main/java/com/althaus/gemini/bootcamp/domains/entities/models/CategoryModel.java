@@ -1,6 +1,7 @@
 package com.althaus.gemini.bootcamp.domains.entities.models;
 
 import java.sql.Timestamp;
+import com.althaus.gemini.bootcamp.domains.entities.Category;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,4 +24,12 @@ public class CategoryModel {
 	@JsonProperty("name")
 	@Schema(description = "Nombre de la categoría", example = "Action")
 	private String name;
+
+	public static CategoryModel from(Category source) {
+		return new CategoryModel(
+			source.getCategoryId(),
+			source.getLastUpdate(),
+			source.getName()
+		);
+	}
 }

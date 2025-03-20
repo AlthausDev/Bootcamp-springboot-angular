@@ -11,7 +11,7 @@ import org.springframework.data.domain.Sort;
 
 import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;
 
-public interface CoreService<T, E> {
+public interface CoreService<T, E> extends ProjectionCoreService<T, E>  {
 
 	T create(T entity) throws DuplicateKeyException, InvalidDataException;
 

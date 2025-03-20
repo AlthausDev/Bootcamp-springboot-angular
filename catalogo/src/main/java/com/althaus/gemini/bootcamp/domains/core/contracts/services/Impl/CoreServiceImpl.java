@@ -77,6 +77,19 @@ public class CoreServiceImpl<T, K extends Serializable> implements CoreService<T
 	        }
 	    }
 
+		@Override
+	public Iterable<T> getAll(Sort sort) {
+		return repository.findAll(sort);
+
+	}
+
+
+	@Override
+	public Page<T> getAll(Pageable pageable) {
+		return repository.findAll(pageable);
+
+	}
+
 	  
 	    @Override
 	    public T update(T entity) {
@@ -135,11 +148,7 @@ public class CoreServiceImpl<T, K extends Serializable> implements CoreService<T
 
 	@Override
 	public <P> List<P> getByProjection(Class<P> type) {
-		if (repository instanceof CoreRepository<?, ?> coreRepository) {
-			return repository.findAllBy(type);
-		} else {
-			throw new IllegalStateException("Repository is not an instance of CoreRepository");
-		}
+		return repository.findAllBy(type);
 	}
 
 	@Override
@@ -151,4 +160,5 @@ public class CoreServiceImpl<T, K extends Serializable> implements CoreService<T
 	public <P> Page<P> getByProjection(Pageable pageable, Class<P> type) {
 		return repository.findAllBy(pageable, type);
 	}
+
 }
