@@ -21,4 +21,11 @@ public class LanguageModel {
             source.getName()
         );
     }
+
+    public static Language from(LanguageModel source){
+        return new Language(
+            source.getLanguageId(),
+            source.getName()
+        );
+    }
 }

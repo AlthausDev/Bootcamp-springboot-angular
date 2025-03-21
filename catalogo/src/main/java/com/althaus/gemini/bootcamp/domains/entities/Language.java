@@ -95,4 +95,9 @@ public class Language implements Serializable {
 		return "Language [languageId=" + languageId + ", name=" + name + "]";
 	}
 
+    public Language(int languageId2, String name2) {
+		this.languageId = languageId2;
+		this.name = name2;
+	}
+
 }
