@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 import com.althaus.gemini.bootcamp.domains.core.entities.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.AttributeConverter;
@@ -60,10 +61,11 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static enum Rating {
-		GENERAL_AUDIENCES("G"), PARENTAL_GUIDANCE_SUGGESTED("PG"), PARENTS_STRONGLY_CAUTIONED("PG-13"), RESTRICTED("R"),
+		GENERAL_AUDIENCES("G"), PARENTAL_GUIDANCE_SUGGESTED("PG"), 
+		PARENTS_STRONGLY_CAUTIONED("PG-13"), RESTRICTED("R"),
 		ADULTS_ONLY("NC-17");
 
-		String value;
+		private String value;
 
 		Rating(String value) {
 			this.value = value;
@@ -74,23 +76,15 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		}
 
 		public static Rating getEnum(String value) {
-			switch (value) {
-			case "G":
-				return Rating.GENERAL_AUDIENCES;
-			case "PG":
-				return Rating.PARENTAL_GUIDANCE_SUGGESTED;
-			case "PG-13":
-				return Rating.PARENTS_STRONGLY_CAUTIONED;
-			case "R":
-				return Rating.RESTRICTED;
-			case "NC-17":
-				return Rating.ADULTS_ONLY;
-			case "":
-				return null;
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + value);
-			}
-		}
+            return switch (value) {
+                case "G" -> GENERAL_AUDIENCES;
+                case "PG" -> PARENTAL_GUIDANCE_SUGGESTED;
+                case "PG-13" -> PARENTS_STRONGLY_CAUTIONED;
+                case "R" -> RESTRICTED;
+                case "NC-17" -> ADULTS_ONLY;
+                default -> throw new IllegalArgumentException("Unexpected value: " + value);
+            };
+        }
 
 		public static final String[] VALUES = { "G", "PG", "PG-13", "R", "NC-17" };
 	}
@@ -101,7 +95,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	    DeletedScenes("Deleted Scenes"),
 	    BehindTheScenes("Behind the Scenes");
 
-	    String value;
+	    private String value;
 
 	    SpecialFeature(String value) {
 	        this.value = value;
@@ -220,34 +214,22 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 
 	// bi-directional many-to-one association to FilmActor
 	@OneToMany(mappedBy = "film", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonBackReference
+	@JsonManagedReference
 	private List<FilmActor> filmActors = new ArrayList<FilmActor>();
 
 	// bi-directional many-to-one association to FilmCategory
 	@OneToMany(mappedBy = "film", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonBackReference
+	@JsonManagedReference
 	private List<FilmCategory> filmCategories = new ArrayList<FilmCategory>();
 
 	public Film(int filmId) {
 		this.filmId = filmId;
 	}
 
-	public Film(@NotBlank @Size(max = 128) String title, @NotNull Language language, @Positive byte rentalDuration,
-			@Positive @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 2, fraction = 2) BigDecimal rentalRate,
-			@DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 3, fraction = 2) BigDecimal replacementCost) {
-		super();
-		this.title = title;
-		this.language = language;
-		this.rentalDuration = rentalDuration;
-		this.rentalRate = rentalRate;
-		this.replacementCost = replacementCost;
-	}
-
 	public Film(int filmId, @NotBlank @Size(max = 128) String title, @NotNull Language language,
 			@NotNull @Positive byte rentalDuration,
 			@NotNull @Digits(integer = 2, fraction = 2) @DecimalMin(value = "0.0", inclusive = false) BigDecimal rentalRate,
 			@NotNull @Digits(integer = 3, fraction = 2) @DecimalMin(value = "0.0", inclusive = false) BigDecimal replacementCost) {
-		super();
 		this.filmId = filmId;
 		this.title = title;
 		this.language = language;
@@ -257,47 +239,24 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	}
 
 	public Film(int filmId, @NotBlank @Size(max = 128) String title, String description, @Min(1895) Short releaseYear,
-			@NotNull Language language, Language languageVO, @Positive byte rentalDuration,
-			@Positive @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 2, fraction = 2) BigDecimal rentalRate,
-			@Positive Integer length,
-			@DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 3, fraction = 2) BigDecimal replacementCost,
-			Rating rating) {
-		super();
-		this.filmId = filmId;
-		this.title = title;
-		this.description = description;
-		this.releaseYear = releaseYear;
-		this.language = language;
-		this.languageVO = languageVO;
-		this.rentalDuration = rentalDuration;
-		this.rentalRate = rentalRate;
-		this.length = length;
-		this.replacementCost = replacementCost;
-		this.rating = rating;
-	}
-
-		
-	// Constructor with all parameters
-	public Film(int filmId, String description, Integer length, Rating rating, Short releaseYear, Byte rentalDuration,
-			BigDecimal rentalRate, BigDecimal replacementCost, String title, Language language, Language languageVO,
-			List<SpecialFeature> specialFeatures, List<Actor> actors, List<Category> categories) {
-		this.filmId = filmId;
-		this.description = description;
-		this.length = length;
-		this.rating = rating;
-		this.releaseYear = releaseYear;
-		this.rentalDuration = rentalDuration;
-		this.rentalRate = rentalRate;
-		this.replacementCost = replacementCost;
-		this.title = title;
-		this.language = language;
-		this.languageVO = languageVO;
-		this.specialFeatures = specialFeatures == null ? EnumSet.noneOf(SpecialFeature.class)
-				: EnumSet.copyOf(specialFeatures);
-		setActors(actors);
-		setCategories(categories);
-	}
-
+                @NotNull Language language, Language languageVO, @Positive byte rentalDuration,
+                @Positive @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 2, fraction = 2) BigDecimal rentalRate,
+                @Positive Integer length,
+                @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 3, fraction = 2) BigDecimal replacementCost,
+                Rating rating) {
+        this.filmId = filmId;
+        this.title = title;
+        this.description = description;
+        this.releaseYear = releaseYear;
+        this.language = language;
+        this.languageVO = languageVO;
+        this.rentalDuration = rentalDuration;
+        this.rentalRate = rentalRate;
+        this.length = length;
+        this.replacementCost = replacementCost;
+        this.rating = rating;
+    }
+	
 	public void setFilmId(int filmId) {
 		this.filmId = filmId;
 		if (filmActors != null && filmActors.size() > 0)
@@ -311,10 +270,8 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 					item.getId().setFilmId(filmId);
 			});
 	}
-
 	
 	// Gestión de actores
-
 	public List<Actor> getActors() {
 		return this.filmActors.stream().map(item -> item.getActor()).toList();
 	}
@@ -350,7 +307,6 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	}
 
 	// Gestión de categorias
-
 	public List<Category> getCategories() {
 		return this.filmCategories.stream().map(item -> item.getCategory()).toList();
 	}
@@ -398,42 +354,18 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		this.specialFeatures.remove(specialFeatures);
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(filmId);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj instanceof Film o)
-			return filmId == o.filmId;
-		else
-			return false;
-	}
-
-	@Override
-	public String toString() {
-		return "Film [filmId=" + filmId + ", title=" + title + ", rentalDuration=" + rentalDuration + ", rentalRate="
-				+ rentalRate + ", replacementCost=" + replacementCost + ", lastUpdate=" + lastUpdate + ", description="
-				+ description + ", length=" + length + ", rating=" + rating + ", releaseYear=" + releaseYear
-				+ ", language=" + language + ", languageVO=" + languageVO + "]";
-	}
-
 	public Film merge(Film target) {
-//		BeanUtils.copyProperties(this, target, "filmId" , "filmActors", "filmCategories");
-		target.title = title;
-		target.description = description;
-		target.releaseYear = releaseYear;
-		target.language = language;
-		target.languageVO = languageVO;
-		target.rentalDuration = rentalDuration;
-		target.rentalRate = rentalRate;
-		target.length = length;
-		target.replacementCost = replacementCost;
-		target.rating = rating;
-		target.specialFeatures = EnumSet.copyOf(specialFeatures);
+        target.setTitle(title);
+        target.setDescription(description);
+        target.setReleaseYear(releaseYear);
+        target.setLanguage(language);
+        target.setLanguageVO(languageVO);
+        target.setRentalDuration(rentalDuration);
+        target.setRentalRate(rentalRate);
+        target.setLength(length);
+        target.setReplacementCost(replacementCost);
+        target.setRating(rating);
+        target.setSpecialFeatures(EnumSet.copyOf(specialFeatures));
 		// Borra los actores que sobran
 		target.getActors().stream().filter(item -> !getActors().contains(item))
 				.forEach(item -> target.removeActor(item));
@@ -451,14 +383,5 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		target.filmCategories.forEach(o -> o.prePersiste());
 		
 		return target;
-	}
-
-	// Bug de Hibernate
-	@PostPersist
-	@PostUpdate
-	public void prePersiste() {
-		System.err.println("prePersiste(): Bug Hibernate");
-		filmActors.forEach(o -> o.prePersiste());
-		filmCategories.forEach(o -> o.prePersiste());
 	}
 }
