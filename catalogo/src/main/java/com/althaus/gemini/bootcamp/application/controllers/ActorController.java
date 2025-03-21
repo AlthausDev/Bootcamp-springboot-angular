@@ -31,6 +31,7 @@ import com.althaus.gemini.bootcamp.utils.exceptions.NotFoundException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import org.springframework.http.HttpStatus;
 
@@ -38,93 +39,138 @@ import org.springframework.http.HttpStatus;
 @RequestMapping("api/actores/v1")
 public class ActorController {
 
-	@Autowired
-	private ActorService actorService;
+    @Autowired
+    private ActorService actorService;
 
+    public ActorController(ActorService actorService) {
+        this.actorService = actorService;
+    }
 
-	public ActorController(ActorService actorService) {
-		this.actorService = actorService;
-	}
-		
-	// @GetMapping
-	// public List<ActorModel> getAll() {
-	// 	return actorService.getByProjection(ActorModel.class);
-	// }
+    @GetMapping
+    @Operation(summary = "Obtener todos los actores", description = "Obtiene una lista de todos los actores")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de actores obtenida con éxito"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<List<Actor>> getAll() {
+        try {
+            List<Actor> actors = actorService.readAllList();
+            return ResponseEntity.ok(actors);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
-	// @GetMapping(params = { "page" })
-	// @Operation(summary = "Obtiene todos los actores paginados")
-	// public Page<ActorModel> getAll(@ParameterObject Pageable pageable) {
-	// 	return actorService.getByProjection(pageable, ActorModel.class);
-	// }
+    @GetMapping("/{id}")
+    @Operation(summary = "Obtener un actor por ID", description = "Obtiene un actor por su identificador")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Actor encontrado"),
+        @ApiResponse(responseCode = "404", description = "Actor no encontrado")
+    })
+    public ResponseEntity<ActorModel> getById(@PathVariable int id) {
+        try {
+            ActorModel actor = actorService.read(id)
+                    .map(ActorModel::from)
+                    .orElseThrow(() -> new NotFoundException("No se encuentra el actor con ID: " + id));
+            return ResponseEntity.ok(actor);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
-	@GetMapping
-	@Operation(summary = "Obtener todos los actores", description = "Obtiene una lista de todos los actores")
-	public List<Actor> getAll() {
-		return actorService.readAllList();
-				
-	}
-
-	@Operation(summary = "Obtener un actor por id", description = "Obtiene un actor por su id")
-	@GetMapping(path = "/{id}")
-	@ApiResponse(responseCode = "200", description = "Actor encontrado")
-	public ActorModel getById(@PathVariable int id) throws NotFoundException {
-		var item = actorService.read(id);
-		
-		if(item.isEmpty()) {
-			throw new NotFoundException("No se encontro el actor con el id: " + id);
-		}
-		return ActorModel.from(item.get());
-	}
-	
 	record Titulo(int id, String titulo) {}
 
-	@Operation(summary = "Obtener las películas de un actor", description = "Obtiene una lista de las películas en las que ha participado un actor")
-	@GetMapping(path = "/{id}/pelis")	
-	@ApiResponse(responseCode = "200", description = "Películas encontradas")
-	@Transactional
-	public List<Titulo> getMoviesByActor(@PathVariable int id) {
-		Actor actor = actorService.read(id).get();
+    @GetMapping("/{id}/pelis")
+    @Operation(summary = "Obtener las películas de un actor", description = "Obtiene una lista de las películas en las que ha participado un actor")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Películas encontradas"),
+        @ApiResponse(responseCode = "404", description = "Actor no encontrado")
+    })
+    @Transactional
+    public ResponseEntity<List<Titulo>> getMoviesByActor(@PathVariable int id) {
+        try {
+            Actor actor = actorService.read(id)
+                    .orElseThrow(() -> new NotFoundException("No se encuentra el actor con ID: " + id));
+            List<Titulo> movies = actor.getFilmActors().stream()
+                    .map(fa -> new Titulo(fa.getFilm().getFilmId(), fa.getFilm().getTitle()))
+                    .toList();
+            return ResponseEntity.ok(movies);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
-		return actor.getFilmActors().stream()
-			.map(fa -> new Titulo(fa.getFilm().getFilmId(), fa.getFilm().getTitle()))
-			.toList();
-	}
+    @PostMapping
+    @Operation(summary = "Crear un actor", description = "Crea un nuevo actor")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Actor creado"),
+        @ApiResponse(responseCode = "400", description = "Datos inválidos")
+    })
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public ResponseEntity<Object> create(@Valid @RequestBody ActorModel item) {
+        try {
+            if (item.getActorId() != 0) {
+                throw new BadRequestException("El id del actor debe ser 0");
+            }
+            if (actorService.read(item.getActorId()).isPresent()) {
+                throw new InvalidDataException("Duplicate key");
+            }
 
-	@Operation(summary = "Crear un actor", description = "Crea un actor")
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	@ApiResponse(responseCode = "201", description = "Actor creado")
-	public ResponseEntity<Object> create(@Valid @RequestBody ActorModel item) throws BadRequestException, InvalidDataException {
-		var newItem = actorService.create(ActorModel.from(item));
-		
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-		.buildAndExpand(((Actor) newItem).getActorId()).toUri();
-		return ResponseEntity.created(location).build();
-	}
-	
-	@Operation(summary = "Actualizar un actor", description = "Actualiza un actor")
-	@PutMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@ApiResponse(responseCode = "204", description = "Actor actualizado")
-	public void update(@PathVariable int id, 
-			@Valid @RequestBody Actor item) throws BadRequestException, NotFoundException, InvalidDataException, NotFoundException {
+            Actor newActor = actorService.create(ActorModel.from(item));
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(newActor.getActorId()).toUri();
+            return ResponseEntity.created(location).build();
+        } catch (BadRequestException | InvalidDataException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
-		if(item.getActorId() != id) {
-			throw new NotFoundException("El id del actor no se encuentra");
-		}
-		
-		try {
-			actorService.update(item);
-		} catch (org.springframework.data.crossstore.ChangeSetPersister.NotFoundException e) {
-			throw new NotFoundException("El actor no se encuentra: " + e.getMessage());
-		}
-	}
-	
-	@Operation(summary = "Eliminar un actor", description = "Elimina un actor")
-	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@ApiResponse(responseCode = "204", description = "Actor eliminado")
-	public void delete(@PathVariable int id) {
-		actorService.deleteById(id);
-	}
+    @PutMapping("/{id}")
+    @Operation(summary = "Actualizar un actor", description = "Actualiza un actor por su identificador")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Actor actualizado"),
+        @ApiResponse(responseCode = "404", description = "Actor no encontrado"),
+        @ApiResponse(responseCode = "400", description = "Datos inválidos")
+    })
+    public ResponseEntity<Object> update(@PathVariable int id, @Valid @RequestBody Actor item) throws NotFoundException {
+        try {
+            if (item.getActorId() != id) {
+                throw new BadRequestException("El id del actor no coincide");
+            }
+
+            actorService.update(item);
+            return ResponseEntity.ok().build();
+        } catch (BadRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un actor", description = "Elimina un actor por su identificador")
+    @ApiResponses({
+        @ApiResponse(responseCode = "204", description = "Actor eliminado"),
+        @ApiResponse(responseCode = "404", description = "Actor no encontrado")
+    })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Object> delete(@PathVariable int id) {
+        try {
+            if (!actorService.read(id).isPresent()) {
+                throw new NotFoundException("No se encuentra el actor con ID: " + id);
+            }
+            actorService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 }

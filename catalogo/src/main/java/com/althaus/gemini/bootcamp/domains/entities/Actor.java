@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -39,13 +40,13 @@ public class Actor implements Serializable {
 	
 	@Column(name="first_name", nullable=false, length=45)
 	@NotBlank
-	@Size(max = 45, min = 5)
+	@Size(max = 45, min = 2)
 	@Pattern(regexp= "^[A-Za-z]*$", message = "El nombre debe estar compuesto por letras")
 	private String firstName;
 	
 	@Column(name="last_name", nullable=false, length=45)
 	@NotBlank
-	@Size(max = 45, min = 5)
+	@Size(max = 45, min = 2)
 	@Pattern(regexp= "^[A-Za-z]*$", message = "El apellido debe estar compuesto por letras")
 	private String lastName;
 
@@ -55,7 +56,7 @@ public class Actor implements Serializable {
 
 	//bi-directional many-to-one association to FilmActor
 	@OneToMany(mappedBy="actor", fetch = FetchType.LAZY)
-	@JsonBackReference
+	@JsonIgnore
 	private List<FilmActor> filmActors;
 	
 	
