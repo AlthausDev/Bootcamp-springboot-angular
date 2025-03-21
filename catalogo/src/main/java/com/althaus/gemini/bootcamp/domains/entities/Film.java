@@ -43,6 +43,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -53,8 +54,7 @@ import lombok.Setter;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "film")
 @NamedQuery(name = "Film.findAll", query = "SELECT f FROM Film f")
@@ -278,6 +278,28 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		this.rating = rating;
 	}
 
+		
+	// Constructor with all parameters
+	public Film(int filmId, String description, Integer length, Rating rating, Short releaseYear, Byte rentalDuration,
+			BigDecimal rentalRate, BigDecimal replacementCost, String title, Language language, Language languageVO,
+			List<SpecialFeature> specialFeatures, List<Actor> actors, List<Category> categories) {
+		this.filmId = filmId;
+		this.description = description;
+		this.length = length;
+		this.rating = rating;
+		this.releaseYear = releaseYear;
+		this.rentalDuration = rentalDuration;
+		this.rentalRate = rentalRate;
+		this.replacementCost = replacementCost;
+		this.title = title;
+		this.language = language;
+		this.languageVO = languageVO;
+		this.specialFeatures = specialFeatures == null ? EnumSet.noneOf(SpecialFeature.class)
+				: EnumSet.copyOf(specialFeatures);
+		setActors(actors);
+		setCategories(categories);
+	}
+
 	public void setFilmId(int filmId) {
 		this.filmId = filmId;
 		if (filmActors != null && filmActors.size() > 0)
@@ -432,7 +454,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		
 		return target;
 	}
-	
+
 	// Bug de Hibernate
 	@PostPersist
 	@PostUpdate

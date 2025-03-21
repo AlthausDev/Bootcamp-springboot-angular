@@ -76,4 +76,24 @@ public class FilmModel {
 				source.getCategories().stream().map(item -> item.getName()).sorted().toList()
 				);
 	}
+
+	public static Film from(FilmModel source) {
+		return new Film(
+				source.getFilmId(), 
+				source.getDescription(),
+				source.getLength(),
+				source.getRating() == null ? null : Film.Rating.valueOf(source.getRating()),
+				source.getReleaseYear(),
+				source.getRentalDuration(),
+				source.getRentalRate(),
+				source.getReplacementCost(),
+				source.getTitle(),
+				null,
+				null,
+				source.getSpecialFeatures().stream().map(item -> Film.SpecialFeature.valueOf(item))
+					.sorted().toList(),
+				null,
+				null
+				);
+	}
 }

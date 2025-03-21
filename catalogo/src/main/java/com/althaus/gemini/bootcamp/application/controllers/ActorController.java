@@ -46,10 +46,10 @@ public class ActorController {
 		this.actorService = actorService;
 	}
 		
-	@GetMapping
-	public List<ActorModel> getAll() {
-		return actorService.getByProjection(ActorModel.class);
-	}
+	// @GetMapping
+	// public List<ActorModel> getAll() {
+	// 	return actorService.getByProjection(ActorModel.class);
+	// }
 
 	// @GetMapping(params = { "page" })
 	// @Operation(summary = "Obtiene todos los actores paginados")
@@ -57,12 +57,24 @@ public class ActorController {
 	// 	return actorService.getByProjection(pageable, ActorModel.class);
 	// }
 
-	// @GetMapping
-	// @Operation(summary = "Obtener todos los actores", description = "Obtiene una lista de todos los actores")
-	// public List<Actor> getAll() {
-	// 	return actorService.readAllList();
+	@GetMapping
+	@Operation(summary = "Obtener todos los actores", description = "Obtiene una lista de todos los actores")
+	public List<Actor> getAll() {
+		return actorService.readAllList();
 				
-	// }
+	}
+
+	@Operation(summary = "Obtener un actor por id", description = "Obtiene un actor por su id")
+	@GetMapping(path = "/{id}")
+	@ApiResponse(responseCode = "200", description = "Actor encontrado")
+	public ActorModel getById(@PathVariable int id) throws NotFoundException {
+		var item = actorService.read(id);
+		
+		if(item.isEmpty()) {
+			throw new NotFoundException("No se encontro el actor con el id: " + id);
+		}
+		return ActorModel.from(item.get());
+	}
 	
 	record Titulo(int id, String titulo) {}
 
@@ -78,18 +90,6 @@ public class ActorController {
 			.toList();
 	}
 
-	@Operation(summary = "Obtener un actor por id", description = "Obtiene un actor por su id")
-	@GetMapping(path = "/{id}")
-	@ApiResponse(responseCode = "200", description = "Actor encontrado")
-	public ActorModel getById(@PathVariable int id) throws NotFoundException {
-		var item = actorService.read(id);
-		
-		if(item.isEmpty()) {
-			throw new NotFoundException("No se encontro el actor con el id: " + id);
-		}
-		return ActorModel.from(item.get());
-	}
-	
 	@Operation(summary = "Crear un actor", description = "Crea un actor")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
