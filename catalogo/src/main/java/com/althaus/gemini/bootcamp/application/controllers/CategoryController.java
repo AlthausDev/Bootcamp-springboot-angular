@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.althaus.gemini.bootcamp.domains.contracts.services.CategoryService;
-import com.althaus.gemini.bootcamp.domains.entities.Actor;
 import com.althaus.gemini.bootcamp.domains.entities.Category;
-import com.althaus.gemini.bootcamp.domains.entities.Film;
 import com.althaus.gemini.bootcamp.domains.entities.models.CategoryModel;
 import com.althaus.gemini.bootcamp.utils.exceptions.BadRequestException;
 import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;

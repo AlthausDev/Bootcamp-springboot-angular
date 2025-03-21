@@ -46,9 +46,14 @@ public class LanguageController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtiene un lenguaje por ID", description = "Obtiene una lenguaje por su identificador")
-
-    public Language getById(@PathVariable int id) {
-        return languageService.read(id).orElseThrow(() -> new RuntimeException("Lenguaje no encontrado"));
+    @ApiResponse(responseCode = "200", description = "Lenguaje encontrado")
+    @ApiResponse(responseCode = "404", description = "Lenguaje no encontrado")
+    public Language getById(@PathVariable int id) throws NotFoundException {
+        try{
+            return languageService.read(id).get();
+        } catch (Exception e) {
+            throw new NotFoundException("No se encuentra el lenguaje: " + e.getMessage());
+        }
     }
 
     //TODO revisar si se puede hacer con el modelo

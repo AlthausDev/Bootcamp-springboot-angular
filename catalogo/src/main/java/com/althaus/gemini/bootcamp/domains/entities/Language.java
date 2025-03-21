@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the language database table.
@@ -39,12 +41,22 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to Film
 	@OneToMany(mappedBy="language")
+	@JsonIgnore
 	private List<Film> films;
 
 	//bi-directional many-to-one association to Film
 	@OneToMany(mappedBy="languageVO")
+	@JsonIgnore
 	private List<Film> filmsVO;
 	
+	public Language(int languageId) {
+		this.languageId = languageId;
+	}
+	
+    public Language(int languageId, String name) {
+		this.languageId = languageId;
+		this.name = name;
+	}
 
 	public Film addFilm(Film film) {
 		getFilms().add(film);
@@ -94,10 +106,4 @@ public class Language implements Serializable {
 	public String toString() {
 		return "Language [languageId=" + languageId + ", name=" + name + "]";
 	}
-
-    public Language(int languageId2, String name2) {
-		this.languageId = languageId2;
-		this.name = name2;
-	}
-
 }
