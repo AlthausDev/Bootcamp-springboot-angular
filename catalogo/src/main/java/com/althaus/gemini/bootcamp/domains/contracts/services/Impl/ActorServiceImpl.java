@@ -8,13 +8,9 @@ import com.althaus.gemini.bootcamp.domains.core.contracts.services.Impl.CoreServ
 import com.althaus.gemini.bootcamp.domains.entities.Actor;
 
 @Service
-public class ActorServiceImpl extends CoreServiceImpl<Actor, Integer> implements ActorService {
-	
-	
-	private ActorRepository actorRepository;
+public class ActorServiceImpl extends CoreServiceImpl<Actor, Integer> implements ActorService {	
 	
 	public ActorServiceImpl(ActorRepository actorRepository) {
 		super(actorRepository);
-		this.actorRepository = actorRepository;
 	}
 }

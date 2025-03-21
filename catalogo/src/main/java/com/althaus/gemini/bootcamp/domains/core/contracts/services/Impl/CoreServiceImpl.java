@@ -1,53 +1,23 @@
 package com.althaus.gemini.bootcamp.domains.core.contracts.services.Impl;
 
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.althaus.gemini.bootcamp.domains.core.contracts.repositories.CoreRepository;
 import com.althaus.gemini.bootcamp.domains.core.contracts.services.CoreService;
 
 public class CoreServiceImpl<T, K extends Serializable> implements CoreService<T, K> {
 
     private final CoreRepository<T, K> repository;
-	 private Class<T> entityClass;
 	   
 	    public CoreServiceImpl(CoreRepository<T, K> repository) {
-	        this.repository = repository;
-	        this.entityClass = initEntityClass();
+	        this.repository = repository;	        
 	    }
 
-
-	    private Class<T> initEntityClass() {
-	        Class<?> clazz = getClass();
-	        Type type = clazz.getGenericSuperclass();
-
-	        while (!(type instanceof ParameterizedType parameterizedType)) {
-	            if (clazz.getSuperclass() == null) {
-	                throw new IllegalArgumentException("No se pudo determinar el tipo de la entidad.");
-	            }
-
-	            clazz = clazz.getSuperclass();
-	            type = clazz.getGenericSuperclass();
-	        }
-
-	        Type[] typeArguments = parameterizedType.getActualTypeArguments();
-
-	        if (typeArguments.length > 0 && typeArguments[0] instanceof Class) {
-	            return (Class<T>) typeArguments[0];
-	        } else {
-	            throw new IllegalArgumentException("No se pudo determinar el tipo de la entidad.");
-	        }
-	    }
-
-	 
 	    @Override
 	    public T create(T entity) {
 	        try {

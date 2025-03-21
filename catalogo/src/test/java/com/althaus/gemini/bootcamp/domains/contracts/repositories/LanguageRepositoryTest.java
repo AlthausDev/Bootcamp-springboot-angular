@@ -1,7 +1,6 @@
 package com.althaus.gemini.bootcamp.domains.contracts.repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.sql.Timestamp;
 import java.util.List;
 import com.althaus.gemini.bootcamp.domains.entities.Language;

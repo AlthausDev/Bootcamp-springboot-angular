@@ -10,10 +10,7 @@ import com.althaus.gemini.bootcamp.domains.entities.Film;
 @Service
 public class FilmServiceImpl extends CoreServiceImpl<Film, Integer> implements FilmService {
 	
-	private FilmRepository filmRepository;
-
 	public FilmServiceImpl(FilmRepository filmRepository) {
 		super(filmRepository);
-		this.filmRepository = filmRepository;
 	}
 }

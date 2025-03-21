@@ -10,10 +10,7 @@ import com.althaus.gemini.bootcamp.domains.entities.Language;
 @Service
 public class LanguageServiceImpl extends CoreServiceImpl<Language, Integer> implements LanguageService {
 
-	private LanguageRepository languageRepository;
-	
 	public LanguageServiceImpl(LanguageRepository languageRepository) {
 		super(languageRepository);
-		this.languageRepository = languageRepository;
 	}
 }
