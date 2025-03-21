@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -21,6 +23,7 @@ import com.althaus.gemini.bootcamp.domains.entities.models.LanguageModel;
 import com.althaus.gemini.bootcamp.utils.exceptions.BadRequestException;
 import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;
 import com.althaus.gemini.bootcamp.utils.exceptions.NotFoundException;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -39,56 +42,62 @@ public class LanguageController {
 
     @GetMapping
     @Operation(summary = "Obtener todos los lenguajes", description = "Obtiene una lista de todos los lenguajes")
-    public List<Language> getAll() {
-        //return languageService.getByProjection(LanguageModel.class);
-        return languageService.readAllList();
+    public List<LanguageModel> getAll() {
+        return languageService.readAllList().stream()
+                .map(LanguageModel::from)
+                .toList();
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtiene un lenguaje por ID", description = "Obtiene una lenguaje por su identificador")
     @ApiResponse(responseCode = "200", description = "Lenguaje encontrado")
     @ApiResponse(responseCode = "404", description = "Lenguaje no encontrado")
-    public Language getById(@PathVariable int id) throws NotFoundException {
-        try{
-            return languageService.read(id).get();
-        } catch (Exception e) {
-            throw new NotFoundException("No se encuentra el lenguaje: " + e.getMessage());
-        }
+    public LanguageModel getById(@PathVariable int id) throws NotFoundException {
+        return languageService.read(id)
+                .map(LanguageModel::from)
+                .orElseThrow(() -> new NotFoundException("No se encuentra el lenguaje con ID: " + id));
     }
 
-    //TODO revisar si se puede hacer con el modelo
     @PostMapping
     @Operation(summary = "Crear un lenguaje", description = "Crea un nuevo lenguaje")
     @ApiResponse(responseCode = "201", description = "Lenguaje creado")
-    public ResponseEntity<Object> create(@Valid @RequestBody LanguageModel item) throws BadRequestException, InvalidDataException { 
-        
-        var newLanguage = languageService.create(LanguageModel.from(item));
+    @ApiResponse(responseCode = "400", description = "Datos inválidos") 
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @JsonView(LanguageModel.class)
+    public ResponseEntity<Object> create(@Valid @RequestBody LanguageModel item) throws BadRequestException, InvalidDataException {
+        if (item.getLanguageId() != 0) {
+            throw new BadRequestException("El id del lenguaje debe ser 0");
+        }
+        if (languageService.read(item.getLanguageId()).isPresent()) {
+            throw new InvalidDataException("Duplicate key");
+        }
 
+        Language newLanguage = languageService.create(LanguageModel.from(item));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-        .buildAndExpand(((Language)newLanguage).getLanguageId()).toUri();
+                .buildAndExpand(newLanguage.getLanguageId()).toUri();
         return ResponseEntity.created(location).build();
     }
 
-
     @PutMapping("/{id}")
-    @Operation(summary = "Actualizar una lenguaje", description = "Actualiza un lenguaje por su identificador")
+    @Operation(summary = "Actualizar un lenguaje", description = "Actualiza un lenguaje por su identificador")
     @ApiResponse(responseCode = "200", description = "Lenguaje actualizado")
-    public void update(@PathVariable int id, @Valid @RequestBody Language item) throws NotFoundException, InvalidDataException {
-        	if(item.getLanguageId() != id) {
-			throw new NotFoundException("El id de la lenguaje no se encuentra");
-		}
-		
-		try {
-			languageService.update(item);
-		} catch (org.springframework.data.crossstore.ChangeSetPersister.NotFoundException e) {
-			throw new NotFoundException("No se encuentra el lenguaje: " + e.getMessage());
-		}
-	}
+    public void update(@PathVariable int id, @Valid @RequestBody LanguageModel item) throws NotFoundException, InvalidDataException {
+        if (item.getLanguageId() != id) {
+            throw new NotFoundException("El id del lenguaje no coincide");
+        }
 
+        try{
+            Language language = LanguageModel.from(item);
+            languageService.update(language);
+        } catch (Exception e) {
+            throw new InvalidDataException("Error al actualizar el lenguaje");
+        }
+    }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Elimina un lenguaje", description = "Elimina un lenguaje por su identificador")
+    @Operation(summary = "Eliminar un lenguaje", description = "Elimina un lenguaje por su identificador")
     @ApiResponse(responseCode = "204", description = "Lenguaje eliminado")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         languageService.deleteById(id);
     }

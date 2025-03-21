@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
+import com.althaus.gemini.bootcamp.domains.core.entities.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -25,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name="language")
 @NamedQuery(name="Language.findAll", query="SELECT l FROM Language l")
-public class Language implements Serializable {
+public class Language extends AbstractEntity<Language> implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -52,7 +53,7 @@ public class Language implements Serializable {
 	public Language(int languageId) {
 		this.languageId = languageId;
 	}
-	
+
     public Language(int languageId, String name) {
 		this.languageId = languageId;
 		this.name = name;
