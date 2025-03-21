@@ -54,6 +54,12 @@ public class Category implements Serializable {
 		this.categoryId = categoryId;
 	}
 
+	public Category(int categoryId, Timestamp lastUpdate, String name) {
+		this.categoryId = categoryId;
+		this.lastUpdate = lastUpdate;
+		this.name = name;
+	}
+
 	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
 		getFilmCategories().add(filmCategory);
 		filmCategory.setCategory(this);

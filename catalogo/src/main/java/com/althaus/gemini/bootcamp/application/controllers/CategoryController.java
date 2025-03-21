@@ -20,6 +20,9 @@ import com.althaus.gemini.bootcamp.domains.entities.Actor;
 import com.althaus.gemini.bootcamp.domains.entities.Category;
 import com.althaus.gemini.bootcamp.domains.entities.Film;
 import com.althaus.gemini.bootcamp.domains.entities.models.CategoryModel;
+import com.althaus.gemini.bootcamp.utils.exceptions.BadRequestException;
+import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;
+import com.althaus.gemini.bootcamp.utils.exceptions.NotFoundException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -36,44 +39,56 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    // @GetMapping
-    // @Operation(summary = "Obtener todas las categorías", description = "Obtiene una lista de todas las categorías")
-    // public List<CategoryModel> getAll() {
-    //     return categoryService.getByProjection(CategoryModel.class);
-    // }
+    @GetMapping
+    @Operation(summary = "Obtener todas las categorías", description = "Obtiene una lista de todas las categorías")
+    public List<Category> getAll() {
+        //return categoryService.getByProjection(CategoryModel.class);
+        return categoryService.readAllList();
+    }
 
-    // @GetMapping("/{id}")
-    // @Operation(summary = "Obtener una categoría por ID", description = "Obtiene una categoría por su identificador")
+    @GetMapping("/{id}")
+    @Operation(summary = "Obtener una categoría por ID", description = "Obtiene una categoría por su identificador")
 
-    // public Category getById(@PathVariable int id) {
-    //     return categoryService.getById(id, CategoryModel.class);
-    // }
+    public Category getById(@PathVariable int id) {
+        return categoryService.read(id).orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+    }
 
-    // @PostMapping
-    // @Operation(summary = "Crear una categoría", description = "Crea una nueva categoría")
-    // @ApiResponse(responseCode = "201", description = "Categoría creada")
-    // public ResponseEntity<Category> create(@Valid @RequestBody CategoryModel categoryModel) {
+    //TODO revisar si se puede hacer con el modelo
+    @PostMapping
+    @Operation(summary = "Crear una categoría", description = "Crea una nueva categoría")
+    @ApiResponse(responseCode = "201", description = "Categoría creada")
+    public ResponseEntity<Object> create(@Valid @RequestBody CategoryModel item) throws BadRequestException, InvalidDataException { 
         
-    //     Category category = categoryService.create(categoryModel.toEntity());
-    //     URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getCategoryId()).toUri();
-    //     return ResponseEntity.created(location).body(category);
-    // }
+        var newCategory = categoryService.create(CategoryModel.from(item));
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        .buildAndExpand(((Category)newCategory).getCategoryId()).toUri();
+        return ResponseEntity.created(location).build();
+    }
 
 
-    // @PutMapping("/{id}")
-    // @Operation(summary = "Actualizar una categoría", description = "Actualiza una categoría por su identificador")
-    // @ApiResponse(responseCode = "200", description = "Categoría actualizada")
-    // public Category update(@PathVariable int id, @Valid @RequestBody CategoryModel categoryModel) {
-    //     return categoryService.update(id, categoryModel, CategoryModel.class);
-    // }
+    @PutMapping("/{id}")
+    @Operation(summary = "Actualizar una categoría", description = "Actualiza una categoría por su identificador")
+    @ApiResponse(responseCode = "200", description = "Categoría actualizada")
+    public void update(@PathVariable int id, @Valid @RequestBody Category item) throws NotFoundException, InvalidDataException {
+        	if(item.getCategoryId() != id) {
+			throw new NotFoundException("El id de la categoría no se encuentra");
+		}
+		
+		try {
+			categoryService.update(item);
+		} catch (org.springframework.data.crossstore.ChangeSetPersister.NotFoundException e) {
+			throw new NotFoundException("La Categoria no se encuentra: " + e.getMessage());
+		}
+	}
 
 
-    // @DeleteMapping("/{id}")
-    // @Operation(summary = "Eliminar una categoría", description = "Elimina una categoría por su identificador")
-    // @ApiResponse(responseCode = "204", description = "Categoría eliminada")
-    // public void delete(@PathVariable int id) {
-    //     categoryService.delete(id);
-    // }
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar una categoría", description = "Elimina una categoría por su identificador")
+    @ApiResponse(responseCode = "204", description = "Categoría eliminada")
+    public void delete(@PathVariable int id) {
+        categoryService.deleteById(id);
+    }
 
 
     // @GetMapping("/{id}/peliculas")

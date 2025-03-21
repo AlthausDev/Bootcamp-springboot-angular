@@ -32,4 +32,12 @@ public class CategoryModel {
 			source.getName()
 		);
 	}
+
+	public static Category from(CategoryModel source) {
+		return new Category(
+			source.getCategoryId(),
+			source.getLastUpdate(),
+			source.getName()
+		);
+	}
 }
