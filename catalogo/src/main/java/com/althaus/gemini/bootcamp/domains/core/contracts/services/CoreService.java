@@ -11,7 +11,7 @@ import org.springframework.data.domain.Sort;
 
 import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;
 
-public interface CoreService<T, E> extends ProjectionCoreService<T, E>  {
+public interface CoreService<T, E>{
 
 	T create(T entity) throws DuplicateKeyException, InvalidDataException;
 
@@ -32,4 +32,8 @@ public interface CoreService<T, E> extends ProjectionCoreService<T, E>  {
 	<U> Iterable<U> getByProjection(Sort sort, Class<U> type);
 
 	<U> Page<U> getByProjection(Pageable pageable, Class<U> type);
+
+	Iterable<T> getAll(Sort sort);
+
+	Page<T> getAll(Pageable pageable);
 }

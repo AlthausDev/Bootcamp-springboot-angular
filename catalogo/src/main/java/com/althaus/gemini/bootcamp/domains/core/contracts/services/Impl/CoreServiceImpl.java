@@ -78,17 +78,17 @@ public class CoreServiceImpl<T, K extends Serializable> implements CoreService<T
 	    }
 
 		@Override
-	public Iterable<T> getAll(Sort sort) {
-		return repository.findAll(sort);
+		public Iterable<T> getAll(Sort sort) {
+			return repository.findAll(sort);
 
-	}
+		}
 
 
-	@Override
-	public Page<T> getAll(Pageable pageable) {
-		return repository.findAll(pageable);
+		@Override
+		public Page<T> getAll(Pageable pageable) {
+			return repository.findAll(pageable);
 
-	}
+		}
 
 	  
 	    @Override
