@@ -1,16 +1,10 @@
 package com.althaus.gemini.bootcamp.application.controllers;
 
-import org.springframework.web.bind.annotation.RestController;
-
-import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.althaus.gemini.bootcamp.domains.contracts.services.ActorService;
@@ -32,8 +27,8 @@ import com.althaus.gemini.bootcamp.utils.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
-import org.springframework.http.HttpStatus;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/actores/v1")
@@ -52,9 +47,11 @@ public class ActorController {
         @ApiResponse(responseCode = "200", description = "Lista de actores obtenida con éxito"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<List<Actor>> getAll() {
+    public ResponseEntity<List<ActorModel>> getAll() {
         try {
-            List<Actor> actors = actorService.readAllList();
+            List<ActorModel> actors = actorService.readAllList().stream()
+                    .map(ActorModel::from)
+                    .toList();
             return ResponseEntity.ok(actors);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -80,7 +77,7 @@ public class ActorController {
         }
     }
 
-	record Titulo(int id, String titulo) {}
+    record Titulo(int id, String titulo) {}
 
     @GetMapping("/{id}/pelis")
     @Operation(summary = "Obtener las películas de un actor", description = "Obtiene una lista de las películas en las que ha participado un actor")
@@ -138,13 +135,14 @@ public class ActorController {
         @ApiResponse(responseCode = "404", description = "Actor no encontrado"),
         @ApiResponse(responseCode = "400", description = "Datos inválidos")
     })
-    public ResponseEntity<Object> update(@PathVariable int id, @Valid @RequestBody Actor item) throws NotFoundException {
+    public ResponseEntity<Object> update(@PathVariable int id, @Valid @RequestBody ActorModel item) {
         try {
             if (item.getActorId() != id) {
                 throw new BadRequestException("El id del actor no coincide");
             }
 
-            actorService.update(item);
+            Actor actor = ActorModel.from(item);
+            actorService.update(actor);
             return ResponseEntity.ok().build();
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
