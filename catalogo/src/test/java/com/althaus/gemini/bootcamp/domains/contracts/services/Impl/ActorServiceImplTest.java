@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.althaus.gemini.bootcamp.application.services.ActorServiceImpl;
 import com.althaus.gemini.bootcamp.domains.contracts.repositories.ActorRepository;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;

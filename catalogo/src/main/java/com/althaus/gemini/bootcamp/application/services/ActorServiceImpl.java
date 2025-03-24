@@ -1,4 +1,4 @@
-package com.althaus.gemini.bootcamp.domains.contracts.services.Impl;
+package com.althaus.gemini.bootcamp.application.services;
 
 import org.springframework.stereotype.Service;
 
