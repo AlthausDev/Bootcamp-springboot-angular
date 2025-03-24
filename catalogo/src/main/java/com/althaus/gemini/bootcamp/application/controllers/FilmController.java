@@ -116,7 +116,7 @@ public class FilmController {
                 throw new BadRequestException("El id de la película no coincide");
             }
             Film film = FilmEditModel.from(item);
-            filmService.update(film);
+            filmService.update(film.merge(filmService.read(id).orElseThrow(() -> new NotFoundException("Película no encontrada con ID: " + id))));
             return ResponseEntity.ok().build();
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.althaus.gemini.bootcamp.domains.entities.Film;
-import com.althaus.gemini.bootcamp.domains.entities.Film.SpecialFeature;
 import com.althaus.gemini.bootcamp.domains.entities.Language;
 
 //import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -52,8 +51,7 @@ public class FilmEditModel {
 	private Integer languageId;
 //	@Schema(description = "El identificador del idioma original de la película")
 	private Integer languageVOId;
-//	@Schema(description = "Contenido Adicional")
-	private List<String> specialFeatures = new ArrayList<>();
+
 //	@Schema(description = "La lista de identificadores de actores que participan en la película")
 	private List<Integer> actors = new ArrayList<>();
 //	@Schema(description = "La lista de identificadores de categorías asignadas a la película")
@@ -73,7 +71,6 @@ public class FilmEditModel {
 				source.getTitle(),
 				source.getLanguage() == null ? null : source.getLanguage().getLanguageId(),
 				source.getLanguageVO() == null ? null : source.getLanguageVO().getLanguageId(),
-				source.getSpecialFeatures().stream().map(item -> item.getValue()).sorted().toList(),
 				source.getActors().stream().map(item -> item.getActorId())
 					.collect(Collectors.toList()),
 				source.getCategories().stream().map(item -> item.getCategoryId())
@@ -96,7 +93,6 @@ public class FilmEditModel {
 				);
 		source.getActors().stream().forEach(item -> rslt.addActor(item));
 		source.getCategories().stream().forEach(item -> rslt.addCategory(item));
-		source.getSpecialFeatures().stream().forEach(item -> rslt.addSpecialFeatures(SpecialFeature.getEnum(item)));
 		return rslt;
 	}
 

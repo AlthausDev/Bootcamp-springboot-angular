@@ -50,9 +50,6 @@ public class FilmModel {
     @Schema(description = "El idioma original de la película")
     private String languageVO;
 
-    @Schema(description = "Contenido Adicional")
-    private List<String> specialFeatures;
-
     @Schema(description = "La lista de actores que participan en la película")
     private List<String> actors;
 
@@ -72,7 +69,6 @@ public class FilmModel {
                 source.getTitle(),
                 source.getLanguage() == null ? null : source.getLanguage().getName(),
                 source.getLanguageVO() == null ? null : source.getLanguageVO().getName(),
-                source.getSpecialFeatures().stream().map(Film.SpecialFeature::getValue).sorted().collect(Collectors.toList()),
                 source.getActors().stream().map(actor -> actor.getFirstName() + " " + actor.getLastName()).sorted().collect(Collectors.toList()),
                 source.getCategories().stream().map(Category::getName).sorted().collect(Collectors.toList())
         );
@@ -89,7 +85,6 @@ public class FilmModel {
         film.setRentalRate(source.getRentalRate());
         film.setReplacementCost(source.getReplacementCost());
         film.setTitle(source.getTitle());
-        film.setSpecialFeatures(source.getSpecialFeatures().stream().map(Film.SpecialFeature::getEnum).collect(Collectors.toSet()));
         return film;
     }
 }

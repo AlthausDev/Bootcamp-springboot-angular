@@ -5,10 +5,12 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import com.althaus.gemini.bootcamp.domains.core.contracts.repositories.CoreRepository;
 import com.althaus.gemini.bootcamp.domains.entities.Actor;
 
+@RepositoryRestResource(exported = false)
 public interface ActorRepository extends CoreRepository<Actor, Integer> {
 	
 	List<Actor> findTop10ByFirstNameStartingWithOrderByLastNameDesc(String prefijo);

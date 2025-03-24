@@ -84,30 +84,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		public static final String[] VALUES = { "G", "PG", "PG-13", "R", "NC-17" };
 	}
 	
-	public static enum SpecialFeature {
-	    Trailers("Trailers"),
-	    Commentaries("Commentaries"),
-	    DeletedScenes("Deleted Scenes"),
-	    BehindTheScenes("Behind the Scenes");
-
-	    private String value;
-
-	    SpecialFeature(String value) {
-	        this.value = value;
-	    }
-
-		public String getValue() {
-			return value;
-		}
-
-	    public static SpecialFeature getEnum(String specialFeature) {
-	        return Stream.of(SpecialFeature.values())
-	                .filter(p -> p.getValue().equals(specialFeature))
-	                .findFirst()
-	                .orElseThrow(IllegalArgumentException::new);
-	    }
-	}
-	
+		
 	@Converter
 	private static class RatingConverter implements AttributeConverter<Rating, String> {
 		@Override
@@ -120,30 +97,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 			return value == null ? null : Rating.getEnum(value);
 		}
 	}
-	
-	@Converter
-	private static class SpecialFeatureConverter implements AttributeConverter<Set<SpecialFeature>, String> {
-	    @Override
-	    public String convertToDatabaseColumn(Set<SpecialFeature> attribute) {
-	        if (attribute == null || attribute.size() == 0) {
-	            return null;
-	        }
-	        return attribute.stream()
-	                .map(SpecialFeature::getValue)
-	                .collect(Collectors.joining(","));
-	    }
-
-	    @Override
-	    public Set<SpecialFeature> convertToEntityAttribute(String value) {
-	        if (value == null) {
-	            return EnumSet.noneOf(SpecialFeature.class);
-	        }
-	        return Arrays.stream(value.split(","))
-	                .map(SpecialFeature::getEnum)
-	                .collect(Collectors.toCollection(() -> EnumSet.noneOf(SpecialFeature.class)));
-	    }
-	}
-	
+		
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "film_id", unique = true, nullable = false)
@@ -190,10 +144,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	@Column(nullable = false, length = 128)
 	private String title;
 	
-	@Column(name = "special_features")
-	@Convert(converter = SpecialFeatureConverter.class)
-	private Set<SpecialFeature> specialFeatures = EnumSet.noneOf(SpecialFeature.class);
-
+	
 	// bi-directional many-to-one association to Language
 	@ManyToOne
 	@JoinColumn(name = "language_id")
@@ -336,19 +287,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		removeCategory(new Category(id));
 	}
 
-	// Special Features
-	public List<SpecialFeature> getSpecialFeatures() {
-		return specialFeatures.stream().toList();
-	}
-
-	public void addSpecialFeatures(SpecialFeature specialFeatures) {
-		this.specialFeatures.add(specialFeatures);
-	}
-
-	public void removeSpecialFeatures(SpecialFeature specialFeatures) {
-		this.specialFeatures.remove(specialFeatures);
-	}
-
+	
 	public Film merge(Film target) {
         target.setTitle(title);
         target.setDescription(description);
@@ -359,8 +298,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
         target.setRentalRate(rentalRate);
         target.setLength(length);
         target.setReplacementCost(replacementCost);
-        target.setRating(rating);
-        target.setSpecialFeatures(EnumSet.copyOf(specialFeatures));
+        target.setRating(rating);       
 		// Borra los actores que sobran
 		target.getActors().stream().filter(item -> !getActors().contains(item))
 				.forEach(item -> target.removeActor(item));
