@@ -4,13 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.althaus.gemini.bootcamp.domains.core.entities.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -29,6 +23,8 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.PostUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -53,6 +49,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "film")
 @NamedQuery(name = "Film.findAll", query = "SELECT f FROM Film f")
 public class Film extends AbstractEntity<Film> implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	public static enum Rating {
@@ -172,10 +169,22 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		this.filmId = filmId;
 	}
 
+	public Film(@NotBlank @Size(max = 128) String title, @NotNull Language language, @Positive byte rentalDuration,
+			@Positive @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 2, fraction = 2) BigDecimal rentalRate,
+			@DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 3, fraction = 2) BigDecimal replacementCost) {
+		super();
+		this.title = title;
+		this.language = language;
+		this.rentalDuration = rentalDuration;
+		this.rentalRate = rentalRate;
+		this.replacementCost = replacementCost;
+	}
+
 	public Film(int filmId, @NotBlank @Size(max = 128) String title, @NotNull Language language,
 			@NotNull @Positive byte rentalDuration,
 			@NotNull @Digits(integer = 2, fraction = 2) @DecimalMin(value = "0.0", inclusive = false) BigDecimal rentalRate,
 			@NotNull @Digits(integer = 3, fraction = 2) @DecimalMin(value = "0.0", inclusive = false) BigDecimal replacementCost) {
+		super();
 		this.filmId = filmId;
 		this.title = title;
 		this.language = language;
@@ -185,23 +194,24 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	}
 
 	public Film(int filmId, @NotBlank @Size(max = 128) String title, String description, @Min(1895) Short releaseYear,
-                @NotNull Language language, Language languageVO, @Positive byte rentalDuration,
-                @Positive @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 2, fraction = 2) BigDecimal rentalRate,
-                @Positive Integer length,
-                @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 3, fraction = 2) BigDecimal replacementCost,
-                Rating rating) {
-        this.filmId = filmId;
-        this.title = title;
-        this.description = description;
-        this.releaseYear = releaseYear;
-        this.language = language;
-        this.languageVO = languageVO;
-        this.rentalDuration = rentalDuration;
-        this.rentalRate = rentalRate;
-        this.length = length;
-        this.replacementCost = replacementCost;
-        this.rating = rating;
-    }
+			@NotNull Language language, Language languageVO, @Positive byte rentalDuration,
+			@Positive @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 2, fraction = 2) BigDecimal rentalRate,
+			@Positive Integer length,
+			@DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 3, fraction = 2) BigDecimal replacementCost,
+			Rating rating) {
+		super();
+		this.filmId = filmId;
+		this.title = title;
+		this.description = description;
+		this.releaseYear = releaseYear;
+		this.language = language;
+		this.languageVO = languageVO;
+		this.rentalDuration = rentalDuration;
+		this.rentalRate = rentalRate;
+		this.length = length;
+		this.replacementCost = replacementCost;
+		this.rating = rating;
+	}
 	
 	public void setFilmId(int filmId) {
 		this.filmId = filmId;
@@ -316,5 +326,14 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		target.filmCategories.forEach(o -> o.prePersiste());
 		
 		return target;
+	}
+
+	// Bug de Hibernate
+	@PostPersist
+	@PostUpdate
+	public void prePersiste() {
+		System.err.println("prePersiste(): Bug Hibernate");
+		filmActors.forEach(o -> o.prePersiste());
+		filmCategories.forEach(o -> o.prePersiste());
 	}
 }

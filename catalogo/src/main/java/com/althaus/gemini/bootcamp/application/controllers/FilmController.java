@@ -21,7 +21,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.althaus.gemini.bootcamp.domains.contracts.services.FilmService;
 import com.althaus.gemini.bootcamp.domains.entities.Film;
 import com.althaus.gemini.bootcamp.domains.entities.models.FilmModel;
-import com.althaus.gemini.bootcamp.domains.entities.models.FilmEditModel;
 import com.althaus.gemini.bootcamp.utils.exceptions.BadRequestException;
 import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;
 import com.althaus.gemini.bootcamp.utils.exceptions.NotFoundException;
@@ -86,15 +85,14 @@ public class FilmController {
     })
     @ResponseStatus(code = HttpStatus.CREATED)
     @Transactional
-    public ResponseEntity<Object> create(@Valid @RequestBody FilmEditModel item) {
+    public ResponseEntity<Object> create(@Valid @RequestBody FilmModel item) {
         try {
             if (item.getFilmId() != 0) {
                 throw new BadRequestException("El id de la película debe ser 0");
             }
-           
-            Film newFilm = filmService.create(FilmEditModel.from(item));
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(newFilm.getFilmId()).toUri();
+            Film newItem = filmService.create(FilmModel.from(item));
+		    URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(newItem.getFilmId()).toUri();
             return ResponseEntity.created(location).build();
         } catch (BadRequestException | InvalidDataException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -110,14 +108,17 @@ public class FilmController {
         @ApiResponse(responseCode = "404", description = "Película no encontrada"),
         @ApiResponse(responseCode = "400", description = "Datos inválidos")
     })
-    public ResponseEntity<Object> update(@PathVariable int id, @Valid @RequestBody FilmEditModel item) {
+    public ResponseEntity<Object> update(@PathVariable int id, @Valid @RequestBody FilmModel item) {
         try {
             if (item.getFilmId() != id) {
                 throw new BadRequestException("El id de la película no coincide");
             }
-            Film film = FilmEditModel.from(item);
-            filmService.update(film.merge(filmService.read(id).orElseThrow(() -> new NotFoundException("Película no encontrada con ID: " + id))));
-            return ResponseEntity.ok().build();
+
+            FilmModel newItem = FilmModel.from(filmService.update(FilmModel.from(item)));
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(newItem.getFilmId()).toUri();
+            return ResponseEntity.created(location).build();
+
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
