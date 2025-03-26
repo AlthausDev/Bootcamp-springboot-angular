@@ -2,8 +2,6 @@ package com.althaus.gemini.bootcamp.application.controllers;
 
 import com.althaus.gemini.bootcamp.domains.contracts.services.ActorService;
 import com.althaus.gemini.bootcamp.domains.entities.Actor;
-import com.althaus.gemini.bootcamp.domains.entities.Film;
-import com.althaus.gemini.bootcamp.domains.entities.FilmActor;
 import com.althaus.gemini.bootcamp.domains.entities.models.ActorModel;
 import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;
 import org.junit.jupiter.api.BeforeEach;

@@ -7,11 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.althaus.gemini.bootcamp.domains.contracts.services.CategoryService;
 import com.althaus.gemini.bootcamp.domains.entities.Category;
 import com.althaus.gemini.bootcamp.domains.entities.models.CategoryModel;
-import com.althaus.gemini.bootcamp.utils.exceptions.BadRequestException;
-import com.althaus.gemini.bootcamp.utils.exceptions.InvalidDataException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
