@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.althaus.gemini.bootcamp.domains.entities.models.FilmModel;
 
-@FeignClient(name = "CATALOGO-SERVICE" /*, url = "http://localhost:8010"*/)
+@FeignClient(name = "CATALOGO-SERVICE", url = "http://localhost:8010")
 public interface CatalogoProxy {
 	@GetMapping(path = "/")
 	String getCatalogo();
