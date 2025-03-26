@@ -44,8 +44,11 @@ public class FilmActor implements Serializable {
 		this.film = film2;
 		this.actor = actor2;
 	}
-	
-	@PrePersist 
+
+    public FilmActor(Film film) {
+    }
+
+    @PrePersist 
 	@PreUpdate
 	void prePersiste() {
 		if (id == null) {

@@ -52,6 +52,10 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	public Film(int i, String s) {
+		super();
+	}
+
 	public static enum Rating {
 		GENERAL_AUDIENCES("G"), PARENTAL_GUIDANCE_SUGGESTED("PG"), 
 		PARENTS_STRONGLY_CAUTIONED("PG-13"), RESTRICTED("R"),
