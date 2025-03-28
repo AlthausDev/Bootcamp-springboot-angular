@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MyCoreModule } from '@my/core';
 
 
 
@@ -7,7 +8,7 @@ import { CommonModule } from '@angular/common';
   declarations: [],
   exports: [],
   imports: [
-    CommonModule
+    CommonModule, MyCoreModule
   ]
 })
 export class ConfigModule { }
