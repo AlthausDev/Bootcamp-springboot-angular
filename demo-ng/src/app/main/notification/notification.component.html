@@ -1,0 +1,21 @@
+@if(notificationViewModel.IsThereAnyNotification) {
+
+    <div class="notificaciones">
+    @for(item of notificationViewModel.Notifications; track item.getId()) {
+    <div class="alert {{item.getType() | i18nSelect:{
+    'error':'alert-danger',
+    'warn':'alert-warning', 'info':'alert-primary',
+    'other':'alert-success' } }} alert-dismissible fade show"
+    role="alert">
+    {{item.getMessage()}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"
+    aria-label="Close" (click)="notificationViewModel.remove($index)"></button>
+    </div>
+    }
+    <div class=" text-center">
+    <button class="btn btn-info" type="button"
+    (click)="notificationViewModel.clear()">Cerrar</button>
+    </div>
+    </div>
+    }
+    

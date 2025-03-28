@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NotificationType } from '../common-models/notification';
+import { NotificationModel, NotificationType } from '../common-models/notification.model';
 import { LoggerService } from '@my/core';
 
 @Injectable({
@@ -8,11 +8,11 @@ import { LoggerService } from '@my/core';
 export class NotificationService {
 
   public readonly NotificationType = NotificationType;
-  private notifications: { id: number; message: string; type: NotificationType }[] = [];
+  private notifications: NotificationModel[] = [];
 
   constructor(private out: LoggerService) {}
 
-  public get Notifications(): Notification[]{
+  public get Notifications(): NotificationModel[]{
     return Object.assign([], this.notifications);
   }
 
@@ -20,18 +20,19 @@ export class NotificationService {
     return this.notifications.length > 0;
   }
 
-  public add(message: string, type: NotificationType = NotificationType.error): void{
-    if(!message || message.length === 0){
+  public add(Message: string, Type: NotificationType = NotificationType.error): void{
+    if(!Message || Message.length === 0){
       this.out.error('NotificationService: El mensaje no puede estar vacio.');
       return;
     }
 
-    const id = this.IsThereAnyNotification ? this.notifications[this.notifications.length - 1].id + 1 : 1;
+    const Id = this.IsThereAnyNotification ? this.notifications[this.notifications.length - 1].getId() + 1 : 1;
+    const notification = new NotificationModel(Id, Type, Message);
 
-    this.notifications.push({ id, message, type });
+    this.notifications.push(notification);
 
-    if(type === NotificationType.error){
-      this.out.error(`NOTIFICATION: ${message}`);
+    if(Type === NotificationType.error){
+      this.out.error(`NOTIFICATION: ${Message}`);
     }
   }
 
