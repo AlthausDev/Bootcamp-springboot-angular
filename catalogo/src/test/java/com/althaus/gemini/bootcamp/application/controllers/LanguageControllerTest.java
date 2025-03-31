@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import com.althaus.gemini.bootcamp.domains.entities.Language;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +37,9 @@ public class LanguageControllerTest {
     @Mock
     private LanguageService languageService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     public void testGetAll_Success() throws Exception {
-        List<LanguageModel> languages = List.of(
-                new LanguageModel(1, "English"),
-                new LanguageModel(2, "Spanish"));
         when(languageService.readAllList()).thenReturn(List.of(
                 new Language(1, "English"),
                 new Language(2, "Spanish")));
@@ -60,7 +54,6 @@ public class LanguageControllerTest {
 
     @Test
     public void testCreate_Success() throws Exception {
-        LanguageModel newLanguage = new LanguageModel(0, "French");
         Language createdLanguage = new Language(3, "French");
         when(languageService.create(any(Language.class))).thenReturn(createdLanguage);
 
