@@ -1,1 +1,11 @@
-<p>demos works!</p>
+<h1>Hola {{nombre()}}</h1>
+
+<p>
+    <input type="button" value="Error" (click)="notificationViewModel.add('Esto es una notificación de error')" >
+    <input type="button" value="Warn" (click)="notificationViewModel.add('Esta notificación es un aviso',  notificationViewModel.NotificationType.warn)" >
+    <input type="button" value="Info" (click)="notificationViewModel.add('Solo una notificación informativa',  notificationViewModel.NotificationType.info)" >
+    <input type="button" value="Log" (click)="notificationViewModel.add('Para trazar con notificaciones',  notificationViewModel.NotificationType.log)" >
+</p>
+<p>{{resultado()}}</p>
+<p>Fecha: {{Fecha}}</p>
+<p>Calcula: 2 + 2 = {{2 + 2}}</p>

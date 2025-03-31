@@ -73,6 +73,8 @@ export class DemosComponent implements OnInit, OnDestroy {
       this.notificationViewModel.add(`Se ha añadido la provincia ${provicia}`, NotificationType.info);
     }
 
+    calcula(a: number, b:number) { return a + b; }
+    
     private suscriptor?: Unsubscribable;
 
     ngOnInit(): void {
