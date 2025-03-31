@@ -1,5 +1,6 @@
 package com.althaus.gemini.bootcamp.application.controllers;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -8,7 +9,7 @@ import com.althaus.gemini.bootcamp.domains.contracts.services.CategoryService;
 import com.althaus.gemini.bootcamp.domains.entities.Category;
 import com.althaus.gemini.bootcamp.domains.entities.models.CategoryModel;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,12 +26,11 @@ class CategoryControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     private CategoryService categoryService;
 
     @Test
     void shouldCreateCategorySuccessfully() throws Exception {
-        CategoryModel categoryModel = new CategoryModel(0, null, "Action");
         Category createdCategory = new Category(1, null, "Action");
 
         when(categoryService.create(any(Category.class))).thenReturn(createdCategory);
@@ -40,7 +40,7 @@ class CategoryControllerTest {
                         .content("{\"categoryId\":0,\"name\":\"Action\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
-                .andExpect(header().string("Location", URI.create("/api/categorias/v1/1").toString()));
+                .andExpect(header().string("Location", URI.create("http://localhost/api/categorias/v1/1").toString()));
 
         verify(categoryService).create(any(Category.class));
     }
