@@ -1,4 +1,4 @@
-<h1>Hola {{nombre() | uppercase}}</h1>
+<h1>Hola {{nombre() | elipsis:10 | uppercase}}</h1>
 
 <p>
     <input type="text" [(ngModel)]="nombre" placeholder="Escribe tu nombre" />
@@ -25,7 +25,7 @@
   <p>ahora existo con flujo</p>
 }
 
-<p [ngClass]="estetica">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+<p [ngClass]="estetica()">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
     sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
     veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
@@ -46,7 +46,7 @@
 <p>
   <select [(ngModel)]="idProvincia">
     @for(item of listado(); track item.id ) {
-      <option [value]="item.id" >{{item.nombre}}</option>>
+      <option [value]="item.id" >{{item.nombre | capitalize}}</option>>
     }
   </select>
   Seleccionado: {{idProvincia()}}

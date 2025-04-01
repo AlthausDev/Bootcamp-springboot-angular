@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CapitalizePipe, ElipsisPipe } from '@my/core';
 import { Unsubscribable } from 'rxjs';
 import { NotificationType } from 'src/app/common-models/notification.model';
 import { NotificationService } from 'src/app/common-services';
 
 @Component({
   selector: 'app-demos',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, ElipsisPipe, CapitalizePipe],
   templateUrl: './demos.component.html',
   styleUrl: './demos.component.css'
 })
@@ -66,6 +67,7 @@ export class DemosComponent implements OnInit, OnDestroy {
         this.visible.update(v => !v);
         this.estetica.update(v => ({...v, importante: !v.importante}));
         this.estetica.update(v => ({...v, urgente: !v.urgente}));
+        this.estetica.update(v => ({...v, error: !v.error}));
     }
     
     add(provicia: string){
