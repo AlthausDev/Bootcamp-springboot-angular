@@ -8,10 +8,11 @@ import { NotificationService } from 'src/app/common-services';
 import { SizerComponent } from "../../../lib/my-core/components/sizer.component";
 import { FormButtonsComponent } from "../../common-components/form-buttons/form-buttons.component";
 import { CardComponent } from "../../common-components/card.component";
+import { FormulariosComponent } from "../formularios/formularios.component";
 
 @Component({
   selector: 'app-demos',
-  imports: [FormsModule, CommonModule, ElipsisPipe, CapitalizePipe, SizerComponent, FormButtonsComponent, CardComponent],
+  imports: [FormsModule, CommonModule, ElipsisPipe, CapitalizePipe, SizerComponent, FormButtonsComponent, CardComponent, FormulariosComponent],
   templateUrl: './demos.component.html',
   styleUrl: './demos.component.css'
 })

@@ -1,5 +1,7 @@
 <h1>Hola {{nombre() | elipsis:10 | uppercase}}</h1>
 
+<app-formularios></app-formularios>
+
 <p>
     <input type="text" [(ngModel)]="nombre" placeholder="Escribe tu nombre" />
     <input type="button" value="Saludar" (click)="saluda()" />

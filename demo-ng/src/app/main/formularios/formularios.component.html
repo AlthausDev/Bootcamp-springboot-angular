@@ -1,1 +1,146 @@
-<p>formularios works!</p>
+<h1>Formularios</h1>
+<p>Formulario de ejemplo</p>
+
+<p>
+  <input type="button" value="Enviar" (click)="add()" />
+  <input type="number" value="1" #txtId />
+  <input type="button" value="edit" (click)="edit(+txtId.value)" />
+</p>
+
+<form #miForm="ngForm">
+  <div>
+    <label for="id"></label>
+    <input
+      type="text"
+      id="id"
+      name="id"
+      [(ngModel)]="elemento.id"
+      #id="ngModel"
+      required
+    />
+    <output class="error" [hidden]="!id.hasError('required') || miForm.pristine"
+      >Campo requerido</output
+    >
+  </div>
+  <div>
+    <label for="campo">Campo</label>
+    <input
+      type="text"
+      id="campo"
+      name="campo"
+      [(ngModel)]="elemento.campo"
+      #campo="ngModel"
+    />
+  </div>
+  <div>
+    <label for="nombre"></label>
+    <input
+      type="text"
+      id="nombre"
+      name="nombre"
+      [(ngModel)]="elemento.nombre"
+      #nombre="ngModel"
+      minlength="2"
+    />
+    <output
+      class="error"
+      [hidden]="!nombre.hasError('minlength') || miForm.pristine"
+      >Campo requerido</output
+    >
+    <output
+      class="error"
+      [hidden]="!nombre.hasError('required') || miForm.pristine"
+      >Campo requerido</output
+    >
+  </div>
+  <div>
+    <label for="apellidos"></label>
+    <input
+      type="text"
+      id="apellidos"
+      name="apellidos"
+      [(ngModel)]="elemento.apellidos"
+      #apellidos="ngModel"
+      minlength="2"
+      required
+    />
+  </div>
+  <div>
+    <label for="correo">Correo</label>
+    <input
+      type="email"
+      id="correo"
+      name="correo"
+      [(ngModel)]="elemento.correo"
+      #correo="ngModel"
+    />
+  </div>
+  <div>
+    <label for="fAlta">Fecha de Alta</label>
+    <input
+      type="date"
+      id="fAlta"
+      name="fAlta"
+      [(ngModel)]="elemento.fAlta"
+      #fAlta="ngModel"
+    />
+  </div>
+  <div>
+    <label for="edad">Edad</label>
+    <input
+      type="number"
+      id="edad"
+      name="edad"
+      [(ngModel)]="elemento.edad"
+      #edad="ngModel"
+      min="16"
+    />
+  </div>
+  <div>
+    <label for="nif">NIF</label>
+    <input
+      type="text"
+      id="nif"
+      name="nif"
+      [(ngModel)]="elemento.nif"
+      #nif="ngModel"
+      pattern="^\d{1,8}{a-zA-Z}$"
+    />
+  </div>
+  <div>
+    <label for="telefono">Teléfono</label>
+    <input
+      type="tel"
+      id="telefono"
+      name="telefono"
+      [(ngModel)]="elemento.telefono"
+      #telefono="ngModel"
+    />
+  </div>
+  <div>
+    <label for="activo"></label>
+    <input
+      type="checkbox"
+      id="activo"
+      name="activo"
+      [(ngModel)]="elemento.activo"
+      #activo="ngModel"
+    />
+  </div>
+  <div>
+    <input type="button" value="Enviar" (click)="send()" />
+    <input type="button" value="Volver" (click)="cancel()" />
+  </div>
+</form>
+
+<!-- {
+    id: 1, 
+    nombre: 'name', 
+    apellidos: 'surname', 
+    correo: 'email@email.com', 
+    fAlta: '2023-10-01', 
+    edad: 25,
+    nif: '12345678A',
+    telefono: '123456789',
+    activo: true
+  } -->
