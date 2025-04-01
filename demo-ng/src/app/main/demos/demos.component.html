@@ -42,7 +42,11 @@
         </li>
       }
 </ul>
-
+<app-card header="Tarjeta" [title]="nombre()" content="contenido()">
+  <p>Contenido de la tarjeta</p>
+  <p>Más contenido de la tarjeta</p>
+  <p>Y más contenido de la tarjeta</p>
+</app-card>
 <p>
   <select [(ngModel)]="idProvincia">
     @for(item of listado(); track item.id ) {
@@ -54,4 +58,8 @@
   <input type="button" value="Añadir" (click)="add(txtProvincia.value)" />
 </p>
 
-<p>{{listado() | json}}></p>
+<my-sizer [(size)]="fontSize"></my-sizer>
+
+<p [style.font-size.px]="fontSize()"> {{listado() | json}}></p>
+
+<app-form-buttons send-text="enviar" (send)="saluda()" abandon-text="volver" (abandon)="despide()"></app-form-buttons>

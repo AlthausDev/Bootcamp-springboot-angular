@@ -5,10 +5,13 @@ import { CapitalizePipe, ElipsisPipe } from '@my/core';
 import { Unsubscribable } from 'rxjs';
 import { NotificationType } from 'src/app/common-models/notification.model';
 import { NotificationService } from 'src/app/common-services';
+import { SizerComponent } from "../../../lib/my-core/components/sizer.component";
+import { FormButtonsComponent } from "../../common-components/form-buttons/form-buttons.component";
+import { CardComponent } from "../../common-components/card.component";
 
 @Component({
   selector: 'app-demos',
-  imports: [FormsModule, CommonModule, ElipsisPipe, CapitalizePipe],
+  imports: [FormsModule, CommonModule, ElipsisPipe, CapitalizePipe, SizerComponent, FormButtonsComponent, CardComponent],
   templateUrl: './demos.component.html',
   styleUrl: './demos.component.css'
 })
