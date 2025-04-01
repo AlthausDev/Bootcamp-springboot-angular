@@ -4,10 +4,11 @@ import { RouterOutlet } from '@angular/router';
 import { LoggerService } from '@my/core';
 import { NotificationComponent } from './main/notification/notification.component';
 import { HomeComponent } from "./main/home/home.component";
+import { DemosComponent } from "./main/demos/demos.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, NotificationComponent, HomeComponent],
+  imports: [RouterOutlet, CommonModule, NotificationComponent, HomeComponent, DemosComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
