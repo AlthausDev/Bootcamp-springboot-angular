@@ -15,7 +15,7 @@ import { NotificationService } from 'src/app/common-services';
 export class DemosComponent implements OnInit, OnDestroy {
 
     private fecha: Date = new Date('2025-03-31T00:00:00Z');
-    public readonly nombre = signal<string>('DemosComponent');
+    public readonly nombre = signal<string>('Demos Component');
     public readonly fontSize = signal<number>(24);
     public readonly notifications = signal([
       {id: 1, nombre: 'Notificación 1', tipo: NotificationType.error, mensaje: 'Error en la aplicación'},
