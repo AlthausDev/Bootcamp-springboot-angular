@@ -9,6 +9,8 @@ export const routes: Routes = [
 {path: '/personas', component: FormulariosComponent},
 {path: '/personas/add', component: FormulariosComponent},
 {path: '/personas/:id', component: FormulariosComponent},
-{path: '/personas/:id/editar', component: FormulariosComponent}
+{path: '/personas/:id/editar', component: FormulariosComponent},
+
+{path: '****', redirectTo: '/home', pathMatch: 'full'},
 
 ];
