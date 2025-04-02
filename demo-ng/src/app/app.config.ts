@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
 import { LOG_LEVEL } from '@my/core';
@@ -10,7 +10,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     {provide: LOG_LEVEL, useValue: environment.LOG_LEVEL},
     provideZoneChangeDetection({ eventCoalescing: true }), 
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideHttpClient()
   ]
 };

@@ -9,10 +9,11 @@ import { SizerComponent } from "../../../lib/my-core/components/sizer.component"
 import { FormButtonsComponent } from "../../common-components/form-buttons/form-buttons.component";
 import { CardComponent } from "../../common-components/card.component";
 import { FormulariosComponent } from "../formularios/formularios.component";
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-demos',
-  imports: [FormsModule, CommonModule, ElipsisPipe, CapitalizePipe, SizerComponent, FormButtonsComponent, CardComponent, FormulariosComponent],
+  imports: [FormsModule, CommonModule, ElipsisPipe, CapitalizePipe, SizerComponent, FormButtonsComponent, CardComponent, FormulariosComponent, RouterModule],
   templateUrl: './demos.component.html',
   styleUrl: './demos.component.css'
 })

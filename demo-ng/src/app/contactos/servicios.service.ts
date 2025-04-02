@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { NotificationService } from '../common-services';
 import { LoggerService } from '@my/core';
+import { Router } from '@angular/router';
 
 export type ModoCRUD = 'list' | 'add' | 'edit' | 'view' | 'delete';
 export const AUTH_REQUIRED = new HttpContextToken<boolean>(() => false);
@@ -60,11 +61,13 @@ export class ContactosViewModelService {
   private listado: Array<any> = [];
   private elemento: any = {};
   private idOriginal: any = null;
+  private listURL = '/contactos';
 
   constructor(
     private notify: NotificationService, 
     private out: LoggerService, 
-    private dao: ContactosDAOService) { }
+    private dao: ContactosDAOService,
+    private router: Router) { }
 
   public get Modo(): ModoCRUD {
     return this.modo;
@@ -125,7 +128,7 @@ export class ContactosViewModelService {
   public cancel(): void {
     this.elemento = {};
     this.idOriginal = null;
-    this.list();
+    this.router.navigateByUrl(this.listURL);
   }
 
   public send(): void {
@@ -157,7 +160,7 @@ export class ContactosViewModelService {
     let msg = '';
     switch (err.status) {
       case 0: msg = err.message; break;
-      case 404: msg = `ERROR ${err.status}: ${err.statusText}`; break;
+      case 404: this.router.navigateByUrl('/404.html'); return;
       default:
         msg = `ERROR ${err.status}: ${err.error?.['title'] ?? err.statusText}.${err.error?.['detail'] ? ` Detalles: ${err.error['detail']}` : ''}`;
         break;

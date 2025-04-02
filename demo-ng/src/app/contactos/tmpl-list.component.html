@@ -3,35 +3,30 @@
     <tr class="table-info">
       <th class="display-4">Lista de contactos</th>
       <th class="text-end">
-        <button class="btn btn-success" (click)="VM.add()">
+        <button class="btn btn-success" routerLink="add">
           <i class="fas fa-plus"></i> Añadir
         </button>
       </th>
     </tr>
   </thead>
   <tbody>
-    @for(item of VM.Listado; track item.id) {
-    <tr>
+    <tr *ngFor="let item of VM.Listado; trackBy: trackById">
       <td>
         <div class="container">
           <div class="row">
             <div class="col-md-2">
               <img
                 class="rounded-circle float-left"
-                src="{{ item.avatar }}"
-                alt="Foto de {{ item.nombre }} {{ item.apellidos }}"
+                [src]="item.avatar ?? (item.sexo === 'H' ? '/assets/user-not-found-male.png' : '/assets/user-not-found-female.png')"
+                [alt]="'Foto de ' + item.nombre + ' ' + item.apellidos"
                 width="75"
                 height="75"
               />
             </div>
             <div class="col-md-10">
-              <button
-                type="button"
-                class="btn btn-link btn-lg px-0"
-                (click)="VM.view(item.id)"
-              >
+              <a class="btn btn-link btn-lg px-0" [routerLink]="[item.id, item.nombre + '-' + item.apellidos]">
                 {{ item.tratamiento }} {{ item.nombre }} {{ item.apellidos }}
-              </button>
+              </a>
               <br />
               <b>Tlfn.:</b> {{ item.telefono }} <b>Correo:</b> {{ item.email }}
             </div>
@@ -40,10 +35,7 @@
       </td>
       <td class="align-middle text-end">
         <div class="btn-group" role="group">
-          <button class="btn btn-info" (click)="VM.view(item.id)">
-            <i class="fas fa-eye"></i>
-          </button>
-          <button class="btn btn-success" (click)="VM.edit(item.id)">
+          <button class="btn btn-success" [routerLink]="[item.id, 'edit']">
             <i class="fas fa-pen"></i>
           </button>
           <button class="btn btn-danger" (click)="VM.delete(item.id)">
@@ -52,6 +44,5 @@
         </div>
       </td>
     </tr>
-    }
   </tbody>
 </table>

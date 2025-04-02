@@ -13,7 +13,7 @@ import { ContactosViewModelService } from './servicios.service';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ErrorMessagePipe, TypeValidator } from '@my/core';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap, RouterModule, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -41,12 +41,14 @@ export class ContactosComponent implements OnInit, OnDestroy {
 }
 
 @Component({
+  standalone: true,
   selector: 'app-contactos-list',
   templateUrl: './tmpl-list.component.html',
   styleUrls: ['./componente.component.css'],
+  imports: [RouterModule],
 })
 export class ContactosListComponent implements OnInit, OnDestroy {
-  constructor(private vm: ContactosViewModelService) {}
+  constructor(private vm: ContactosViewModelService, protected route: ActivatedRoute, protected router: Router) {}
   public get VM(): ContactosViewModelService {
     return this.vm;
   }
@@ -109,7 +111,7 @@ export class ContactosEditComponent implements OnInit, OnDestroy {
   selector: 'app-contactos-view',
   templateUrl: './tmpl-view.component.html',
   styleUrls: ['./componente.component.css'],
-  imports: [DatePipe],
+  imports: [DatePipe, RouterModule],
 })
 export class ContactosViewComponent implements OnChanges {
   @Input() id?: string;
