@@ -1,0 +1,71 @@
+<!-- <h1>Hola {{nombre() | elipsis:10 | uppercase}}</h1> -->
+
+<li class="nav-item">
+  <a class="nav-link" [routerLink]="['/contactos']" routerLinkActive="active">contactos</a>
+</li>
+<!-- 
+<app-formularios></app-formularios>
+
+<p>
+    <input type="text" [(ngModel)]="nombre" placeholder="Escribe tu nombre" />
+    <input type="button" value="Saludar" (click)="saluda()" />
+    <input type="button" value="Despedirse" (click)="despide()" />
+    <input type="button" value="di algo" (click)="di('algo')" />
+    <input type="button" value="cambia" (click)="cambiaEstetica()" />
+
+
+    <input type="button" value="Error" (click)="notificationViewModel.add('Esto es una notificación de error')" >
+    <input type="button" value="Warn" (click)="notificationViewModel.add('Esta notificación es un aviso',  notificationViewModel.NotificationType.warn)" >
+    <input type="button" value="Info" (click)="notificationViewModel.add('Solo una notificación informativa',  notificationViewModel.NotificationType.info)" >
+    <input type="button" value="Log" (click)="notificationViewModel.add('Para trazar con notificaciones',  notificationViewModel.NotificationType.log)" >
+</p>
+
+<p [textContent]="resultado()">Esto se pierde</p>
+<p [innerHTML]="resultado()">Esto no se pierde</p>
+<p [hidden]="!visible()">Esto es visible</p>
+<p [hidden]="invisible()">ahora me ves</p>
+<div hidden="hidden">invisible()</div> -->
+
+<!-- <p *ngfl="visible">Ahora existo con directiva</p>
+@if ((visible())) {
+  <p>ahora existo con flujo</p>
+} -->
+
+<!-- <p [ngClass]="estetica()">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
+    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+     Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+      nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+<p [class.semivisible]="invisible()">Ahora me ves bien</p>
+
+<p>Fecha: {{Fecha | date:'dd/MMM/yyyy'}}</p>
+<p>Calcula: 2 + 2 = {{2 + 2}} = {{ calcula(2, 2) | currency:'EUR':'symbol':'1.2-2' }}</p>
+<ul>
+    @for(item of listado(); track item.id ) {
+        <li [style.background-color]="$odd ? 'LightBlue' : 'Lavender'">
+          {{item.nombre}} ({{item.id}}) [Elemento {{$index + 1}} de {{listado().length}}]
+        </li>
+      }
+</ul>
+<app-card header="Tarjeta" [title]="nombre()" content="contenido()">
+  <p>Contenido de la tarjeta</p>
+  <p>Más contenido de la tarjeta</p>
+  <p>Y más contenido de la tarjeta</p>
+</app-card>
+<p>
+  <select [(ngModel)]="idProvincia">
+    @for(item of listado(); track item.id ) {
+      <option [value]="item.id" >{{item.nombre | capitalize}}</option>>
+    }
+  </select>
+  Seleccionado: {{idProvincia()}}
+  <input type="text" value="Tabarnia" #txtProvincia >
+  <input type="button" value="Añadir" (click)="add(txtProvincia.value)" />
+</p>
+
+<my-sizer [(size)]="fontSize"></my-sizer>
+
+<p [style.font-size.px]="fontSize()"> {{listado() | json}}></p>
+
+<app-form-buttons send-text="enviar" (send)="saluda()" abandon-text="volver" (abandon)="despide()"></app-form-buttons> -->
