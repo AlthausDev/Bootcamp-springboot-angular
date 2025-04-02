@@ -1,10 +1,20 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  forwardRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { ContactosViewModelService } from './servicios.service';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ErrorMessagePipe, TypeValidator } from '@my/core';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contactos',
@@ -18,10 +28,16 @@ import { ErrorMessagePipe, TypeValidator } from '@my/core';
   ],
 })
 export class ContactosComponent implements OnInit, OnDestroy {
-  constructor(private vm: ContactosViewModelService) { }
-  public get VM(): ContactosViewModelService { return this.vm; }
-  ngOnInit(): void { this.vm.list(); }
-  ngOnDestroy(): void { this.vm.clear(); }
+  constructor(private vm: ContactosViewModelService) {}
+  public get VM(): ContactosViewModelService {
+    return this.vm;
+  }
+  ngOnInit(): void {
+    this.vm.list();
+  }
+  ngOnDestroy(): void {
+    this.vm.clear();
+  }
 }
 
 @Component({
@@ -30,10 +46,16 @@ export class ContactosComponent implements OnInit, OnDestroy {
   styleUrls: ['./componente.component.css'],
 })
 export class ContactosListComponent implements OnInit, OnDestroy {
-  constructor(private vm: ContactosViewModelService) { }
-  public get VM(): ContactosViewModelService { return this.vm; }
-  ngOnInit(): void { }
-  ngOnDestroy(): void { this.vm.clear(); }
+  constructor(private vm: ContactosViewModelService) {}
+  public get VM(): ContactosViewModelService {
+    return this.vm;
+  }
+  ngOnInit(): void {
+    this.vm.list();
+  }
+  ngOnDestroy(): void {
+    this.vm.clear();
+  }
 }
 
 @Component({
@@ -43,9 +65,13 @@ export class ContactosListComponent implements OnInit, OnDestroy {
   imports: [FormsModule, TypeValidator, ErrorMessagePipe],
 })
 export class ContactosAddComponent implements OnInit {
-  constructor(private vm: ContactosViewModelService) { }
-  public get VM(): ContactosViewModelService { return this.vm; }
-  ngOnInit(): void { }
+  constructor(private vm: ContactosViewModelService) {}
+  public get VM(): ContactosViewModelService {
+    return this.vm;
+  }
+  ngOnInit(): void {
+    this.vm.add();
+  }
 }
 
 @Component({
@@ -55,10 +81,28 @@ export class ContactosAddComponent implements OnInit {
   imports: [FormsModule, TypeValidator, ErrorMessagePipe],
 })
 export class ContactosEditComponent implements OnInit, OnDestroy {
-  constructor(private vm: ContactosViewModelService) { }
-  public get VM(): ContactosViewModelService { return this.vm; }
-  ngOnInit(): void { }
-  ngOnDestroy(): void { }
+  private obs$?: Subscription;
+  constructor(
+    protected vm: ContactosViewModelService,
+    protected route: ActivatedRoute,
+    protected router: Router
+  ) {}
+  public get VM(): ContactosViewModelService {
+    return this.vm;
+  }
+  ngOnInit(): void {
+    this.obs$ = this.route.paramMap.subscribe((params: ParamMap) => {
+      const id = parseInt(params?.get('id') ?? '');
+      if (id) {
+        this.vm.edit(id);
+      } else {
+        this.router.navigate(['/404.html']);
+      }
+    });
+  }
+  ngOnDestroy(): void {
+    this.obs$!.unsubscribe();
+  }
 }
 
 @Component({
@@ -67,14 +111,28 @@ export class ContactosEditComponent implements OnInit, OnDestroy {
   styleUrls: ['./componente.component.css'],
   imports: [DatePipe],
 })
-export class ContactosViewComponent implements OnInit, OnDestroy {
-  constructor(private vm: ContactosViewModelService) { }
-  public get VM(): ContactosViewModelService { return this.vm; }
-  ngOnInit(): void { }
-  ngOnDestroy(): void { }
+export class ContactosViewComponent implements OnChanges {
+  @Input() id?: string;
+  constructor(
+    protected vm: ContactosViewModelService,
+    protected router: Router
+  ) {}
+  public get VM(): ContactosViewModelService {
+    return this.vm;
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.id) {
+      this.vm.view(+this.id);
+    } else {
+      this.router.navigate(['/404.html']);
+    }
+  }
 }
 
 export const CONTACTOS_COMPONENTES = [
-  ContactosComponent, ContactosListComponent, ContactosAddComponent,
-  ContactosEditComponent, ContactosViewComponent,
- ]; 
+  ContactosComponent,
+  ContactosListComponent,
+  ContactosAddComponent,
+  ContactosEditComponent,
+  ContactosViewComponent,
+];

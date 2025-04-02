@@ -1,7 +1,17 @@
 import { Routes } from '@angular/router';
 import { DemosComponent, FormulariosComponent, HomeComponent } from './main';
+import { ContactosAddComponent, ContactosEditComponent, ContactosListComponent, ContactosViewComponent } from './contactos';
 
 export const routes: Routes = [
+    { path: 'contactos', children: [
+        { path: '', component: ContactosListComponent},
+        { path: 'add', component: ContactosAddComponent},
+        { path: ':id/edit', component: ContactosEditComponent},
+        { path: ':id', component: ContactosViewComponent},
+        { path: ':id/:kk', component: ContactosViewComponent},
+        ]},
+       
+
 {path: '/', component: HomeComponent, pathMatch: 'full'},
 {path: '/home', component: HomeComponent},
 {path: '/demos', component: DemosComponent, title: 'Demos', pathMatch: 'full'},
