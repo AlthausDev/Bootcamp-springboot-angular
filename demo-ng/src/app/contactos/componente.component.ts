@@ -1,11 +1,80 @@
-import { Component } from '@angular/core';
+/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core';
+import { ContactosViewModelService } from './servicios.service';
+import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ErrorMessagePipe, TypeValidator } from '@my/core';
 
 @Component({
-  selector: 'app-componente',
-  imports: [],
-  templateUrl: './componente.component.html',
-  styleUrl: './componente.component.css'
+  selector: 'app-contactos',
+  templateUrl: './tmpl-anfitrion.component.html',
+  styleUrls: ['./componente.component.css'],
+  imports: [
+    forwardRef(() => ContactosAddComponent),
+    forwardRef(() => ContactosEditComponent),
+    forwardRef(() => ContactosViewComponent),
+    forwardRef(() => ContactosListComponent),
+  ],
 })
-export class ComponenteComponent {
-
+export class ContactosComponent implements OnInit, OnDestroy {
+  constructor(private vm: ContactosViewModelService) { }
+  public get VM(): ContactosViewModelService { return this.vm; }
+  ngOnInit(): void { this.vm.list(); }
+  ngOnDestroy(): void { this.vm.clear(); }
 }
+
+@Component({
+  selector: 'app-contactos-list',
+  templateUrl: './tmpl-list.component.html',
+  styleUrls: ['./componente.component.css'],
+})
+export class ContactosListComponent implements OnInit, OnDestroy {
+  constructor(private vm: ContactosViewModelService) { }
+  public get VM(): ContactosViewModelService { return this.vm; }
+  ngOnInit(): void { }
+  ngOnDestroy(): void { this.vm.clear(); }
+}
+
+@Component({
+  selector: 'app-contactos-add',
+  templateUrl: './tmpl-form.component.html',
+  styleUrls: ['./componente.component.css'],
+  imports: [FormsModule, TypeValidator, ErrorMessagePipe],
+})
+export class ContactosAddComponent implements OnInit {
+  constructor(private vm: ContactosViewModelService) { }
+  public get VM(): ContactosViewModelService { return this.vm; }
+  ngOnInit(): void { }
+}
+
+@Component({
+  selector: 'app-contactos-edit',
+  templateUrl: './tmpl-form.component.html',
+  styleUrls: ['./componente.component.css'],
+  imports: [FormsModule, TypeValidator, ErrorMessagePipe],
+})
+export class ContactosEditComponent implements OnInit, OnDestroy {
+  constructor(private vm: ContactosViewModelService) { }
+  public get VM(): ContactosViewModelService { return this.vm; }
+  ngOnInit(): void { }
+  ngOnDestroy(): void { }
+}
+
+@Component({
+  selector: 'app-contactos-view',
+  templateUrl: './tmpl-view.component.html',
+  styleUrls: ['./componente.component.css'],
+  imports: [DatePipe],
+})
+export class ContactosViewComponent implements OnInit, OnDestroy {
+  constructor(private vm: ContactosViewModelService) { }
+  public get VM(): ContactosViewModelService { return this.vm; }
+  ngOnInit(): void { }
+  ngOnDestroy(): void { }
+}
+
+export const CONTACTOS_COMPONENTES = [
+  ContactosComponent, ContactosListComponent, ContactosAddComponent,
+  ContactosEditComponent, ContactosViewComponent,
+ ]; 

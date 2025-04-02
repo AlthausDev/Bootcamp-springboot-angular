@@ -1,2 +1,3 @@
-import * as ContactosModule from './contactos.module';
-import * as ServiciosService from './servicios.service';
+export * from './componente.component';
+export * from './servicios.service';
+export * from './modulo.module';
