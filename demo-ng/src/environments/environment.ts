@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    apiUrl: 'api/catalogo',
+    apiUrl: '/api/',
     securityUrl: 'auth',
     LOG_LEVEL: 1
 };
