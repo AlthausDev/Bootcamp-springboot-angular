@@ -1,9 +1,9 @@
-<h1>Hola {{nombre() | elipsis:10 | uppercase}}</h1>
+<!-- <h1>Hola {{nombre() | elipsis:10 | uppercase}}</h1> -->
 
 <li class="nav-item">
   <a class="nav-link" [routerLink]="['/contactos']" routerLinkActive="active">contactos</a>
 </li>
-
+<!-- 
 <app-formularios></app-formularios>
 
 <p>
@@ -24,14 +24,14 @@
 <p [innerHTML]="resultado()">Esto no se pierde</p>
 <p [hidden]="!visible()">Esto es visible</p>
 <p [hidden]="invisible()">ahora me ves</p>
-<div hidden="hidden">invisible()</div>
+<div hidden="hidden">invisible()</div> -->
 
-<p *ngfl="visible">Ahora existo con directiva</p>
+<!-- <p *ngfl="visible">Ahora existo con directiva</p>
 @if ((visible())) {
   <p>ahora existo con flujo</p>
-}
+} -->
 
-<p [ngClass]="estetica()">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+<!-- <p [ngClass]="estetica()">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
     sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
     veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
@@ -68,4 +68,4 @@
 
 <p [style.font-size.px]="fontSize()"> {{listado() | json}}></p>
 
-<app-form-buttons send-text="enviar" (send)="saluda()" abandon-text="volver" (abandon)="despide()"></app-form-buttons>
+<app-form-buttons send-text="enviar" (send)="saluda()" abandon-text="volver" (abandon)="despide()"></app-form-buttons> -->

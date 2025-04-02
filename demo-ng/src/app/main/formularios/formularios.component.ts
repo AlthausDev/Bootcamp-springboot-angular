@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ErrorMessagePipe } from "../../../lib/my-core/pipes/cadenas.pipe";
 
-import { JsonPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
@@ -46,7 +45,7 @@ export class PersonasDaoService extends RESTDAOService<any, number> {
 
 @Component({
   selector: 'app-formularios',
-  imports: [FormsModule, ErrorMessagePipe, NIFNIEValidator, TypeValidator, UppercaseValidator, JsonPipe ],
+  imports: [FormsModule, ErrorMessagePipe, NIFNIEValidator, TypeValidator, UppercaseValidator],
   templateUrl: './formularios.component.html',
   styleUrl: './formularios.component.css'
 })

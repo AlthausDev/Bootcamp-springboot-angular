@@ -36,13 +36,6 @@ export abstract class RESTDAOService<T, K> {
   }
 }
 
-@Injectable({ providedIn: 'root' })
-export class PersonasDaoService extends RESTDAOService<any, any> {
-  constructor() {
-    super('personas');
-  }
-}
-
 @Injectable({
   providedIn: 'root',
 })
