@@ -9,7 +9,7 @@ import { AUTH_REQUIRED } from '../security';
 })
 export class PeliculasDAOService extends RESTDAOService<any, number> {
   constructor() {
-    super('catalogo/peliculas/v1', { context: new HttpContext().set(AUTH_REQUIRED, true) });
+    super('peliculas/v1', { context: new HttpContext().set(AUTH_REQUIRED, false) });
   }
   page(page: number, rows: number = 20): Observable<{ page: number, pages: number, rows: number, list: any[] }> {
     return new Observable(subscriber => {
@@ -33,7 +33,7 @@ export class PeliculasDAOService extends RESTDAOService<any, number> {
 })
 export class ActoresDAOService extends RESTDAOService<any, number> {
   constructor() {
-    super('catalogo/actores/v1', { context: new HttpContext().set(AUTH_REQUIRED, true) });
+    super('actores/v1', { context: new HttpContext().set(AUTH_REQUIRED, false) });
   }
   override query(extras = {}): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}?modo=short`, Object.assign({}, this.option, extras));
@@ -57,7 +57,7 @@ export class ActoresDAOService extends RESTDAOService<any, number> {
 })
 export class CategoriasDAOService extends RESTDAOService<any, number> {
   constructor() {
-    super('catalogo/categorias/v1', { context: new HttpContext().set(AUTH_REQUIRED, true) });
+    super('categorias/v1', { context: new HttpContext().set(AUTH_REQUIRED, false) });
   }
   peliculas(id: number): Observable<any[]> {
     return this.http.get<any>(`${this.baseUrl}/${id}/peliculas`, this.option);
@@ -69,6 +69,6 @@ export class CategoriasDAOService extends RESTDAOService<any, number> {
 })
 export class IdiomasDAOService extends RESTDAOService<any, number> {
   constructor() {
-    super('catalogo/idiomas/v1', { context: new HttpContext().set(AUTH_REQUIRED, true) });
+    super('idiomas/v1', { context: new HttpContext().set(AUTH_REQUIRED, false) });
   }
 }
