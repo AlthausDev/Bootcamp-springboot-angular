@@ -166,7 +166,7 @@ export class IbanValidator implements Validator {
   }
 }
 // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-export function isNotBlankValidator(
+export function NotblankValidator(
   control: AbstractControl
 ): { [key: string]: any } | null {
   return control.value != null &&

@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { Injectable, inject } from '@angular/core';
-import { Router, Route, CanActivateFn, CanActivateChildFn, CanMatchFn, ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, CanActivateChild, CanLoad, UrlSegment, UrlTree } from '@angular/router';
+import { Router, Route, CanActivateFn, CanActivateChildFn, CanMatchFn } from '@angular/router';
 import { HttpClient, HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpContextToken } from '@angular/common/http';
 import { BehaviorSubject, catchError, filter, Observable, of, switchMap, take, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { EventBusService } from '../common-services';
-import { environment } from '../../environments/environment.development';
 
 export const AUTH_REQUIRED = new HttpContextToken<boolean>(() => false);
 export const LOGIN_EVENT = 'login'
@@ -89,7 +87,7 @@ export class LoginService {
   login(usr: string, pwd: string) {
     if (this.auth.isAuthenticated) this.auth.logout();
     return new Observable(observable =>
-      this.http.post<LoginResponse>(environment.securityApiURL + 'login', { username: usr, password: pwd })
+      this.http.post<LoginResponse>(environment.securityUrl + 'login', { username: usr, password: pwd })
         .subscribe({
           next: data => {
             if (data.success === true) {
@@ -103,7 +101,7 @@ export class LoginService {
   }
   refresh() {
     if (this.auth.isAuthenticated) {
-      return this.http.post<LoginResponse>(environment.securityApiURL + 'login/refresh', { token: this.auth.RefreshToken })
+      return this.http.post<LoginResponse>(environment.securityUrl + 'login/refresh', { token: this.auth.RefreshToken })
         .pipe(
           switchMap(data => {
             if (data.success === true) {
@@ -133,7 +131,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
   constructor(private auth: AuthService, private login: LoginService) { }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (!(req.context.get(AUTH_REQUIRED) || req.withCredentials) || !this.auth.isAuthenticated) {
       return next.handle(req);
@@ -141,7 +138,7 @@ export class AuthInterceptor implements HttpInterceptor {
     const authReq = this.addAuthorizationHeader(req)
     return next.handle(authReq).pipe(
       catchError(err => {
-        if ([401, 403].includes(err.status) && err.error?.detail?.toLowerCase()?.includes('token expired')
+        if ([401, 403].includes(err.status) && (err.error?.detail ?? err.error?.message)?.match(/token.+expired/i)
           && !authReq.url.includes('/refresh') && this.auth.isAuthenticated) {
           return this.refreshToken(authReq, next);
         }
@@ -180,6 +177,7 @@ export class AuthInterceptor implements HttpInterceptor {
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
+/*
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) { }
@@ -189,7 +187,7 @@ export class AuthGuard implements CanActivate {
     return this.authService.isAuthenticated;
   }
 }
-
+*/
 export const AuthCanActivateFn: CanActivateFn = (_route, _state) => {
   return inject(AuthService).isAuthenticated;
 }
@@ -203,21 +201,21 @@ export function AuthWithRedirectCanActivate(redirectTo: string): CanActivateFn {
   }
 }
 
-
+/*
 @Injectable({ providedIn: 'root' })
 export class InRoleGuard implements CanActivate, CanActivateChild, CanLoad {
   constructor(private authService: AuthService, private router: Router) { }
-  canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): boolean {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     return route.data['roles'] ? this.authService.isInRoles(...route.data['roles']) : false;
   }
-  canActivateChild(childRoute: ActivatedRouteSnapshot, _state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     return childRoute.data['roles'] ? this.authService.isInRoles(...childRoute.data['roles']) : false;
   }
-  canLoad(route: Route, _segments: UrlSegment[]): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+  canLoad(route: Route, segments: UrlSegment[]): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     return route.data && route.data['roles'] ? this.authService.isInRoles(...route.data['roles']) : false;
   }
 }
-
+*/
 export function InRoleCanActivate(...rolesArgs: string[]): CanActivateFn {
   return (_route, _state) => {
     return rolesArgs.length ? inject(AuthService).isInRoles(...rolesArgs) : false;
@@ -257,7 +255,7 @@ export class User {
 
 @Injectable({ providedIn: 'root' })
 export class RegisterUserDAO {
-  private baseUrl = environment.securityApiURL + 'register ';
+  private baseUrl = environment.securityUrl + 'register ';
   private options = { withCredentials: true };
 
   constructor(private http: HttpClient) { }

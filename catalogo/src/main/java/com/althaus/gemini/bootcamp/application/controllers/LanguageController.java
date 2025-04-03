@@ -31,7 +31,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("api/lenguajes/v1")
+@RequestMapping("api/lenguages/v1")
 public class LanguageController {
     
     @Autowired

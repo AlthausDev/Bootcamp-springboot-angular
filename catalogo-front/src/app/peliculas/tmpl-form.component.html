@@ -1,101 +1,133 @@
-<h1>Pelicula</h1>
-@if(VM.Elemento) {
+<h1 class="display-3">Película</h1>
 <form #miForm="ngForm" class="row gy-2 gx-2 align-items-start">
-  @if (VM.Modo==='add') {
-    <div class="form-floating col-md-2">
-      <input class="form-control" [class.is-invalid]="id.invalid && miForm.dirty" type="number" name="id" id="id" [(ngModel)]="VM.Elemento.id"
-      #id="ngModel" required min="0" placeholder=" ">
-      <label for="id">Código:</label>
-      <output class="invalid-feedback" [hidden]="id.valid">{{id.errors | errormsg}}</output>
-    </div>
-  } @else {
-    <div class="col-md-2">
-      <label class="form-label-sm" for="id">Código:</label>
-      <output class="d-block" [textContent]="VM.Elemento.id"></output>
-    </div>
-  }
-  <div class="form-floating col-md-2">
-    <select class="form-control form-select" name="tratamiento" id="tratamiento"
-       [(ngModel)]="VM.Elemento.tratamiento" #tratamiento="ngModel">
-      <option>Sr.</option>
-      <option>Sra.</option>
-      <option>Srta.</option>
-      <option>Dr.</option>
-      <option>Dra.</option>
-      <option>Ilmo.</option>
-      <option>Ilma.</option>
-      <option>Excmo.</option>
-      <option>Excma.</option>
+  <div class="form-floating">
+    <input class="form-control" [class.is-invalid]="title.invalid" type="text" name="title" id="title"
+      [(ngModel)]="VM.Elemento.title" #title="ngModel" placeholder="title" notblank maxlength="128">
+    <label for="title">título:</label>
+    <output class="invalid-feedback" [hidden]="title.valid">{{title.errors | errormsg}}</output>
+  </div>
+  <div class="form-floating">
+    <textarea class="form-control" [class.is-invalid]="description.invalid" type="text" name="description"
+      id="description" [(ngModel)]="VM.Elemento.description" #description="ngModel" placeholder="description"
+    style="height: 100px"></textarea>
+    <label for="description">descripción:</label>
+    <output class="invalid-feedback" [hidden]="description.valid">{{description.errors | errormsg}}</output>
+  </div>
+  <div class="form-floating col-md-6">
+    <select class="form-control form-select" [class.is-invalid]="rating.invalid" name="rating" id="rating"
+      [(ngModel)]="VM.Elemento.rating" #rating="ngModel">
+      <option value="{{null}}"></option>
+      @for (ele of VM.clasificaciones; track ele) {
+        <option [value]="ele.key">{{ele.value}} ({{ele.key}})</option>
+      }
     </select>
-    <label for="tratamiento">Tratamiento:</label>
+    <label for="rating">clasificación por edades:</label>
+    <output class="invalid-feedback" [hidden]="rating.valid">{{rating.errors | errormsg}}</output>
   </div>
-  <div class="form-floating col-md-4">
-    <input class="form-control" [class.is-invalid]="nombre.invalid" type="text" name="nombre" id="nombre"
-       [(ngModel)]="VM.Elemento.nombre" #nombre="ngModel" required minlength="2"
-       maxlength="50" placeholder=" ">
-    <label for="nombre">Nombre:</label>
-    <output class="invalid-feedback" [hidden]="nombre.valid">{{nombre.errors | errormsg}}</output>
+  <div class="form-floating col-md-3">
+    <select class="form-control form-select" [class.is-invalid]="languageId.invalid" name="languageId" id="languageId"
+      [(ngModel)]="VM.Elemento.languageId" #languageId="ngModel" required>
+      @for (lang of VM.idiomas; track lang) {
+        <option [value]="lang.id">{{lang.idioma}}</option>
+      }
+    </select>
+    <label for="languageId">idioma:</label>
+    <output class="invalid-feedback" [hidden]="languageId.valid">{{languageId.errors | errormsg}}</output>
   </div>
-  <div class="form-floating col-md-4">
-    <input class="form-control" [class.is-invalid]="apellidos.invalid" type="text" name="apellidos" id="apellidos"
-       [(ngModel)]="VM.Elemento.apellidos" #apellidos="ngModel" minlength="2" maxlength="50"
-       placeholder=" ">
-    <label for="apellidos">Apellidos:</label>
-    <output class="invalid-feedback" [hidden]="apellidos.valid">{{apellidos.errors | errormsg}}</output>
+  <div class="form-floating col-md-3">
+    <select class="form-control form-select" name="languageVOId" id="languageVOId"
+      [(ngModel)]="VM.Elemento.languageVOId" #languageVOId="ngModel">
+      <option [value]="null"></option>
+      @for (lang of VM.idiomas; track lang) {
+        <option [value]="lang.id">{{lang.idioma}}</option>
+      }
+    </select>
+    <label for="languageVOId">v.o.:</label>
   </div>
-  <div class="form-floating col-md-3 col-lg-2">
-    <input class="form-control" [class.is-invalid]="telefono.invalid" type="tel" name="telefono" id="telefono"
-       [(ngModel)]="VM.Elemento.telefono" #telefono="ngModel" pattern="^(\d{3}\s){2}\d{3}$" placeholder=" ">
-    <label class="form-label" for="telefono">Teléfono:</label>
-    <output class="invalid-feedback" [hidden]="telefono.valid">{{telefono.errors | errormsg:"El formato debe ser: 555 999 999"}}</output>
+  <div class="form-floating col-md-2">
+    <input class="form-control" [class.is-invalid]="releaseYear.invalid" type="number" name="releaseYear"
+      id="releaseYear" [(ngModel)]="VM.Elemento.releaseYear" #releaseYear="ngModel" placeholder="releaseYear" min="1901"
+      max="2155" step="1">
+    <label for="releaseYear">año:</label>
+    <output class="invalid-feedback" [hidden]="releaseYear.valid">{{releaseYear.errors | errormsg}}</output>
   </div>
-  <div class="form-floating  col-md-6 col-lg-4">
-    <input class="form-control" [class.is-invalid]="email.invalid" type="email" name="email" id="email" [(ngModel)]="VM.Elemento.email"
-       #email="ngModel" email maxlength="100" placeholder=" ">
-    <label class="form-label" for="email">Correo:</label>
-    <output class="invalid-feedback" [hidden]="email.valid">{{email.errors | errormsg}}</output>
+  <div class="form-floating col-md-2">
+    <input class="form-control" [class.is-invalid]="length.invalid" type="number" name="length" id="length"
+      [(ngModel)]="VM.Elemento.length" #length="ngModel" placeholder="length" min="1" step="1">
+    <label for="length">duración (min):</label>
+    <output class="invalid-feedback" [hidden]="length.valid">{{length.errors | errormsg}}</output>
   </div>
-  <div class="form-floating col-md-3 col-lg-2">
-    <input class="form-control" [class.is-invalid]="nacimiento.invalid" type="date" name="nacimiento" id="nacimiento"
-       [(ngModel)]="VM.Elemento.nacimiento" #nacimiento="ngModel" placeholder=" ">
-    <label class="form-label" for="nacimiento">F. Nacimiento:</label>
-    <output class="invalid-feedback" [hidden]="nacimiento.valid">{{nacimiento.errors | errormsg}}</output>
+  <div class="form-floating col-md-3">
+    <input class="form-control" [class.is-invalid]="rentalDuration.invalid" type="number" name="rentalDuration"
+      id="rentalDuration" [(ngModel)]="VM.Elemento.rentalDuration" #rentalDuration="ngModel"
+      placeholder="rentalDuration" required min="1" step="1">
+    <label for="rentalDuration">días de alquiler:</label>
+    <output class="invalid-feedback" [hidden]="rentalDuration.valid">{{rentalDuration.errors | errormsg}}</output>
   </div>
-  <div class="col-md-4 col-lg-2">
-    <div class="col-form-label-sm d-inline d-lg-block">Sexo:</div>
-    <div class="ms-2 d-inline">
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="sexo" id="sexo1" value="H"
-       [(ngModel)]="VM.Elemento.sexo">
-        <label class="form-check-label" for="sexo1">Hombre</label>
+  <div class="form-floating col-md-3">
+    <input class="form-control" [class.is-invalid]="rentalRate.invalid" type="number" name="rentalRate" id="rentalRate"
+      [(ngModel)]="VM.Elemento.rentalRate" #rentalRate="ngModel" placeholder="rentalRate" required min="0.01"
+      step="0.01">
+    <label for="rentalRate">precio alquiler:</label>
+    <output class="invalid-feedback" [hidden]="rentalRate.valid">{{rentalRate.errors | errormsg}}</output>
+  </div>
+  <div class="form-floating col-md-2">
+    <input class="form-control" [class.is-invalid]="replacementCost.invalid" type="number" name="replacementCost"
+      id="replacementCost" [(ngModel)]="VM.Elemento.replacementCost" #replacementCost="ngModel"
+      placeholder="replacementCost" required min="0.01" step="0.01">
+    <label for="replacementCost">penalización:</label>
+    <output class="invalid-feedback" [hidden]="replacementCost.valid">{{replacementCost.errors | errormsg}}</output>
+  </div>
+  <div class="row mt-2 g-1">
+    <div class="col-md-6">
+      <div class="input-group">
+        <label class="input-group-text" for="id">Reparto</label>
+        <select class="form-control form-select" name="id" id="id" #id>
+          @for (ele of VM.Actores; track ele) {
+            <option [value]="ele.id">{{ele.nombre | titlecase}}</option>
+          }
+        </select>
+        <button class="btn btn-outline-secondary" type="button" (click)="VM.addActor(+id.value)"
+          [disabled]="VM.Actores.length === 0"><svg class="bi" width="16" height="16" role="img" aria-label="añadir">
+          <use xlink:href="images/crud-sprite.svg#plus" />
+        </svg></button>
       </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="sexo" id="sexo2" value="M"
-       [(ngModel)]="VM.Elemento.sexo">
-        <label class="form-check-label" for="sexo2">Mujer</label>
+      <div class="list-group">
+        @for (actor of VM.Elemento.actors; track actor; let indice = $index) {
+          <li class="list-group-item">
+            {{VM.dameActor | exec:actor | titlecase}} <button type="button"
+            class="btn btn-outline-danger position-absolute h-100 top-0 end-0" (click)="VM.removeActor(indice)"><svg
+            class="bi" width="16" height="16" role="img" aria-label="borrar">
+            <use xlink:href="images/crud-sprite.svg#trash-fill" />
+          </svg></button></li>
+        }
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="input-group">
+        <label class="input-group-text" for="categoriaId">Categorías</label>
+        <select class="form-control form-select" name="categoriaId" id="categoriaId" #categoriaId>
+          @for (cat of VM.Categorias; track cat) {
+            <option [value]="cat.id">{{cat.categoria}}</option>
+          }
+        </select>
+        <button class="btn btn-outline-secondary" type="button" (click)="VM.addCategoria(+categoriaId.value)"
+          [disabled]="VM.Categorias.length === 0"><svg class="bi" width="16" height="16" role="img" aria-label="añadir">
+          <use xlink:href="images/crud-sprite.svg#plus" />
+        </svg></button>
+      </div>
+      <div class="list-group">
+        @for (categoria of VM.Elemento.categories; track categoria; let indice = $index) {
+          <li class="list-group-item">
+            {{VM.dameCategoria | exec:categoria }} <button type="button"
+            class="btn btn-outline-danger position-absolute h-100 top-0 end-0" (click)="VM.removeCategoria(indice)"><svg
+            class="bi" width="16" height="16" role="img" aria-label="borrar">
+            <use xlink:href="images/crud-sprite.svg#trash-fill" />
+          </svg></button></li>
+        }
       </div>
     </div>
   </div>
-  <div class="col-md-4 col-lg-2">
-    <div class="col-form-label-sm d-inline d-lg-block">Situación:</div>
-    <div class="ms-2 form-check form-check-inline form-switch">
-      <input class="form-check-input" type="checkbox" id="conflictivo" name="conflictivo"
-        [(ngModel)]="VM.Elemento.conflictivo" #conflictivo="ngModel">
-      <label class="form-check-label" for="conflictivo">Conflictivo</label>
-    </div>
-  </div>
-  <div class="form-floating col-md-12">
-    <input class="form-control" [class.is-invalid]="avatar.invalid" type="url" name="avatar" id="avatar"
-       [(ngModel)]="VM.Elemento.avatar" #avatar="ngModel" maxlength="500" placeholder=" ">
-    <label class="form-label" for="avatar">Avatar:</label>
-    <output class="invalid-feedback" [hidden]="avatar.valid">{{avatar.errors | errormsg}}</output>
-  </div>
-  <div class="mt-2">
-    <input type="button" class="btn btn-success" value="Enviar" (click)="VM.send()"
-       [disabled]="miForm.invalid">
-    <input type="button" class="btn btn-info" value="Volver" (click)="VM.cancel()">
-  </div>
+  <app-form-buttons (send)="VM.send()" [send-disabled]="miForm.invalid" (cancel)="VM.cancel()"
+    (delete)="VM.delete(VM.Elemento.filmId)" [delete-visible]="VM.Modo === 'edit'" />
 </form>
-} @else {
-  <h2>Sin datos</h2>
-}

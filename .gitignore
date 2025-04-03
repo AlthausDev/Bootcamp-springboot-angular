@@ -23,6 +23,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
+sakila
 
 # External tool builders
 .externalToolBuilders/

@@ -1,167 +1,42 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoggerService } from '@my/core';
-import { Observable } from 'rxjs';
-import { RESTDAOService, ModoCRUD } from '../code-base';
-import { NavigationService, NotificationService } from '../common-services';
-import { AuthService, AUTH_REQUIRED } from '../security';
-
-export interface IPelicula {
-  [index: string]: any;
-  id: number
-  titulo: string
-  director: string
-  duración: number
-  genero: string
-  idioma: string
-  precio: number
-  año: number
-}
-
+import { ViewModelService } from '../code-base';
+import { NotificationService, NavigationService, PeliculasDAOService, IdiomasDAOService, CategoriasDAOService, ActoresDAOService } from '../common-services';
+import { AuthService } from '../security';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PeliculasDAOService extends RESTDAOService<any, number> {
-  constructor() {
-    super('peliculas', { context: new HttpContext().set(AUTH_REQUIRED, true) });
-  }
-  page(page: number, rows: number = 20): Observable<{ page: number, pages: number, rows: number, list: any[] }> {
-    return new Observable(subscriber => {
-      const url = `${this.baseUrl}?_page=${page}&_rows=${rows}&_sort=nombre,apellidos`
-      this.http.get<any>(url, this.option).subscribe({
-        next: data => subscriber.next({ page: data.number, pages: data.totalPages, rows: data.totalElements, list: data.content }),
-        error: err => subscriber.error(err)
-      })
-    })
-  }
-}
+export class PeliculasViewModelService extends ViewModelService<any, number> {  
 
-@Injectable({
-  providedIn: 'root'
-})
-export class PeliculasViewModelService {
-  protected modo: ModoCRUD = 'list';
-  protected listado: any[] = [];
-  protected elemento!: any;
-  protected idOriginal?: number;
-  protected listURL = '/peliculas';
-
-  constructor(protected notify: NotificationService,
-    protected out: LoggerService,
-    protected dao: PeliculasDAOService
-    , public auth: AuthService, protected router: Router, private navigation: NavigationService
-  ) { }
-
-  public get Modo(): ModoCRUD { return this.modo; }
-  public get Listado() { return this.listado; }
-  public get Elemento() { return this.elemento; }
-
-  public list(): void {
-    this.dao.query().subscribe({
-      next: data => {
-        this.listado = data;
-        this.modo = 'list';
-      },
-      error: err => this.handleError(err)
-    });
+  constructor(notify: NotificationService, out: LoggerService , auth: AuthService, router: Router, navigation: NavigationService,
+    dao: PeliculasDAOService, protected daoIdiomas: IdiomasDAOService, protected daoCategorias: CategoriasDAOService, protected daoActores: ActoresDAOService
+  ) {
+    super(dao, { rating: 'G' }, notify, out, auth, router, navigation)
+    // Soluciona el problema de las clases JavaScript por el cual los métodos pierden la referencia a this cuando se referencian por nombre (ExecPipe)
+    this.dameActor = this.dameActor.bind(this)
+    this.dameCategoria = this.dameCategoria.bind(this)
   }
 
-  public add(): void {
-    this.elemento = {};
-    this.modo = 'add';
-  }
-  public edit(key: any): void {
+  public override view(key: any): void {
     this.dao.get(key).subscribe({
       next: data => {
         this.elemento = data;
-        this.idOriginal = key;
-        this.modo = 'edit';
       },
       error: err => this.handleError(err)
     });
   }
-  public view(key: any): void {
-    this.dao.get(key).subscribe({
-      next: data => {
-        this.elemento = data;
-        this.modo = 'view';
-      },
-      error: err => this.handleError(err)
-    });
-  }
-  public delete(key: any): void {
-    if (!window.confirm('¿Seguro?')) { return; }
-
-    this.dao.remove(key).subscribe({
-      next: () => {
-        // this.list()
-        this.load()
-      },
-      error: err => this.handleError(err)
-    });
-  }
-
-  clear() {
-    this.elemento = {}
-    this.idOriginal = undefined;
-    this.listado = [];
-  }
-
-  public cancel(): void {
-    this.clear()
-    // this.list();
-    // this.load(this.page)
-    // this.router.navigateByUrl(this.listURL);
-    this.navigation.back()
-  }
-  public send(): void {
-    switch (this.modo) {
-      case 'add':
-        this.dao.add(this.elemento).subscribe({
-          next: () => this.cancel(),
-          error: err => this.handleError(err)
-        });
-        break;
-      case 'edit':
-        if (!this.idOriginal) {
-          this.out.error('Falta el identificador')
-          return
-        }
-        this.dao.change(this.idOriginal, this.elemento).subscribe({
-          next: () => this.cancel(),
-          error: err => this.handleError(err)
-        });
-        break;
-      case 'view':
-        this.cancel();
-        break;
-    }
-  }
-
-  handleError(err: HttpErrorResponse) {
-    let msg = ''
-    switch (err.status) {
-      case 0: msg = err.message; break;
-      case 404: msg = `ERROR ${err.status}: ${err.statusText}`; break;
-      default:
-        msg = `ERROR ${err.status}: ${err.error?.['title'] ?? err.statusText}.${err.error?.['detail'] ? ` Detalles: ${err.error['detail']}` : ''}`
-        break;
-    }
-    this.notify.add(msg)
-  }
-
   // Paginado
 
   page = 0;
   totalPages = 0;
   totalRows = 0;
-  rowsPerPage = 8;
+  rowsPerPage = 24;
   load(page: number = -1) {
-    if (page < 0) page = this.page
-    this.dao.page(page, this.rowsPerPage).subscribe({
+    if (!page || page < 0) page = this.page;
+    (this.dao as PeliculasDAOService).page(page, this.rowsPerPage).subscribe({
       next: rslt => {
         this.page = rslt.page;
         this.totalPages = rslt.pages;
@@ -172,11 +47,91 @@ export class PeliculasViewModelService {
       error: err => this.handleError(err)
     })
   }
-  pageChange(page: number = 0) {
-    this.router.navigate([], { queryParams: { page } })
-  }
-  imageErrorHandler(event: Event, item: any) {
-    (event.target as HTMLImageElement).src = item.sexo === 'H' ? '/images/user-not-found-male.png' : '/images/user-not-found-female.png'
+
+  public idiomas: any[] = [];
+  public clasificaciones: any[] = [];
+  private actores: any[] = [];
+  private categorias: any[] = [];
+
+  public get Actores(): any { return this.actores.filter(item => !this.elemento?.actors?.includes(item.id)); }
+  public get Categorias(): any { return this.categorias.filter(item => !this.elemento?.categories?.includes(item.id)); }
+
+  public cargaCategorias() {
+    this.daoCategorias.query().subscribe({
+      next: data => {
+        this.categorias = data;
+      },
+      error: err => this.handleError(err)
+    });
   }
 
+  override cargaListas() {
+    if (this.clasificaciones.length === 0)
+    (this.dao as PeliculasDAOService).clasificaciones().subscribe({
+        next: data => {
+          this.clasificaciones = data;
+        },
+        error: err => this.handleError(err)
+      });
+    this.cargaCategorias();
+    this.daoActores.query().subscribe({
+      next: data => {
+        this.actores = data;
+      },
+      error: err => this.handleError(err)
+    });
+    this.daoIdiomas.query().subscribe({
+      next: data => {
+        this.idiomas = data;
+      },
+      error: err => this.handleError(err)
+    });
+  }
+
+
+  dameActor(id: number) {
+    if (!this?.actores || this.actores.length === 0) return '(sin cargar)'
+    const cat = this.actores.find(item => item.id === id)
+    return cat ? cat.nombre : 'error'
+  }
+  addActor(id: number) {
+    if(!this.elemento.actors) {
+      this.elemento.actors = []
+    } else if (this.elemento.actors.includes(id)) {
+      this.notify.add('Ya tiene la categoría')
+      return
+    }
+    this.elemento.actors.push(id)
+  }
+  removeActor(index: number) {
+    this.elemento.actors.splice(index, 1)
+  }
+
+  dameCategoria(id: number) {
+    if (!this?.categorias || this.categorias.length === 0) return '(sin cargar)'
+    const cat = this.categorias.find(item => item.id === id)
+    return cat ? cat.categoria : 'error'
+  }
+  addCategoria(id: number) {
+    if(!this.elemento.categories) {
+      this.elemento.categories = []
+    } else if (this.elemento.categories.includes(id)) {
+      this.notify.add('Ya tiene la categoría')
+      return
+    }
+    this.elemento.categories.push(id)
+  }
+  removeCategoria(index: number) {
+    this.elemento.categories.splice(index, 1)
+  }
+
+  public porCategorias(id: number) {
+    this.cargaCategorias();
+    this.daoCategorias.peliculas(id).subscribe({
+      next: data => {
+        this.listado = data;
+      },
+      error: err => this.handleError(err)
+    });
+  }
 }

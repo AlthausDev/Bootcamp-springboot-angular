@@ -1,115 +1,68 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
-import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges, forwardRef, input } from '@angular/core';
-import { ActivatedRoute, Router, ParamMap, RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { DatePipe, NgIf, } from '@angular/common';
-import { PaginatorModule } from 'primeng/paginator';
-import { ErrorMessagePipe, TypeValidator } from '@my/core';
+import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PeliculasViewModelService } from './servicios.service';
-import { Subscription } from 'rxjs';
+
+import { ErrorMessagePipe, ExecPipe, NormalizePipe, TypeValidator } from '@my/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { FormButtonsComponent } from '../common-components';
 
 @Component({
-    selector: 'app-peliculas',
-    templateUrl: './tmpl-anfitrion.component.html',
-    styleUrls: ['./componente.component.css'],
-    imports: [
-        forwardRef(() => PeliculasAddComponent),
-        forwardRef(() => PeliculasEditComponent),
-        forwardRef(() => PeliculasViewComponent),
-        forwardRef(() => PeliculasListComponent),
-    ]
+  selector: 'app-peliculas-list-body',
+  templateUrl: './tmpl-list-body.component.html',
+  styleUrls: ['./componente.component.css'],
+  standalone: true,
+  imports: [RouterLink, NormalizePipe, CommonModule, ]
 })
-export class PeliculasComponent implements OnInit, OnDestroy {
-  constructor(protected vm: PeliculasViewModelService) { }
-  public get VM(): PeliculasViewModelService { return this.vm; }
-  ngOnInit(): void {
-    // this.vm.list();
-    this.vm.load()
+export class PeliculasListBodyComponent {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Input({required: true}) Listado: any[] = []
+  @Input() urlBase = ''
+  @Output() imageError = new EventEmitter<Event>()
+
+  imageErrorHandler(event: Event) {
+    this.imageError.emit(event)
   }
+}
+
+@Component({
+  selector: 'app-peliculas-list',
+  templateUrl: './tmpl-list.component.html',
+  styleUrls: ['./componente.component.css'],
+  standalone: true,
+  imports: [RouterLink, PeliculasListBodyComponent, ],
+})
+export class PeliculasListComponent implements OnChanges, OnDestroy {
+  @Input() page = 0
+  @Input() search = ''
+  @Input() categoria? : number
+  pagina = false
+  constructor(protected vm: PeliculasViewModelService) { }
+
+  public get VM(): PeliculasViewModelService { return this.vm; }
+
+  ngOnChanges(_changes: SimpleChanges): void {
+    // if (this.type == 'categorias') {
+    //   this.vm.list()
+    if (this.categoria) {
+      this.vm.porCategorias(this.categoria)
+    } else if (this.search == 'categorias') {
+      this.vm.cargaCategorias()
+    } else{
+      this.pagina = true;
+      this.vm.load(this.page)
+    }
+  }
+
   ngOnDestroy(): void { this.vm.clear(); }
 }
 
-/*
-@Component({
-  selector: 'app-peliculas-list',
-  templateUrl: './tmpl-list.sin-rutas.component.html',
-  styleUrls: ['./componente.component.css'],
-  standalone: true,
-  imports: [PaginatorModule, NgIf, ]
-})
-export class PeliculasListComponent implements OnInit, OnDestroy {
-  constructor(protected vm: PeliculasViewModelService) { }
-  public get VM(): PeliculasViewModelService { return this.vm; }
-  ngOnInit(): void { }
-  ngOnDestroy(): void { }
-}
 @Component({
   selector: 'app-peliculas-add',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
-  imports: [FormsModule, TypeValidator, ErrorMessagePipe]
-})
-export class PeliculasAddComponent implements OnInit {
-  constructor(protected vm: PeliculasViewModelService) { }
-  public get VM(): PeliculasViewModelService { return this.vm; }
-  ngOnInit(): void { }
-}
-@Component({
-  selector: 'app-peliculas-edit',
-  templateUrl: './tmpl-form.component.html',
-  styleUrls: ['./componente.component.css'],
-  standalone: true,
-  imports: [FormsModule, TypeValidator, ErrorMessagePipe]
-})
-export class PeliculasEditComponent implements OnInit, OnDestroy {
-  constructor(protected vm: PeliculasViewModelService) { }
-  public get VM(): PeliculasViewModelService { return this.vm; }
-  ngOnInit(): void { }
-  ngOnDestroy(): void { }
-}
-@Component({
-  selector: 'app-peliculas-view',
-  templateUrl: './tmpl-view.component.html',
-  styleUrls: ['./componente.component.css'],
-  standalone: true,
-  imports: [DatePipe]
-})
-export class PeliculasViewComponent implements OnInit, OnDestroy {
-  constructor(protected vm: PeliculasViewModelService) { }
-  public get VM(): PeliculasViewModelService { return this.vm; }
-  ngOnInit(): void { }
-  ngOnDestroy(): void { }
-}
-*/
-
-@Component({
-    selector: 'app-peliculas-list',
-    templateUrl: './tmpl-list.con-rutas.component.html',
-    styleUrls: ['./componente.component.css'],
-    imports: [RouterLink, PaginatorModule]
-})
-export class PeliculasListComponent implements OnChanges, OnDestroy {
-  readonly page = input(0);
-
-  constructor(protected vm: PeliculasViewModelService) { }
-  public get VM(): PeliculasViewModelService { return this.vm; }
-  // ngOnInit(): void {
-  //   // this.vm.list();
-  //   this.vm.load()
-  // }
-  ngOnChanges(_changes: SimpleChanges): void {
-    this.vm.load(this.page())
-  }
-  ngOnDestroy(): void { this.vm.clear(); }
-}
-@Component({
-    selector: 'app-peliculas-add',
-    templateUrl: './tmpl-form.component.html',
-    styleUrls: ['./componente.component.css'],
-    imports: [FormsModule, TypeValidator, ErrorMessagePipe]
+  imports: [FormsModule, CommonModule, ErrorMessagePipe, TypeValidator, FormButtonsComponent, ExecPipe, ]
 })
 export class PeliculasAddComponent implements OnInit {
   constructor(protected vm: PeliculasViewModelService) { }
@@ -118,54 +71,75 @@ export class PeliculasAddComponent implements OnInit {
     this.vm.add();
   }
 }
+
 @Component({
-    selector: 'app-peliculas-edit',
-    templateUrl: './tmpl-form.component.html',
-    styleUrls: ['./componente.component.css'],
-    imports: [FormsModule, TypeValidator, ErrorMessagePipe]
+  selector: 'app-peliculas-edit',
+  templateUrl: './tmpl-form.component.html',
+  styleUrls: ['./componente.component.css'],
+  standalone: true,
+  imports: [FormsModule, CommonModule, ErrorMessagePipe, TypeValidator, FormButtonsComponent, ExecPipe, ]
 })
-export class PeliculasEditComponent implements OnInit, OnDestroy {
-  private obs$?: Subscription;
-  constructor(protected vm: PeliculasViewModelService,
-    protected route: ActivatedRoute, protected router: Router) { }
-  public get VM(): PeliculasViewModelService { return this.vm; }
-  ngOnInit(): void {
-    this.obs$ = this.route.paramMap.subscribe(
-      (params: ParamMap) => {
-        const id = parseInt(params?.get('id') ?? '');
-        if (id) {
-          this.vm.edit(id);
-        } else {
-          this.router.navigate(['/404.html']);
-        }
-      });
-  }
-  ngOnDestroy(): void {
-    this.obs$!.unsubscribe();
-  }
-}
-@Component({
-    selector: 'app-peliculas-view',
-    templateUrl: './tmpl-view.component.html',
-    styleUrls: ['./componente.component.css'],
-    imports: [DatePipe]
-})
-export class PeliculasViewComponent implements OnChanges {
-  readonly id = input<string>();
+export class PeliculasEditComponent implements OnChanges {
+  @Input() id?: string;
   constructor(protected vm: PeliculasViewModelService, protected router: Router) { }
   public get VM(): PeliculasViewModelService { return this.vm; }
   ngOnChanges(_changes: SimpleChanges): void {
-    const id = this.id();
-    if (id) {
-      this.vm.view(+id);
+    if (this.id) {
+      this.vm.edit(+this.id);
     } else {
       this.router.navigate(['/404.html']);
     }
   }
 }
 
+@Component({
+  selector: 'app-peliculas-view',
+  templateUrl: './tmpl-view.component.html',
+  styleUrls: ['./componente.component.css'],
+  standalone: true,
+  imports: [RouterLink, CommonModule, FormButtonsComponent, ]
+})
+export class PeliculasViewComponent implements OnChanges {
+  @Input() id?: string;
+  constructor(protected vm: PeliculasViewModelService, protected router: Router) { }
+  public get VM(): PeliculasViewModelService { return this.vm; }
+  ngOnChanges(_changes: SimpleChanges): void {
+    if (this.id) {
+      this.vm.view(+this.id);
+    } else {
+      this.router.navigate(['/404.html']);
+    }
+  }
+}
+
+@Component({
+  selector: 'app-peliculas',
+  templateUrl: './tmpl-anfitrion.component.html',
+  styleUrls: ['./componente.component.css'],
+  standalone: true,
+  imports: [PeliculasListComponent, PeliculasAddComponent, PeliculasEditComponent, PeliculasViewComponent, ],
+})
+export class PeliculasComponent implements OnInit, OnDestroy {
+  constructor(protected vm: PeliculasViewModelService, private route: ActivatedRoute) { }
+  public get VM(): PeliculasViewModelService { return this.vm; }
+  ngOnInit(): void {
+    const id = this.route.snapshot.params['id'];
+    if (id) {
+      if (this.route.snapshot.url.slice(-1)[0]?.path === 'edit') {
+        this.vm.edit(+id);
+      } else {
+        this.vm.view(+id);
+      }
+    } else if (this.route.snapshot.url.slice(-1)[0]?.path === 'add') {
+      this.vm.add();
+    } else {
+      this.vm.load(this.route.snapshot.queryParams['page'] ?? 0);
+    }
+  }
+  ngOnDestroy(): void { this.vm.clear(); }
+}
 
 export const PELICULAS_COMPONENTES = [
-  // PeliculasComponent,
-  PeliculasListComponent, PeliculasAddComponent, PeliculasEditComponent, PeliculasViewComponent,
+  PeliculasComponent, PeliculasListComponent, PeliculasAddComponent,
+  PeliculasEditComponent, PeliculasViewComponent, PeliculasListBodyComponent,
 ];

@@ -1,29 +1,33 @@
 import { Routes } from '@angular/router';
 import { HomeComponent, PageNotFoundComponent } from './main';
-import { ContactosAddComponent, ContactosEditComponent, ContactosListComponent, ContactosViewComponent } from './contactos';
+// Removed unused import
+import { PeliculasListComponent, routes as PeliculasRoutes } from './peliculas';
+import { LoginFormComponent, RegisterUserComponent } from './security';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeComponent },
-    { path: 'inicio', component: HomeComponent },
-    { path: 'contactos', children: [
-        { path: '', component: ContactosListComponent},
-        { path: 'add', component: ContactosAddComponent},
-        { path: ':id/edit', component: ContactosEditComponent},
-        { path: ':id', component: ContactosViewComponent},
-        { path: ':id/:kk', component: ContactosViewComponent},
-        ]},
-       
+  { path: 'inicio', component: HomeComponent },
+  { path: 'catalogo/categorias', component: PeliculasListComponent, data: { search: 'categorias' }, title: 'categorias' },
+  { path: 'catalogo/categorias/:idPeli/:tit', redirectTo: '/catalogo/:idPeli/:tit', title: 'catalogo' },
+  { path: 'catalogo', children: PeliculasRoutes, title: 'catalogo' },
+  { path: 'actores/:id/:nom/:idPeli/:tit', redirectTo: '/catalogo/:idPeli/:tit', title: 'catalogo' },
+  {
+    path: 'actores', loadChildren: () => import('./actores/modulo.module'), title: 'actores'
+  },
+  {
+    path: 'categorias', loadChildren: () => import('./categorias/modulo.module'), title: 'categorias'
+  },
+  {
+    path: 'idiomas', loadChildren: () => import('./idiomas/modulo.module'), title: 'idiomas'
+  },
+  // {
+  //   path: 'contactos', loadChildren: () => import('./contactos/modulo.module').then(mod => mod.ContactosModule), title: 'contactos',
+  //   canActivate: [AuthCanActivateFn]
+  // },
 
-// {path: '/', component: HomeComponent, pathMatch: 'full'},
-// {path: '/home', component: HomeComponent},
-// {path: '/demos', component: DemosComponent, title: 'Demos', pathMatch: 'full'},
-// {path: '/demos/:id', component: DemosComponent, title: 'Demos'},
-// {path: '/personas', component: FormulariosComponent},
-// {path: '/personas/add', component: FormulariosComponent},
-// {path: '/personas/:id', component: FormulariosComponent},
-// {path: '/personas/:id/editar', component: FormulariosComponent},
+  { path: 'login', component: LoginFormComponent },
+  { path: 'registro', component: RegisterUserComponent },
 
+  { path: '404.html', component: PageNotFoundComponent },
   { path: '**', component: PageNotFoundComponent },
-
-
 ];

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/array-type */
-import { HttpClient, HttpContext, HttpContextToken, HttpErrorResponse } from '@angular/common/http';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { HttpClient, HttpContextToken, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment } from 'src/environments/environment';
 import { NotificationService } from '../common-services';
 import { LoggerService } from '@my/core';
 import { Router } from '@angular/router';
@@ -36,39 +37,29 @@ export abstract class RESTDAOService<T, K> {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class ContactosDAOService extends RESTDAOService<any, number> {
+export class LanguagesDAOService extends RESTDAOService<any, any> {
   constructor() {
-    super('contactos', { context: new HttpContext().set(AUTH_REQUIRED, true) });
-  }
-  page(page: number, rows: number = 20): Observable<{ page: number, pages: number, rows: number, list: any[] }> {
-    return new Observable(subscriber => {
-      const url = `${this.baseUrl}?_page=${page}&_rows=${rows}&_sort=nombre,apellidos`
-      this.http.get<any>(url, this.option).subscribe({
-        next: data => subscriber.next({ page: data.number, pages: data.totalPages, rows: data.totalElements, list: data.content }),
-        error: err => subscriber.error(err)
-      })
-    })
+    super('languages');
   }
 }
-
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContactosViewModelService {
+export class LanguagesViewModelService {
 
   private modo: ModoCRUD = 'list';
   private listado: Array<any> = [];
   private elemento: any = {};
   private idOriginal: any = null;
-  private listURL = '/contactos';
+  private listURL = '/languages/v1';
 
   constructor(
     private notify: NotificationService, 
     private out: LoggerService, 
-    private dao: ContactosDAOService,
+    private dao: LanguagesDAOService,
     private router: Router) { }
 
   public get Modo(): ModoCRUD {

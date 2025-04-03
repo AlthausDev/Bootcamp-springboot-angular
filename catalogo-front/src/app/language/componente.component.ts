@@ -7,7 +7,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { ContactosViewModelService } from './servicios.service';
+import { LanguagesViewModelService } from './servicios.service';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, ParamMap, RouterModule, RouterLink} from '@angular/router';
@@ -16,19 +16,19 @@ import { ErrorMessagePipe as ErrorMessagePipe } from "../../lib/my-core/pipes/st
 import { TypeValidator } from '@my/core';
 
 @Component({
-  selector: 'app-contactos',
+  selector: 'app-languages',
   templateUrl: './tmpl-anfitrion.component.html',
   styleUrls: ['./componente.component.css'],
   imports: [
-    forwardRef(() => ContactosAddComponent),
-    forwardRef(() => ContactosEditComponent),
-    forwardRef(() => ContactosViewComponent),
-    forwardRef(() => ContactosListComponent),
+    forwardRef(() => LanguagesAddComponent),
+    forwardRef(() => LanguagesEditComponent),
+    forwardRef(() => LanguagesViewComponent),
+    forwardRef(() => LanguagesListComponent),
   ],
 })
-export class ContactosComponent implements OnInit, OnDestroy {
-  constructor(private vm: ContactosViewModelService) {}
-  public get VM(): ContactosViewModelService {
+export class LanguagesComponent implements OnInit, OnDestroy {
+  constructor(private vm: LanguagesViewModelService) {}
+  public get VM(): LanguagesViewModelService {
     return this.vm;
   }
   ngOnInit(): void {
@@ -41,14 +41,14 @@ export class ContactosComponent implements OnInit, OnDestroy {
 
 @Component({
   standalone: true,
-  selector: 'app-contactos-list',
+  selector: 'app-languages-list',
   templateUrl: './tmpl-list.component.html',
   styleUrls: ['./componente.component.css'],
   imports: [RouterLink],
 })
-export class ContactosListComponent implements OnInit, OnDestroy {
-  constructor(private vm: ContactosViewModelService) {}
-  public get VM(): ContactosViewModelService {
+export class LanguagesListComponent implements OnInit, OnDestroy {
+  constructor(private vm: LanguagesViewModelService) {}
+  public get VM(): LanguagesViewModelService {
     return this.vm;
   }
   ngOnInit(): void {
@@ -60,14 +60,15 @@ export class ContactosListComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-contactos-add',
+  selector: 'app-languages-add',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
   imports: [FormsModule, TypeValidator, ErrorMessagePipe],
+  providers: [LanguagesViewModelService],
 })
-export class ContactosAddComponent implements OnInit {
-  constructor(private vm: ContactosViewModelService) {}
-  public get VM(): ContactosViewModelService {
+export class LanguagesAddComponent implements OnInit {
+  constructor(private vm: LanguagesViewModelService) {}
+  public get VM(): LanguagesViewModelService {
     return this.vm;
   }
   ngOnInit(): void {
@@ -76,19 +77,19 @@ export class ContactosAddComponent implements OnInit {
 }
 
 @Component({
-  selector: 'app-contactos-edit',
+  selector: 'app-languages-edit',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
   imports: [FormsModule, TypeValidator, ErrorMessagePipe, ErrorMessagePipe],
 })
-export class ContactosEditComponent implements OnInit, OnDestroy {
+export class LanguagesEditComponent implements OnInit, OnDestroy {
   private obs$?: Subscription;
   constructor(
-    protected vm: ContactosViewModelService,
+    protected vm: LanguagesViewModelService,
     protected route: ActivatedRoute,
     protected router: Router
   ) {}
-  public get VM(): ContactosViewModelService {
+  public get VM(): LanguagesViewModelService {
     return this.vm;
   }
   ngOnInit(): void {
@@ -107,18 +108,18 @@ export class ContactosEditComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-contactos-view',
+  selector: 'app-languages-view',
   templateUrl: './tmpl-view.component.html',
   styleUrls: ['./componente.component.css'],
   imports: [DatePipe, RouterModule],
 })
-export class ContactosViewComponent implements OnChanges {
+export class LanguagesViewComponent implements OnChanges {
   @Input() id?: string;
   constructor(
-    protected vm: ContactosViewModelService,
+    protected vm: LanguagesViewModelService,
     protected router: Router
   ) {}
-  public get VM(): ContactosViewModelService {
+  public get VM(): LanguagesViewModelService {
     return this.vm;
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -131,10 +132,10 @@ export class ContactosViewComponent implements OnChanges {
   }
 }
 
-export const CONTACTOS_COMPONENTES = [
-  ContactosComponent,
-  ContactosListComponent,
-  ContactosAddComponent,
-  ContactosEditComponent,
-  ContactosViewComponent,
+export const LANGUAGES_COMPONENTES = [
+  LanguagesComponent,
+  LanguagesListComponent,
+  LanguagesAddComponent,
+  LanguagesEditComponent,
+  LanguagesViewComponent,
 ];
