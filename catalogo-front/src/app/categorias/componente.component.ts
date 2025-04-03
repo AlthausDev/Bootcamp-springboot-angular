@@ -1,9 +1,8 @@
 import { Injectable, Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { ErrorMessagePipe, LoggerService, NotblankValidator } from '@my/core';
+import { ErrorMessagePipe, LoggerService} from '@my/core';
 import { ViewModelService } from '../code-base';
 import { CategoriasDAOService, NotificationService, NavigationService } from '../common-services';
-import { AuthService } from '../security';
 import { FormsModule } from '@angular/forms';
 import { FormButtonsComponent } from '../common-components';
 
@@ -14,8 +13,8 @@ import { FormButtonsComponent } from '../common-components';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class CategoriasViewModelService extends ViewModelService<any, number> {
   constructor(dao: CategoriasDAOService, notify: NotificationService, out: LoggerService,
-    auth: AuthService, router: Router, navigation: NavigationService) {
-    super(dao, {}, notify, out, auth, router, navigation)
+    router: Router, navigation: NavigationService) {
+    super(dao, {}, notify, out,router, navigation)
   }
   public override cancel(): void {
       this.clear()

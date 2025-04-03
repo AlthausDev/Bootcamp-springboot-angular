@@ -5,7 +5,6 @@ import { LoggerService, ErrorMessagePipe} from '@my/core';
 import { ViewModelService } from '../code-base';
 import { FormButtonsComponent } from '../common-components';
 import { IdiomasDAOService, NotificationService, NavigationService } from '../common-services';
-import { AuthService } from '../security';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +12,8 @@ import { AuthService } from '../security';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class IdiomasViewModelService extends ViewModelService<any, number> {
   constructor(dao: IdiomasDAOService, notify: NotificationService, out: LoggerService,
-    auth: AuthService, router: Router, navigation: NavigationService) {
-    super(dao, {}, notify, out, auth, router, navigation)
+    router: Router, navigation: NavigationService) {
+    super(dao, {}, notify, out, router, navigation)
   }
   public override cancel(): void {
       this.clear()

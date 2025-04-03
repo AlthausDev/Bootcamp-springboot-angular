@@ -1,15 +1,21 @@
 <h1 class="display-1">Actor</h1>
 <form #miForm="ngForm" class="row gy-2 gx-2 align-items-start">
   <div class="form-floating">
+    <input class="form-control" [class.is-invalid]="id.invalid" type="text" name="id" id="id" [(ngModel)]="VM.Elemento.id"
+      #id="ngModel" placeholder="id">
+    <label for="id">id:</label>
+    <output class="invalid-feedback" [hidden]="id.valid">{{id.errors | errormsg}}</output>
+  </div>
+  <div class="form-floating">
     <input class="form-control" [class.is-invalid]="firstname.invalid" type="text" name="firstname" id="firstname" [(ngModel)]="VM.Elemento.firstName"
       #firstname="ngModel" placeholder="firstname" notblank minlength="2" maxlength="45" uppercase >
-    <label for="firstname">firstname:</label>
+    <label for="firstname">Nombre:</label>
     <output class="invalid-feedback" [hidden]="firstname.valid">{{firstname.errors | errormsg}}</output>
   </div>
   <div class="form-floating">
     <input class="form-control" [class.is-invalid]="lastname.invalid" type="text" name="lastname" id="lastname" [(ngModel)]="VM.Elemento.lastName"
       #lastname="ngModel" placeholder="lastname" notblank minlength="2" maxlength="45" uppercase>
-    <label for="lastname">lastname:</label>
+    <label for="lastname">Apellido:</label>
     <output class="invalid-feedback" [hidden]="lastname.valid">{{lastname.errors | errormsg}}</output>
   </div>
   <app-form-buttons (send)="VM.send()" [send-disabled]="miForm.invalid" (cancel)="VM.cancel()" />

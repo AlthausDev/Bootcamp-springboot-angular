@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    apiUrl: '/api/',
-    securityUrl: 'auth',
+    apiUrl: 'http://localhost:8080/api/',
+    securityApiURL: 'http://localhost:8080/',
     LOG_LEVEL: 1
 };

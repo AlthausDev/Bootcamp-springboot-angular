@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { CommonModule } from '@angular/common';
 import { Injectable, Component, OnChanges, OnDestroy, Input, SimpleChanges, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -9,15 +7,13 @@ import { ViewModelService } from '../code-base';
 import { FormButtonsComponent } from '../common-components';
 import { ActoresDAOService, NotificationService, NavigationService } from '../common-services';
 import { PeliculasListBodyComponent } from '../peliculas';
-import { AuthService } from '../security';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActoresViewModelService extends ViewModelService<any, number> {
-  constructor(dao: ActoresDAOService, notify: NotificationService, out: LoggerService,
-    auth: AuthService, router: Router, navigation: NavigationService) {
-    super(dao, {}, notify, out, auth, router, navigation)
+  constructor(dao: ActoresDAOService, notify: NotificationService, out: LoggerService, router: Router, navigation: NavigationService) {
+    super(dao, {}, notify, out, router, navigation)
   }
   page = 0;
   totalPages = 0;

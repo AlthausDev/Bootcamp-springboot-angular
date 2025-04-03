@@ -2,7 +2,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LoggerService } from '@my/core';
 import { NotificationService, NavigationService } from '../common-services';
-import { AuthService } from '../security';
 import { ModoCRUD } from './tipos';
 import { RESTDAOService } from './rest-dao-service.class';
 
@@ -14,7 +13,7 @@ export abstract class ViewModelService<T, K> {
   protected idOriginal: K | null = null;
 
   constructor(protected dao: RESTDAOService<T, K>, initElemento: T, public notify: NotificationService, protected out: LoggerService,
-    public auth: AuthService, protected router: Router, protected navigation: NavigationService) {
+    protected router: Router, protected navigation: NavigationService) {
     this.initElemento = initElemento
   }
 

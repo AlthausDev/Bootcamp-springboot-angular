@@ -4,17 +4,17 @@ import { Router } from '@angular/router';
 import { LoggerService } from '@my/core';
 import { ViewModelService } from '../code-base';
 import { NotificationService, NavigationService, PeliculasDAOService, IdiomasDAOService, CategoriasDAOService, ActoresDAOService } from '../common-services';
-import { AuthService } from '../security';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class PeliculasViewModelService extends ViewModelService<any, number> {  
 
-  constructor(notify: NotificationService, out: LoggerService , auth: AuthService, router: Router, navigation: NavigationService,
+  constructor(notify: NotificationService, out: LoggerService , router: Router, navigation: NavigationService,
     dao: PeliculasDAOService, protected daoIdiomas: IdiomasDAOService, protected daoCategorias: CategoriasDAOService, protected daoActores: ActoresDAOService
   ) {
-    super(dao, { rating: 'G' }, notify, out, auth, router, navigation)
+    super(dao, { rating: 'G' }, notify, out, router, navigation)
     // Soluciona el problema de las clases JavaScript por el cual los métodos pierden la referencia a this cuando se referencian por nombre (ExecPipe)
     this.dameActor = this.dameActor.bind(this)
     this.dameCategoria = this.dameCategoria.bind(this)

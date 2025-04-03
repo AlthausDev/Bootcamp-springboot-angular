@@ -11,7 +11,7 @@
     @for (item of VM.Listado; track item) {
       <tr>
         <td>
-          <a class="btn btn-link btn-lg px-0" routerLink="{{item.id}}/{{item.firstname | normalize | lowercase}}">{{item.firstname | titlecase}}</a>
+          <a class="btn btn-link btn-lg px-0" routerLink="{{item.id}}/{{item.nombre | normalize | lowercase}}">{{item.nombre | titlecase}}</a>
         </td>
         <td class="align-middle text-end">
           <div class="btn-group" role="group">
