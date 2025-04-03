@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 export interface IActor{
     [index: string]: any;
     id?: number
@@ -16,8 +13,7 @@ export interface IActor{
     icono?: string
   }
   
-  export class Actor implements IActor {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export class Actor implements IActor {   
     [index: string]: any;
     constructor(
       public id: number = 0,

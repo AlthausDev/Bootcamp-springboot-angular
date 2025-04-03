@@ -7,7 +7,7 @@ import { FooterComponent } from './main/footer/footer.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NotificationComponent, NotificationModalComponent, AjaxWaitComponent, HeaderComponent, FooterComponent, ],
+  imports: [RouterOutlet, NotificationComponent, NotificationModalComponent, AjaxWaitComponent, FooterComponent, HeaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

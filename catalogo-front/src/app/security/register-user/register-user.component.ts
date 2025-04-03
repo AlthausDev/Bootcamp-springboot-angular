@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, ValidatorFn, AbstractControl, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { User, RegisterUserDAO, LoginService } from '../security.service';
 import { Router } from '@angular/router';
-import { NotificationService, NotificationType } from 'src/app/common-services';
+import { NotificationService } from 'src/app/common-services';
 import { ErrorMessagePipe, LoggerService } from '@my/core';
+import { NotificationType } from 'src/app/common-models/notification.model';
 
 @Component({
     selector: 'app-register-user',

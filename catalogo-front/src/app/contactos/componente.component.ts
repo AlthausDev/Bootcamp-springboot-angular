@@ -1,5 +1,3 @@
-/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
-/* eslint-disable @typescript-eslint/no-empty-function */
 import {
   Component,
   forwardRef,
@@ -12,10 +10,10 @@ import {
 import { ContactosViewModelService } from './servicios.service';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ErrorMessagePipe, TypeValidator } from '@my/core';
 import { ActivatedRoute, Router, ParamMap, RouterModule, RouterLink} from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ErrorMessagePipe_1 as ErrorMessagePipe } from "../../lib/my-core/pipes/strings.pipe";
+import { ErrorMessagePipe as ErrorMessagePipe } from "../../lib/my-core/pipes/strings.pipe";
+import { TypeValidator } from '@my/core';
 
 @Component({
   selector: 'app-contactos',
@@ -46,7 +44,7 @@ export class ContactosComponent implements OnInit, OnDestroy {
   selector: 'app-contactos-list',
   templateUrl: './tmpl-list.component.html',
   styleUrls: ['./componente.component.css'],
-  imports: [RouterLink, PaginatorModule],
+  imports: [RouterLink],
 })
 export class ContactosListComponent implements OnInit, OnDestroy {
   constructor(private vm: ContactosViewModelService) {}
@@ -81,7 +79,7 @@ export class ContactosAddComponent implements OnInit {
   selector: 'app-contactos-edit',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
-  imports: [FormsModule, TypeValidator, ErrorMessagePipe, ErrorMessagePipe_1],
+  imports: [FormsModule, TypeValidator, ErrorMessagePipe, ErrorMessagePipe],
 })
 export class ContactosEditComponent implements OnInit, OnDestroy {
   private obs$?: Subscription;
@@ -123,6 +121,7 @@ export class ContactosViewComponent implements OnChanges {
   public get VM(): ContactosViewModelService {
     return this.vm;
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ngOnChanges(changes: SimpleChanges): void {
     if (this.id) {
       this.vm.view(+this.id);

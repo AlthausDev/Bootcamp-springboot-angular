@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { Router, NavigationEnd, ActivationStart, GuardsCheckEnd } from '@angular/router';
 import { LoggerService } from '@my/core';
 

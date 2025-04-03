@@ -2,11 +2,10 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
-import { LOG_LEVEL } from '@my/core';
-import { environment } from 'src/environments/environment';
+import { environment } from '../environments/environment';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
-import { ajaxWaitInterceptor } from '../../public/src/app/main';
-import { LoggerService } from '../lib/my-core';
+import { ajaxWaitInterceptor } from './main/ajax-wait';
+import { LoggerService, LOG_LEVEL } from '../lib/my-core';
 import { AuthInterceptor } from './security';
 
 export const appConfig: ApplicationConfig = {

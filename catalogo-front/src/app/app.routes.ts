@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { DemosComponent, FormulariosComponent, HomeComponent, PageNotFoundComponent } from './main';
+import { HomeComponent, PageNotFoundComponent } from './main';
 import { ContactosAddComponent, ContactosEditComponent, ContactosListComponent, ContactosViewComponent } from './contactos';
 
 export const routes: Routes = [

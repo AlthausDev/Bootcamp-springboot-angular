@@ -2,10 +2,7 @@
   <thead>
     <tr class="table-info">
       <th class="display-4">Lista de contactos</th>
-      <th class="text-end">
-        @if (VM.auth.isAuthenticated) {
-        <button class="btn btn-success" routerLink="add"><i class="fas fa-plus"></i> Añadir</button>
-        }
+      <th class="text-end">        
       </th>
     </tr>
   </thead>
@@ -29,16 +26,14 @@
           </div>
         </td>
         <td class="align-middle text-end">
-          @if (VM.auth.isAuthenticated) {
+         
           <div class="btn-group" role="group">
             <button class="btn btn-success" [routerLink]="[item.id, 'edit']"><i class="fas fa-pen"></i></button>
             <button class="btn btn-danger" (click)="VM.delete(item.id)"><i class="far fa-trash-alt"></i></button>
           </div>
-          }
+          
       </td>
       </tr>
   }
   </tbody>
 </table>
-<p-paginator [first]="VM.rowsPerPage*VM.page" [rows]="VM.rowsPerPage" [totalRecords]="VM.totalRows"
-    [pageLinkSize]="5" (onPageChange)="VM.pageChange($event.page)"></p-paginator>
