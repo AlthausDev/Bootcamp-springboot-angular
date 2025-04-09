@@ -36,6 +36,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -45,6 +46,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "film")
 @NamedQuery(name = "Film.findAll", query = "SELECT f FROM Film f")
@@ -57,8 +59,10 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	}
 
 	public static enum Rating {
-		GENERAL_AUDIENCES("G"), PARENTAL_GUIDANCE_SUGGESTED("PG"), 
-		PARENTS_STRONGLY_CAUTIONED("PG-13"), RESTRICTED("R"),
+		GENERAL_AUDIENCES("G"), 
+		PARENTAL_GUIDANCE_SUGGESTED("PG"),
+		PARENTS_STRONGLY_CAUTIONED("PG-13"), 
+		RESTRICTED("R"),
 		ADULTS_ONLY("NC-17");
 
 		private String value;
@@ -72,20 +76,19 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		}
 
 		public static Rating getEnum(String value) {
-            return switch (value) {
-                case "G" -> GENERAL_AUDIENCES;
-                case "PG" -> PARENTAL_GUIDANCE_SUGGESTED;
-                case "PG-13" -> PARENTS_STRONGLY_CAUTIONED;
-                case "R" -> RESTRICTED;
-                case "NC-17" -> ADULTS_ONLY;
-                default -> throw new IllegalArgumentException("Unexpected value: " + value);
-            };
-        }
+			return switch (value) {
+				case "G" -> GENERAL_AUDIENCES;
+				case "PG" -> PARENTAL_GUIDANCE_SUGGESTED;
+				case "PG-13" -> PARENTS_STRONGLY_CAUTIONED;
+				case "R" -> RESTRICTED;
+				case "NC-17" -> ADULTS_ONLY;
+				default -> throw new IllegalArgumentException("Unexpected value: " + value);
+			};
+		}
 
 		public static final String[] VALUES = { "G", "PG", "PG-13", "R", "NC-17" };
 	}
-	
-		
+
 	@Converter
 	private static class RatingConverter implements AttributeConverter<Rating, String> {
 		@Override
@@ -98,7 +101,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 			return value == null ? null : Rating.getEnum(value);
 		}
 	}
-		
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "film_id", unique = true, nullable = false)
@@ -144,8 +147,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	@Size(max = 128)
 	@Column(nullable = false, length = 128)
 	private String title;
-	
-	
+
 	// bi-directional many-to-one association to Language
 	@ManyToOne
 	@JoinColumn(name = "language_id")
@@ -216,7 +218,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		this.replacementCost = replacementCost;
 		this.rating = rating;
 	}
-	
+
 	public void setFilmId(int filmId) {
 		this.filmId = filmId;
 		if (filmActors != null && filmActors.size() > 0)
@@ -230,7 +232,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 					item.getId().setFilmId(filmId);
 			});
 	}
-	
+
 	// Gestión de actores
 	public List<Actor> getActors() {
 		return this.filmActors.stream().map(item -> item.getActor()).toList();
@@ -301,18 +303,17 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		removeCategory(new Category(id));
 	}
 
-	
 	public Film merge(Film target) {
-        target.setTitle(title);
-        target.setDescription(description);
-        target.setReleaseYear(releaseYear);
-        target.setLanguage(language);
-        target.setLanguageVO(languageVO);
-        target.setRentalDuration(rentalDuration);
-        target.setRentalRate(rentalRate);
-        target.setLength(length);
-        target.setReplacementCost(replacementCost);
-        target.setRating(rating);       
+		target.setTitle(title);
+		target.setDescription(description);
+		target.setReleaseYear(releaseYear);
+		target.setLanguage(language);
+		target.setLanguageVO(languageVO);
+		target.setRentalDuration(rentalDuration);
+		target.setRentalRate(rentalRate);
+		target.setLength(length);
+		target.setReplacementCost(replacementCost);
+		target.setRating(rating);
 		// Borra los actores que sobran
 		target.getActors().stream().filter(item -> !getActors().contains(item))
 				.forEach(item -> target.removeActor(item));
@@ -324,11 +325,11 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		// Añade las categorias que faltan
 		getCategories().stream().filter(item -> !target.getCategories().contains(item))
 				.forEach(item -> target.addCategory(item));
-		
+
 		// Bug de Hibernate
 		target.filmActors.forEach(o -> o.prePersiste());
 		target.filmCategories.forEach(o -> o.prePersiste());
-		
+
 		return target;
 	}
 
