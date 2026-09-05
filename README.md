@@ -14,9 +14,25 @@ Entre los módulos conservados se encuentran:
 - `demo-gs-consuming-web-service/` — ejemplo de consumo de servicios web.
 - `demo/` — ejercicios adicionales del bootcamp.
 
-## Propósito
+## Cómo usar el repositorio
 
-El repositorio se mantiene como archivo de formación y referencia técnica. Algunos módulos reflejan deliberadamente el stack y las versiones utilizadas durante el curso.
+Cada carpeta representa un ejercicio o módulo independiente. No existe una única aplicación que deba arrancarse desde la raíz: entra en el proyecto que quieras revisar y utiliza sus herramientas (`mvn`, `npm`, Angular CLI, etc.).
+
+Esto hace que el repositorio funcione mejor como archivo de aprendizaje que como producto único.
+
+## Qué cubre
+
+El conjunto permite recuperar ejemplos de:
+
+- APIs y servicios con Spring Boot;
+- Angular y separación frontend/backend;
+- SOAP y consumo de servicios web;
+- refactorización sobre código legado;
+- integración de distintas piezas dentro de ejercicios formativos.
+
+## Estado
+
+El repositorio se mantiene como archivo de formación y referencia técnica. Algunos módulos reflejan deliberadamente el stack y las versiones utilizadas durante el curso; las alertas de seguridad relevantes de la rama principal se corrigen cuando merece la pena conservar el ejercicio utilizable.
 
 ## Licencia
 
