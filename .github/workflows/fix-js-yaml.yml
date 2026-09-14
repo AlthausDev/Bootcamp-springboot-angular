@@ -1,0 +1,42 @@
+name: Temporary js-yaml security update
+
+on:
+  push:
+    branches:
+      - chore/js-yaml-4.3.2
+
+permissions:
+  contents: write
+
+jobs:
+  update-lockfiles:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: chore/js-yaml-4.3.2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Update demo-ng lockfile
+        working-directory: demo-ng
+        run: npm update js-yaml@4.3.2 --package-lock-only --ignore-scripts --no-audit --no-fund
+
+      - name: Update catalogo-front lockfile
+        working-directory: catalogo-front
+        run: npm update js-yaml@4.3.2 --package-lock-only --ignore-scripts --no-audit --no-fund
+
+      - name: Commit lockfile updates
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add demo-ng/package-lock.json catalogo-front/package-lock.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(deps): bump js-yaml to 4.3.2'
+            git push origin HEAD:chore/js-yaml-4.3.2
+          fi
