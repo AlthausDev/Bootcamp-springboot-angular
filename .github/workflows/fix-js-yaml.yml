@@ -1,9 +1,9 @@
 name: Temporary js-yaml security update
 
 on:
-  push:
+  pull_request:
     branches:
-      - chore/js-yaml-4.3.2
+      - main
 
 permissions:
   contents: write
@@ -13,7 +13,7 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout update branch
         uses: actions/checkout@v4
         with:
           ref: chore/js-yaml-4.3.2
