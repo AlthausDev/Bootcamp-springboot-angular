@@ -1,4 +1,4 @@
-import { Injectable, Component, OnInit } from '@angular/core';
+import { Injectable, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoggerService, ErrorMessagePipe} from '@my/core';
@@ -27,6 +27,7 @@ export class IdiomasViewModelService extends ViewModelService<any, number> {
   templateUrl: './tmpl-anfitrion.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, FormButtonsComponent, ErrorMessagePipe],
 })
 export class IdiomasComponent implements OnInit {

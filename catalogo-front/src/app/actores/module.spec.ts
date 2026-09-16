@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -28,7 +28,7 @@ describe('Modulo Actores', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
     imports: [],
-    providers: [ActoresDAOService, HttpClient, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+    providers: [ActoresDAOService, HttpClient, provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
 });
     });
 
@@ -102,7 +102,7 @@ describe('Modulo Actores', () => {
     providers: [NotificationService, LoggerService,
         {
             provide: ActoresDAOService, useFactory: () => new DAOServiceMock<Actores, number>([...dataMock])
-        }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+        }, provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
 });
       service = TestBed.inject(ActoresViewModelService);
       dao = TestBed.inject(ActoresDAOService);
@@ -279,7 +279,7 @@ describe('Modulo Actores', () => {
     declarations: [componente],
     schemas: [NO_ERRORS_SCHEMA],
     imports: [RouterTestingModule, FormsModule, JmaCoreModule],
-    providers: [NotificationService, LoggerService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+    providers: [NotificationService, LoggerService, provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
 })
             .compileComponents();
         });

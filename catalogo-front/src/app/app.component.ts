@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AjaxWaitComponent, HeaderComponent, NotificationComponent } from './main';
 import { NavigationService } from './common-services';
@@ -9,6 +9,7 @@ import { FooterComponent } from './main/footer/footer.component';
   standalone: true,
   imports: [RouterOutlet, NotificationComponent, AjaxWaitComponent, FooterComponent, HeaderComponent],
   templateUrl: './app.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.component.css'
 })
 export class AppComponent {

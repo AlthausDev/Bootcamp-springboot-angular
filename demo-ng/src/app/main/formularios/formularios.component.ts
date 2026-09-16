@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ErrorMessagePipe } from "../../../lib/my-core/pipes/cadenas.pipe";
 
@@ -47,6 +47,7 @@ export class PersonasDaoService extends RESTDAOService<any, number> {
   selector: 'app-formularios',
   imports: [FormsModule, ErrorMessagePipe, NIFNIEValidator, TypeValidator, UppercaseValidator],
   templateUrl: './formularios.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './formularios.component.css'
 })
 export class FormulariosComponent {

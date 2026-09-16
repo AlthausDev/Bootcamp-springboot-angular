@@ -1,6 +1,6 @@
 /* eslint-disable @angular-eslint/no-input-rename */
-import { Component, EventEmitter, input, Output } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { Component, EventEmitter, input, Output, ChangeDetectionStrategy } from '@angular/core';
+
 
 
 @Component({
@@ -19,7 +19,8 @@ import { NgIf } from '@angular/common';
     </div>
   `,
     standalone: true,
-    imports: [NgIf]
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: []
 })
 export class ListButtonsComponent {
   readonly canView = input(true, { alias: "can-view" });

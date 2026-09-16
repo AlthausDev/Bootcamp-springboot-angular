@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Injectable, Component, OnChanges, OnDestroy, Input, SimpleChanges, OnInit } from '@angular/core';
+import { Injectable, Component, OnChanges, OnDestroy, Input, SimpleChanges, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { LoggerService, ErrorMessagePipe, NormalizePipe, UppercaseValidator, TypeValidator } from '@my/core';
@@ -51,6 +51,7 @@ export class ActoresViewModelService extends ViewModelService<any, number> {
   templateUrl: './tmpl-list.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [RouterLink, CommonModule, NormalizePipe, ]
 })
 export class ActoresListComponent implements OnChanges, OnDestroy {
@@ -71,6 +72,7 @@ export class ActoresListComponent implements OnChanges, OnDestroy {
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, CommonModule, ErrorMessagePipe, NormalizePipe, UppercaseValidator, TypeValidator, FormButtonsComponent,]
 })
 export class ActoresAddComponent implements OnInit {
@@ -86,6 +88,7 @@ export class ActoresAddComponent implements OnInit {
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, CommonModule, ErrorMessagePipe, NormalizePipe, UppercaseValidator, TypeValidator, FormButtonsComponent,]
 })
 export class ActoresEditComponent implements OnChanges {
@@ -106,6 +109,7 @@ export class ActoresEditComponent implements OnChanges {
   templateUrl: './tmpl-view.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormButtonsComponent, PeliculasListBodyComponent, ]
 })
 export class ActoresViewComponent implements OnChanges {

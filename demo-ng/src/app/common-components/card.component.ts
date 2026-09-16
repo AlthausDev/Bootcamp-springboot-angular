@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'app-card',
@@ -10,6 +10,7 @@ import { Component, input } from '@angular/core';
       </div>
     </div>
   `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
 })
 export class CardComponent {

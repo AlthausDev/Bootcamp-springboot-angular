@@ -1,6 +1,6 @@
 import { HttpClient, HttpContext, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Location } from '@angular/common';
 import { inject, TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
@@ -357,11 +357,13 @@ describe('AuthInterceptor', () => {
 
 @Component({
     selector: 'app-test-home', template: `<p>Test Home</p>`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true
 })
 class TestHomeComponent { }
 @Component({
     selector: 'app-test-component', template: `<p>Test Component</p>`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true
 })
 class TestComponent { }

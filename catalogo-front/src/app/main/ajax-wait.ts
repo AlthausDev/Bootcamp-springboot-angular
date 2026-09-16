@@ -1,4 +1,4 @@
-import { Component, Injectable, DoCheck, inject } from '@angular/core';
+import { Component, Injectable, DoCheck, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpHandlerFn } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -86,6 +86,7 @@ export function ajaxWaitInterceptor(req: HttpRequest<unknown>, next: HttpHandler
         100% { transform: rotate(360deg); }
       }
   `],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
 })
 export class AjaxWaitComponent implements DoCheck {

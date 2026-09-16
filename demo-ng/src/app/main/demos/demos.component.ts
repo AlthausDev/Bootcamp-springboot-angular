@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, computed, OnDestroy, OnInit, signal } from '@angular/core';
+
+import { Component, computed, OnDestroy, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CapitalizePipe, ElipsisPipe } from '@my/core';
 import { Unsubscribable } from 'rxjs';
@@ -13,8 +13,9 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-demos',
-  imports: [FormsModule, CommonModule, ElipsisPipe, CapitalizePipe, SizerComponent, FormButtonsComponent, CardComponent, FormulariosComponent, RouterModule],
+  imports: [FormsModule, ElipsisPipe, CapitalizePipe, SizerComponent, FormButtonsComponent, CardComponent, FormulariosComponent, RouterModule],
   templateUrl: './demos.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './demos.component.css'
 })
 export class DemosComponent implements OnInit, OnDestroy {

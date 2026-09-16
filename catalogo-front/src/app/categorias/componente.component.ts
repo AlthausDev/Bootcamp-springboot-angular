@@ -1,4 +1,4 @@
-import { Injectable, Component, OnInit } from '@angular/core';
+import { Injectable, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ErrorMessagePipe, LoggerService} from '@my/core';
 import { ViewModelService } from '../code-base';
@@ -28,6 +28,7 @@ export class CategoriasViewModelService extends ViewModelService<any, number> {
   templateUrl: './tmpl-anfitrion.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, RouterLink, FormButtonsComponent, ErrorMessagePipe]
 })
 export class CategoriasComponent implements OnInit {

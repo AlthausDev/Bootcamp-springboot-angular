@@ -1,6 +1,6 @@
 import { FormControl, FormsModule } from '@angular/forms';
 import { ibanValidator, isNotBlankValidator, NIFNIEValidator, nifnieValidator, uppercaseValidator, UppercaseValidator } from './mis-validadores.directive'
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 describe('Mis validadores', () => {
@@ -178,6 +178,7 @@ describe('nifnieValidator', () => {
 });
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `<input type="text" [(ngModel)]="valor" #myInput="ngModel" nifnie >`,
 })
 class nifnieValidatorHostComponent {

@@ -8,6 +8,7 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { ContactosViewModelService } from './servicios.service';
 import { DatePipe } from '@angular/common';
@@ -20,6 +21,7 @@ import { Subscription } from 'rxjs';
   selector: 'app-contactos',
   templateUrl: './tmpl-anfitrion.component.html',
   styleUrls: ['./componente.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     forwardRef(() => ContactosAddComponent),
     forwardRef(() => ContactosEditComponent),
@@ -45,6 +47,7 @@ export class ContactosComponent implements OnInit, OnDestroy {
   selector: 'app-contactos-list',
   templateUrl: './tmpl-list.component.html',
   styleUrls: ['./componente.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [RouterLink],
 })
 export class ContactosListComponent implements OnInit, OnDestroy {
@@ -64,6 +67,7 @@ export class ContactosListComponent implements OnInit, OnDestroy {
   selector: 'app-contactos-add',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, TypeValidator, ErrorMessagePipe],
 })
 export class ContactosAddComponent implements OnInit {
@@ -80,6 +84,7 @@ export class ContactosAddComponent implements OnInit {
   selector: 'app-contactos-edit',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, TypeValidator, ErrorMessagePipe],
 })
 export class ContactosEditComponent implements OnInit, OnDestroy {
@@ -111,6 +116,7 @@ export class ContactosEditComponent implements OnInit, OnDestroy {
   selector: 'app-contactos-view',
   templateUrl: './tmpl-view.component.html',
   styleUrls: ['./componente.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DatePipe, RouterModule],
 })
 export class ContactosViewComponent implements OnChanges {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { LOGIN_FORM_CLOSE_EVENT, LOGIN_FORM_OPEN_EVENT, LoginService } from '../security.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventBusService, NotificationService } from 'src/app/common-services';
@@ -50,6 +50,7 @@ export class BaseComponent {
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [FormsModule]
 })
 export class LoginComponent extends BaseComponent implements OnDestroy {
@@ -76,6 +77,7 @@ export class LoginComponent extends BaseComponent implements OnDestroy {
     selector: 'app-login-form',
     templateUrl: './login-form.component.html',
     styleUrls: ['./login.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [FormsModule]
 })
 export class LoginFormComponent extends BaseComponent implements OnInit, OnDestroy {

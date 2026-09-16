@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PeliculasViewModelService } from './servicios.service';
 
@@ -12,6 +12,7 @@ import { FormButtonsComponent } from '../common-components';
   templateUrl: './tmpl-list-body.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [RouterLink, NormalizePipe, CommonModule, ]
 })
 export class PeliculasListBodyComponent {
@@ -30,6 +31,7 @@ export class PeliculasListBodyComponent {
   templateUrl: './tmpl-list.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [RouterLink, PeliculasListBodyComponent, ],
 })
 export class PeliculasListComponent implements OnChanges, OnDestroy {
@@ -62,6 +64,7 @@ export class PeliculasListComponent implements OnChanges, OnDestroy {
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, CommonModule, ErrorMessagePipe, TypeValidator, FormButtonsComponent, ExecPipe, ]
 })
 export class PeliculasAddComponent implements OnInit {
@@ -77,6 +80,7 @@ export class PeliculasAddComponent implements OnInit {
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, CommonModule, ErrorMessagePipe, TypeValidator, FormButtonsComponent, ExecPipe, ]
 })
 export class PeliculasEditComponent implements OnChanges {
@@ -97,6 +101,7 @@ export class PeliculasEditComponent implements OnChanges {
   templateUrl: './tmpl-view.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [RouterLink, CommonModule, FormButtonsComponent, ]
 })
 export class PeliculasViewComponent implements OnChanges {
@@ -117,6 +122,7 @@ export class PeliculasViewComponent implements OnChanges {
   templateUrl: './tmpl-anfitrion.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [PeliculasListComponent, PeliculasAddComponent, PeliculasEditComponent, PeliculasViewComponent, ],
 })
 export class PeliculasComponent implements OnInit, OnDestroy {

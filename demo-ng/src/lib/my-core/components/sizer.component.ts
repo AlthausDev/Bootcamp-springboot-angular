@@ -1,5 +1,5 @@
 /* eslint-disable @angular-eslint/component-selector */
-import { Component, input, model } from '@angular/core';
+import { Component, input, model, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'my-sizer',
@@ -11,6 +11,7 @@ import { Component, input, model } from '@angular/core';
       <button (click)="inc()">+</button>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'role': 'slider',
     '[attr.aria-valuenow]': 'size()',

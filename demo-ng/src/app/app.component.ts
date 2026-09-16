@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LoggerService } from '@my/core';
 import { NotificationComponent } from './main/notification/notification.component';
@@ -8,8 +8,9 @@ import { DemosComponent } from "./main/demos/demos.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, NotificationComponent, HomeComponent, DemosComponent],
+  imports: [RouterOutlet, NotificationComponent, HomeComponent, DemosComponent],
   templateUrl: './app.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.component.css'
 })
 export class AppComponent {
