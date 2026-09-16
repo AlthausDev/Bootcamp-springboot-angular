@@ -30,6 +30,7 @@ jobs:
         working-directory: demo-ng
         run: |
           npm ci
+          npm install -D typescript-eslint@latest --ignore-scripts
           npx ng update @angular/core@20 @angular/cli@20 angular-eslint@20 --allow-dirty
           npm run build
           npx ng update @angular/core@21 @angular/cli@21 angular-eslint@21 --allow-dirty
@@ -48,6 +49,7 @@ jobs:
         working-directory: catalogo-front
         run: |
           npm ci
+          npm install -D typescript-eslint@latest --ignore-scripts
           npx ng update @angular/core@20 @angular/cli@20 angular-eslint@20 --allow-dirty
           npm run build
           npx ng update @angular/core@21 @angular/cli@21 angular-eslint@21 --allow-dirty
