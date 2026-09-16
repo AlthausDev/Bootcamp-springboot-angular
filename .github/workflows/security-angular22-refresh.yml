@@ -36,7 +36,7 @@ jobs:
           npx ng update @angular/core@21 @angular/cli@21 angular-eslint@21 --allow-dirty
           npm run build
           npx ng update @angular/core@22 @angular/cli@22 angular-eslint@22 --allow-dirty
-          node -e "const fs=require('fs'); const p='tsconfig.json'; const j=JSON.parse(fs.readFileSync(p,'utf8')); j.compilerOptions.ignoreDeprecations='6.0'; fs.writeFileSync(p, JSON.stringify(j,null,2)+'\n')"
+          grep -q '"ignoreDeprecations"' tsconfig.json || sed -i '/"baseUrl": "\.\/",/a\    "ignoreDeprecations": "6.0",' tsconfig.json
           npm run build
           npx ng update @angular/cli --name use-application-builder --allow-dirty
           npm audit fix --ignore-scripts || true
@@ -56,7 +56,7 @@ jobs:
           npx ng update @angular/core@21 @angular/cli@21 angular-eslint@21 --allow-dirty
           npm run build
           npx ng update @angular/core@22 @angular/cli@22 angular-eslint@22 --allow-dirty
-          node -e "const fs=require('fs'); const p='tsconfig.json'; const j=JSON.parse(fs.readFileSync(p,'utf8')); j.compilerOptions.ignoreDeprecations='6.0'; fs.writeFileSync(p, JSON.stringify(j,null,2)+'\n')"
+          grep -q '"ignoreDeprecations"' tsconfig.json || sed -i '/"baseUrl": "\.\/",/a\    "ignoreDeprecations": "6.0",' tsconfig.json
           npm run build
           npx ng update @angular/cli --name use-application-builder --allow-dirty
           npm audit fix --ignore-scripts || true
