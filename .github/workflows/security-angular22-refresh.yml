@@ -1,0 +1,75 @@
+name: Angular 22 security refresh
+
+on:
+  push:
+    branches:
+      - security/angular22-refresh
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            demo-ng/package-lock.json
+            catalogo-front/package-lock.json
+
+      - name: Migrate demo-ng to Angular 22
+        working-directory: demo-ng
+        run: |
+          npm ci
+          npx ng update @angular/core@20 @angular/cli@20 angular-eslint@20 --allow-dirty
+          npm run build
+          npx ng update @angular/core@21 @angular/cli@21 angular-eslint@21 --allow-dirty
+          npm run build
+          npx ng update @angular/core@22 @angular/cli@22 angular-eslint@22 --allow-dirty
+          npm run build
+          npx ng update @angular/cli --name use-application-builder --allow-dirty
+          npm audit fix --ignore-scripts || true
+          rm -rf node_modules
+          npm ci
+          npm run build
+          npm run lint
+          npm audit
+
+      - name: Migrate catalogo-front to Angular 22
+        working-directory: catalogo-front
+        run: |
+          npm ci
+          npx ng update @angular/core@20 @angular/cli@20 angular-eslint@20 --allow-dirty
+          npm run build
+          npx ng update @angular/core@21 @angular/cli@21 angular-eslint@21 --allow-dirty
+          npm run build
+          npx ng update @angular/core@22 @angular/cli@22 angular-eslint@22 --allow-dirty
+          npm run build
+          npx ng update @angular/cli --name use-application-builder --allow-dirty
+          npm audit fix --ignore-scripts || true
+          rm -rf node_modules
+          npm ci
+          npm run build
+          npm run lint
+          npm audit
+
+      - name: Commit refreshed applications
+        run: |
+          if git diff --quiet -- demo-ng catalogo-front; then
+            echo "No dependency changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add demo-ng catalogo-front
+          git commit -m "chore(deps): migrate Angular apps to 22"
+          git push
