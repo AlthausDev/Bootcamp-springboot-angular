@@ -43,3 +43,55 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Build
         run: npm run build
+
+  maintenance-lockfiles:
+    name: Actualizar y validar lockfiles
+    if: github.event_name == 'pull_request' && github.head_ref == 'maintenance/bootcamp-lockfiles-20261023'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+      - name: Regenerar con npm
+        run: |
+          (cd catalogo-front && npm update --package-lock-only --ignore-scripts)
+          (cd demo-ng && npm update --package-lock-only --ignore-scripts)
+      - name: Validar catalogo-front
+        working-directory: catalogo-front
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          npm test -- --watch=false --browsers=ChromeHeadless
+      - name: Validar demo-ng
+        working-directory: demo-ng
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          npm test -- --watch=false --browsers=ChromeHeadless
+      - name: Comprobar versiones vulnerables
+        run: |
+          node - <<'NODE'
+          for (const app of ['catalogo-front','demo-ng']) {
+            const lock = require('./' + app + '/package-lock.json');
+            const pkgs = lock.packages;
+            const piscina = pkgs['node_modules/piscina']?.version;
+            if (piscina && piscina.startsWith('4.') && Number(piscina.split('.')[1]) < 9) {
+              throw new Error(app + ': Piscina vulnerable ' + piscina);
+            }
+          }
+          NODE
+      - name: Guardar lockfiles verificados
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add catalogo-front/package-lock.json demo-ng/package-lock.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'build: actualizar lockfiles Angular con npm'
+            git push origin HEAD:maintenance/bootcamp-lockfiles-20261023
+          fi
