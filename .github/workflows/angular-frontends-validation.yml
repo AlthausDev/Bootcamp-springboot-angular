@@ -67,13 +67,26 @@ jobs:
         run: |
           npm ci --no-audit --no-fund
           npm run build
-          npm test -- --watch=false --browsers=ChromeHeadless
       - name: Validar demo-ng
         working-directory: demo-ng
         run: |
           npm ci --no-audit --no-fund
           npm run build
-          npm test -- --watch=false --browsers=ChromeHeadless
+      - name: Guardar lockfiles compilados
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add catalogo-front/package-lock.json demo-ng/package-lock.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'build: actualizar lockfiles Angular con npm'
+            git push origin HEAD:maintenance/bootcamp-lockfiles-20261023
+          fi
+      - name: Tests catalogo-front
+        working-directory: catalogo-front
+        run: npm test -- --watch=false --browsers=ChromeHeadless
+      - name: Tests demo-ng
+        working-directory: demo-ng
+        run: npm test -- --watch=false --browsers=ChromeHeadless
       - name: Comprobar versiones vulnerables
         run: |
           node - <<'NODE'
@@ -86,12 +99,3 @@ jobs:
             }
           }
           NODE
-      - name: Guardar lockfiles verificados
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add catalogo-front/package-lock.json demo-ng/package-lock.json
-          if ! git diff --cached --quiet; then
-            git commit -m 'build: actualizar lockfiles Angular con npm'
-            git push origin HEAD:maintenance/bootcamp-lockfiles-20261023
-          fi
