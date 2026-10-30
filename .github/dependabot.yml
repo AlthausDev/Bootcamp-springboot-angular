@@ -1,0 +1,51 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/catalogo-front"
+    schedule:
+      interval: weekly
+      day: tuesday
+      time: "06:00"
+      timezone: Europe/Madrid
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    groups:
+      angular:
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+        update-types:
+          - minor
+          - patch
+    ignore:
+      - dependency-name: "@angular/*"
+        update-types:
+          - version-update:semver-major
+      - dependency-name: "@angular-devkit/*"
+        update-types:
+          - version-update:semver-major
+
+  - package-ecosystem: npm
+    directory: "/demo-ng"
+    schedule:
+      interval: weekly
+      day: tuesday
+      time: "06:00"
+      timezone: Europe/Madrid
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    groups:
+      angular:
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+        update-types:
+          - minor
+          - patch
+    ignore:
+      - dependency-name: "@angular/*"
+        update-types:
+          - version-update:semver-major
+      - dependency-name: "@angular-devkit/*"
+        update-types:
+          - version-update:semver-major

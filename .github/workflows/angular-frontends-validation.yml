@@ -7,11 +7,13 @@ on:
       - 'demo-ng/**'
       - 'catalogo-front/**'
       - '.github/workflows/angular-frontends-validation.yml'
+      - '.github/dependabot.yml'
   pull_request:
     paths:
       - 'demo-ng/**'
       - 'catalogo-front/**'
       - '.github/workflows/angular-frontends-validation.yml'
+      - '.github/dependabot.yml'
   workflow_dispatch:
 
 permissions:
